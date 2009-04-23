@@ -138,60 +138,90 @@
   <widget class="QWidget" name="" >
    <property name="geometry" >
     <rect>
-     <x>20</x>
-     <y>150</y>
-     <width>279</width>
-     <height>69</height>
+     <x>21</x>
+     <y>151</y>
+     <width>277</width>
+     <height>30</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout" >
+   <layout class="QHBoxLayout" name="horizontalLayout_3" >
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3" >
+     <widget class="QLabel" name="label_3" >
+      <property name="text" >
+       <string>Magnetic Bearing:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lineEdit_bearing" />
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="" >
+   <property name="geometry" >
+    <rect>
+     <x>22</x>
+     <y>188</y>
+     <width>323</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_6" >
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_4" >
       <item>
-       <widget class="QLabel" name="label_3" >
+       <widget class="QLabel" name="label_4" >
         <property name="text" >
-         <string>Magnetic Bearing:</string>
+         <string>Equipment:</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_bearing" />
+       <widget class="QComboBox" name="comboBox_EquipmentType" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="insertPolicy" >
+         <enum>QComboBox::NoInsert</enum>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_6" >
+     <spacer name="horizontalSpacer" >
+      <property name="orientation" >
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0" >
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_5" >
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4" >
-        <item>
-         <widget class="QLabel" name="label_4" >
-          <property name="text" >
-           <string>Equipment:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="comboBox_EquipmentType" >
-          <property name="insertPolicy" >
-           <enum>QComboBox::NoInsert</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QLabel" name="label_5" >
+        <property name="text" >
+         <string>Quality:</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5" >
-        <item>
-         <widget class="QLabel" name="label_5" >
-          <property name="text" >
-           <string>Quality:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="comboBox_Quality" />
-        </item>
-       </layout>
+       <widget class="QComboBox" name="comboBox_Quality" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
