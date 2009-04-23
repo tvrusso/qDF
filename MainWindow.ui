@@ -1,0 +1,362 @@
+<ui version="4.0" >
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>qDF</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>26</y>
+     <width>800</width>
+     <height>551</height>
+    </rect>
+   </property>
+   <widget class="QFrame" name="frame" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>351</width>
+      <height>311</height>
+     </rect>
+    </property>
+    <property name="frameShape" >
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow" >
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLabel" name="labelFixStatus" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:12pt; font-weight:600; text-decoration: underline;">DF Fix Status&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>140</y>
+       <width>331</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="title" >
+      <string>Least Squares Fix</string>
+     </property>
+     <widget class="QWidget" name="layoutWidget" >
+      <property name="geometry" >
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>301</width>
+        <height>44</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout_2" >
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_4" >
+         <property name="text" >
+          <string>Longitude:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLabel" name="label_LS_Longitude" >
+         <property name="text" >
+          <string>Not Available</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label_5" >
+         <property name="text" >
+          <string>Latitude:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLabel" name="label_LS_Latitude" >
+         <property name="text" >
+          <string>Not Available</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_3" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>220</y>
+       <width>331</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="title" >
+      <string>Maximum Likliehood Fix</string>
+     </property>
+     <widget class="QWidget" name="layoutWidget_2" >
+      <property name="geometry" >
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>301</width>
+        <height>44</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout_3" >
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_6" >
+         <property name="text" >
+          <string>Longitude:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLabel" name="label_ML_Longitude" >
+         <property name="text" >
+          <string>Not Available</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label_7" >
+         <property name="text" >
+          <string>Latitude:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLabel" name="label_ML_Latitude" >
+         <property name="text" >
+          <string>Not Available</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>331</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="title" >
+      <string>Fix Cut Average</string>
+     </property>
+     <widget class="QWidget" name="layoutWidget_3" >
+      <property name="geometry" >
+       <rect>
+        <x>180</x>
+        <y>20</y>
+        <width>141</width>
+        <height>44</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout_4" >
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_8" >
+         <property name="text" >
+          <string>Sigma:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLabel" name="label_FCA_Longitude_SD" >
+         <property name="text" >
+          <string>Not Available</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label_9" >
+         <property name="text" >
+          <string>Sigma</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLabel" name="label_FCA_Latitude_SD" >
+         <property name="text" >
+          <string>Not Available</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="" >
+      <property name="geometry" >
+       <rect>
+        <x>21</x>
+        <y>21</y>
+        <width>139</width>
+        <height>44</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout" >
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_2" >
+         <property name="text" >
+          <string>Longitude:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLabel" name="label_FCA_Longitude" >
+         <property name="text" >
+          <string>Not Available</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label_3" >
+         <property name="text" >
+          <string>Latitude:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLabel" name="label_FCA_Latitude" >
+         <property name="text" >
+          <string>Not Available</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>173</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout" >
+      <item>
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Number of reports:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLCDNumber" name="lcdNumberNReports" />
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QListWidget" name="reportListWidget" >
+    <property name="geometry" >
+     <rect>
+      <x>360</x>
+      <y>10</y>
+      <width>421</width>
+      <height>311</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuReport" >
+    <property name="title" >
+     <string>&amp;Report</string>
+    </property>
+    <addaction name="actionNew_Report" />
+    <addaction name="actionToggle_Validity" />
+   </widget>
+   <widget class="QMenu" name="menu_File" >
+    <property name="title" >
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionE_xit" />
+   </widget>
+   <addaction name="menu_File" />
+   <addaction name="menuReport" />
+  </widget>
+  <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>577</y>
+     <width>800</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <action name="actionNew_Report" >
+   <property name="text" >
+    <string>&amp;New Report</string>
+   </property>
+   <property name="statusTip" >
+    <string>Create a new DF report</string>
+   </property>
+  </action>
+  <action name="actionE_xit" >
+   <property name="text" >
+    <string>E&amp;xit</string>
+   </property>
+  </action>
+  <action name="actionToggle_Validity" >
+   <property name="text" >
+    <string>Toggle &amp;Validity</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionE_xit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
