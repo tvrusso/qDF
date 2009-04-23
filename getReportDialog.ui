@@ -28,6 +28,51 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
+  <widget class="QLabel" name="label_2" >
+   <property name="geometry" >
+    <rect>
+     <x>22</x>
+     <y>48</y>
+     <width>107</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Coordinate System:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboBox_CoordSys" >
+   <property name="geometry" >
+    <rect>
+     <x>135</x>
+     <y>48</y>
+     <width>119</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="sizePolicy" >
+    <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="toolTip" >
+    <string>The name of the coordinate system</string>
+   </property>
+   <property name="insertPolicy" >
+    <enum>QComboBox::NoInsert</enum>
+   </property>
+   <item>
+    <property name="text" >
+     <string>NAD27 Lat/Lon</string>
+    </property>
+   </item>
+   <item>
+    <property name="text" >
+     <string>WGS84 Lat/Lon</string>
+    </property>
+   </item>
+  </widget>
   <widget class="QLabel" name="label_Coord0" >
    <property name="geometry" >
     <rect>
@@ -78,45 +123,6 @@
    <property name="geometry" >
     <rect>
      <x>21</x>
-     <y>47</y>
-     <width>234</width>
-     <height>29</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2" >
-    <item>
-     <widget class="QLabel" name="label_2" >
-      <property name="text" >
-       <string>Coordinate System:</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QComboBox" name="comboBox_CoordSys" >
-      <property name="toolTip" >
-       <string>The name of the coordinate system</string>
-      </property>
-      <property name="insertPolicy" >
-       <enum>QComboBox::NoInsert</enum>
-      </property>
-      <item>
-       <property name="text" >
-        <string>NAD27 Lat/Lon</string>
-       </property>
-      </item>
-      <item>
-       <property name="text" >
-        <string>WGS84 Lat/Lon</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="" >
-   <property name="geometry" >
-    <rect>
-     <x>21</x>
      <y>11</y>
      <width>234</width>
      <height>30</height>
@@ -160,70 +166,61 @@
   <widget class="QWidget" name="" >
    <property name="geometry" >
     <rect>
-     <x>22</x>
-     <y>188</y>
-     <width>323</width>
-     <height>31</height>
+     <x>220</x>
+     <y>189</y>
+     <width>124</width>
+     <height>29</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_6" >
+   <layout class="QHBoxLayout" name="horizontalLayout_5" >
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_4" >
-      <item>
-       <widget class="QLabel" name="label_4" >
-        <property name="text" >
-         <string>Equipment:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="comboBox_EquipmentType" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="insertPolicy" >
-         <enum>QComboBox::NoInsert</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QLabel" name="label_5" >
+      <property name="text" >
+       <string>Quality:</string>
+      </property>
+     </widget>
     </item>
     <item>
-     <spacer name="horizontalSpacer" >
-      <property name="orientation" >
-       <enum>Qt::Horizontal</enum>
+     <widget class="QComboBox" name="comboBox_Quality" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <property name="sizeHint" stdset="0" >
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="" >
+   <property name="geometry" >
+    <rect>
+     <x>23</x>
+     <y>189</y>
+     <width>145</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_4" >
+    <item>
+     <widget class="QLabel" name="label_4" >
+      <property name="text" >
+       <string>Equipment:</string>
       </property>
-     </spacer>
+     </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_5" >
-      <item>
-       <widget class="QLabel" name="label_5" >
-        <property name="text" >
-         <string>Quality:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="comboBox_Quality" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QComboBox" name="comboBox_EquipmentType" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="insertPolicy" >
+       <enum>QComboBox::NoInsert</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
