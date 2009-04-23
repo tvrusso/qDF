@@ -284,6 +284,17 @@ p, li { white-space: pre-wrap; }
       <height>311</height>
      </rect>
     </property>
+    <property name="whatsThis" >
+     <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This area of the screen displays a summary of the reports entered so far.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">It shows the report name, the longitude and latitude in the default coordinate system (WGS84), the &lt;span style=" font-style:italic;">true&lt;/span> bearing (not magnetic), bearing standard deviation in degrees, and whether the report is currently marked valid or invalid.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Double clicking on a line will toggle the validity of that report and automatically update the DF fixes to reflect the new validity setting of that report.&lt;/p>&lt;/body>&lt;/html></string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar" >
