@@ -323,6 +323,7 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionOpen" />
     <addaction name="actionSave" />
     <addaction name="actionSave_As" />
+    <addaction name="actionClose" />
     <addaction name="separator" />
     <addaction name="actionE_xit" />
    </widget>
@@ -382,6 +383,11 @@ p, li { white-space: pre-wrap; }
   <action name="actionSave" >
    <property name="text" >
     <string>&amp;Save</string>
+   </property>
+  </action>
+  <action name="actionClose" >
+   <property name="text" >
+    <string>&amp;Close</string>
    </property>
   </action>
  </widget>

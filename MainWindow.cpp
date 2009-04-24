@@ -35,6 +35,7 @@ void MainWindow::setupConnections()
   connect(actionSave_As, SIGNAL(triggered()), this, SLOT(saveAs()));
   connect(actionSave, SIGNAL(triggered()), this, SLOT(save()));
   connect(actionOpen, SIGNAL(triggered()), this, SLOT(open()));
+  connect(actionClose, SIGNAL(triggered()), this, SLOT(closeFile()));
 
   // Report menu
   connect(actionToggle_Validity, SIGNAL(triggered()), this, SLOT(toggleValidityClicked()));
@@ -174,12 +175,20 @@ void MainWindow::newReportReceived(qDFProjReport *report)
        formatCoords(LS_point,formattedCoords);
        label_LS_Longitude->setText(QString::fromStdString(formattedCoords[0]));
        label_LS_Latitude->setText(QString::fromStdString(formattedCoords[1]));
-       
+       // APRS object for it:
+       QString aprsPosit=theAPRS.createObject("LS_Fix",LS_point,
+                                              "Ln"," Least Squares Solution");
+       listWidgetAPRS->addItem(aprsPosit);
+
        vector<double> ML_point=MLFix.getUserCoords();
        //       printCoords(ML_point,string("Maximum Likelihood Fix"));
        formatCoords(ML_point,formattedCoords);
        label_ML_Longitude->setText(QString::fromStdString(formattedCoords[0]));
        label_ML_Latitude->setText(QString::fromStdString(formattedCoords[1]));
+       // APRS object for it:
+       aprsPosit=theAPRS.createObject("ML_Fix",ML_point,
+                                      "Mn"," Maximum Likelihood Solution");
+       listWidgetAPRS->addItem(aprsPosit);
      }
      else
      {
@@ -187,6 +196,13 @@ void MainWindow::newReportReceived(qDFProjReport *report)
        label_ML_Latitude->setText("Not Available");
        label_LS_Longitude->setText("Not Available");
        label_LS_Latitude->setText("Not Available");
+
+       QString aprsPosit=theAPRS.deleteObject("ML_Fix");
+       if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
+
+       aprsPosit=theAPRS.deleteObject("LS_Fix");
+       if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
+       
      }       
 
      vector<double> FCA_point=FCA.getUserCoords();
@@ -194,6 +210,13 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      formatCoords(FCA_point,formattedCoords);
      label_FCA_Longitude->setText(QString::fromStdString(formattedCoords[0]));
      label_FCA_Latitude->setText(QString::fromStdString(formattedCoords[1]));
+
+     // APRS object for it:
+     QString aprsPosit=theAPRS.createObject("FCA_Fix",FCA_point,
+                                            "An"," Fix Cut Averate Solution");
+     listWidgetAPRS->addItem(aprsPosit);
+     // Also create a multline for the standard deviation if nonzero...
+
      //     cout << " Standard deviation of FCA is " << FCA_stddev[0] << " longitude"
      //          << " and " << FCA_stddev[1] << " latitude." << endl;
 
@@ -217,6 +240,13 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      label_ML_Latitude->setText("Not Available");
      label_LS_Longitude->setText("Not Available");
      label_LS_Latitude->setText("Not Available");
+
+     QString aprsPosit=theAPRS.deleteObject("ML_Fix");
+     if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
+     aprsPosit=theAPRS.deleteObject("LS_Fix");
+     if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
+     aprsPosit=theAPRS.deleteObject("FCA_Fix");
+     if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
    }       
      
      
@@ -280,6 +310,11 @@ void MainWindow::clearCollectionDisplay()
 {
   dirtyCollection=false;
   reportListWidget->clear();
+
+  //APRS: must delete all objects here, too
+  QStringList foo=theAPRS.deleteAllObjects();
+  listWidgetAPRS->addItems(foo);
+
 }
 
 void MainWindow::updateCollectionDisplay(int reportIndex)
@@ -287,6 +322,9 @@ void MainWindow::updateCollectionDisplay(int reportIndex)
   CoordSys myCS=theSettings_.getCoordSys("WGS84 Lat/Lon");
   vector<string> theProj4Params=myCS.getProj4Params();
   QString theReportSummary=QString::fromStdString(theReportCollection.getReportSummary(reportIndex,theProj4Params) );
+
+
+  // First job is to update the display in the clickable list
 
   // add (or replace) the report summary to the list
   QListWidgetItem *theWidgetItem=reportListWidget->item(reportIndex);
@@ -311,7 +349,7 @@ void MainWindow::updateCollectionDisplay(int reportIndex)
   theWidgetItem->setFont(theItemFont);
 
 
-  // hack
+  // Next job is to send objects to APRS
   const qDFProjReport * report=dynamic_cast<const qDFProjReport *>(theReportCollection.getReport(reportIndex));
   if (report->isValid())
   {
@@ -327,7 +365,7 @@ void MainWindow::updateCollectionDisplay(int reportIndex)
   {
     QString oName=QString::fromStdString(report->getReportName());
     QString aprsPosit=theAPRS.deleteObject(oName);
-    listWidgetAPRS->addItem(aprsPosit);
+    if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
   }
     
 
@@ -511,7 +549,8 @@ bool MainWindow::saveAs()
 
 void MainWindow::open()
 {
-  if (okToContinue()) {
+  if (okToContinue()) 
+  {
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open DF Reports"), ".",
                                                     tr("qDF files (*.qdf)"));
@@ -521,6 +560,15 @@ void MainWindow::open()
       currentFileName=fileName;
     }
 
+  }
+}
+
+void MainWindow::closeFile()
+{
+  if (okToContinue()) 
+  {
+    theReportCollection.deleteReports();
+    currentFileName="";
   }
 }
 

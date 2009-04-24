@@ -51,6 +51,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
    bool saveAs();
    bool save();
    void open();
+   void closeFile();
 
  signals:
    void newReportCreated(qDFProjReport *report);

@@ -1,6 +1,11 @@
 #include "APRS.hpp"
 #include <QDateTime>
 #include <cmath>
+#include <QUdpSocket>
+#include <QHostInfo>
+#include <QHostAddress>
+#include <iostream>
+using namespace std;
 
 APRS::APRS()
   :server_(""),
@@ -121,7 +126,7 @@ QString APRS::createObject(const QString &oName,const vector<double> &coords,
   min=(lon-deg)*60;
   
   lonS.sprintf("%03d%05.2lf",deg,min);
-  lonS.append(NS);
+  lonS.append(EW);
 
   formattedPosit=callsign_;
   formattedPosit.append(">APZTVR:;");
@@ -138,6 +143,8 @@ QString APRS::createObject(const QString &oName,const vector<double> &coords,
   formattedPosit.append(comment.left(43));
 
   activeObjects[oName]=formattedPosit;
+
+  sendPacketToServer(formattedPosit);
   return formattedPosit;
 }
 
@@ -148,8 +155,95 @@ QString APRS::deleteObject(const QString &oName)
   if (i != activeObjects.end())
   {
     retval=i.value();
-    retval.replace(retval.indexOf('*'),1,'_');
-    activeObjects[oName]=retval;
+    if (!retval.isEmpty())
+    {
+      retval.replace(retval.indexOf('*'),1,'_');
+      activeObjects[oName]="";
+      sendPacketToServer(retval);
+    }
   }
   return retval;
 }
+
+QStringList APRS::deleteAllObjects()
+{
+  QStringList returnList;
+  QMap<QString, QString>::iterator i;
+
+  for (i=activeObjects.begin(); i!=activeObjects.end(); i++)
+  {
+    QString retString=deleteObject(i.key());
+    if (!retString.isEmpty()) returnList.append(retString);
+  }
+  return returnList;
+}
+
+void APRS::sendPacketToServer(const QString &payload)
+{
+
+  if (!payload.isEmpty())
+  {
+
+    // Create a new udpSocket for this one packet (?)
+    QUdpSocket *theSocket  = new QUdpSocket(this);
+
+    // Now send our payload in the proper format.  Xastir is expecting:
+    // CALL,CALLPASS\nPAYLOAD\n
+
+    QString sendText=callsign_;
+    sendText.append(",");
+    sendText.append(callpass_);
+    sendText.append("\n");
+    sendText.append(payload);
+    sendText.append("\n");
+
+    QByteArray datagram=sendText.toAscii();
+
+    QHostInfo info=QHostInfo::fromName(server_);
+    if (!info.addresses().isEmpty())
+    {
+      theSocket->writeDatagram(datagram,info.addresses().first(),port_);
+      
+      // now set this socket up to listen there...
+      theSocket->bind(QHostAddress::LocalHost,port_);
+      // and set us up to handle anything the server sends back:
+      connect(theSocket,SIGNAL(readyRead()),this,SLOT(processPendingDatagrams()));
+    }
+    else
+    {
+      cout << " sendPacketToServer error: host name could not be resolved." << endl;
+    }
+  }
+}
+
+void APRS::processPendingDatagrams()
+{
+  // The server will send an ACK or NACK back.  Get it, then close the socket.
+  // get the socket that generated the signal...
+  // This means that this method should ONLY ever be used as a slot connected
+  // to a readReady() signal of a QUdpSocket!  DANGER!
+
+  QUdpSocket *theSocket = dynamic_cast<QUdpSocket *>(QObject::sender());
+
+
+  QByteArray datagram;
+
+  do
+  {
+    QHostAddress sender;
+    quint16 senderPort;
+    datagram.resize(theSocket->pendingDatagramSize());
+    theSocket->readDatagram(datagram.data(),datagram.size(),&sender,&senderPort);
+    
+    QDataStream in(&datagram,QIODevice::ReadOnly);
+    in.setVersion(QDataStream::Qt_4_4);
+    
+    QString aprsPacket(datagram);
+    
+
+  } while (theSocket->hasPendingDatagrams());
+
+  // we're now done with this socket, delete it
+  delete theSocket;
+}
+

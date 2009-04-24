@@ -1,13 +1,18 @@
 #ifndef APRS_HPP
 #define APRS_HPP
 
+#include <QObject>
 #include <QString>
 #include <QMap>
+#include <QStringList>
+
 #include <vector>
 using namespace std;
 
-class APRS
+class APRS:public QObject
 {
+  Q_OBJECT;
+
 public:
   APRS();
   APRS(const QString &server,const quint16 port, const QString &callsign, 
@@ -17,6 +22,9 @@ public:
   QString createDFObject(const QString &oName, const vector<double> &coords,
                          double bearing, double sigma, const QString &comment);
   QString deleteObject(const QString &oName);
+  QStringList deleteAllObjects();
+
+  void sendPacketToServer(const QString &payload);
 
   void setServer(const QString &server);
   void setCallsign(const QString &callsign);
@@ -36,6 +44,10 @@ private:
   QString callpass_;
 
   QMap<QString,QString> activeObjects;
+
+private slots:
+  void processPendingDatagrams();
+
 };
 
 #endif

@@ -7,6 +7,8 @@ TARGET =
 DEPENDPATH += .
 INCLUDEPATH += .
 
+QT += network
+
 # Input
 HEADERS += CoordSysBuilder.hpp \
            Settings.hpp \
