@@ -1,11 +1,13 @@
 #include "Settings.hpp"
+#include <iostream>
+using namespace std;
 
 Settings::Settings()
+  :defaultDeclination_(9.3),
+   defaultUTMZone_(13),
+   defaultFCAMinAngle_(5.0)
 {
   defaultCS_=theCoordSysBuilder_.getCoordSys(QString("WGS84 Lat/Lon"));
-  defaultDeclination_=9.3;
-  defaultUTMZone_=13;
-
 
   equipQualSDMap_["Interferometer"]["Very Good"]=3.0;
   equipQualSDMap_["Interferometer"]["Good"]=6.0;
@@ -29,7 +31,8 @@ Settings::Settings(const Settings &right)
    defaultCS_(right.defaultCS_),
    equipQualSDMap_(right.equipQualSDMap_),
    defaultDeclination_(right.defaultDeclination_),
-   defaultUTMZone_(right.defaultUTMZone_)
+   defaultUTMZone_(right.defaultUTMZone_),
+   defaultFCAMinAngle_(right.defaultFCAMinAngle_)
 {
 }
 
@@ -50,9 +53,17 @@ double Settings::getStandardDeviation(const QString &equipType,
   return (equipQualSDMap_[equipType][quality]);
 }
 
+const CoordSys &Settings::getDefaultCS() const { return defaultCS_;};
+
 QString Settings::getDefaultCSName() const
 {
   QString theName=QString::fromStdString(defaultCS_.getBaseName());
   return (theName);
+}
+
+
+void Settings::setDefaultCS(const QString & csName)
+{
+  defaultCS_=theCoordSysBuilder_.getCoordSys(csName);
 }
 

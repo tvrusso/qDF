@@ -16,42 +16,96 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>26</y>
+     <y>37</y>
      <width>800</width>
-     <height>551</height>
+     <height>540</height>
     </rect>
    </property>
-   <widget class="QFrame" name="frame" >
+   <widget class="QListWidget" name="reportListWidget" >
     <property name="geometry" >
      <rect>
-      <x>10</x>
+      <x>360</x>
       <y>10</y>
-      <width>351</width>
+      <width>421</width>
       <height>311</height>
      </rect>
     </property>
-    <property name="frameShape" >
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow" >
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QLabel" name="labelFixStatus" >
-     <property name="geometry" >
-      <rect>
-       <x>10</x>
-       <y>0</y>
-       <width>111</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text" >
-      <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+    <property name="whatsThis" >
+     <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:12pt; font-weight:600; text-decoration: underline;">DF Fix Status&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This area of the screen displays a summary of the reports entered so far.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">It shows the report name, the longitude and latitude in the default coordinate system (WGS84), the &lt;span style=" font-style:italic;">true&lt;/span> bearing (not magnetic), bearing standard deviation in degrees, and whether the report is currently marked valid or invalid.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Double clicking on a line will toggle the validity of that report and automatically update the DF fixes to reflect the new validity setting of that report.&lt;/p>&lt;/body>&lt;/html></string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>361</width>
+      <height>321</height>
+     </rect>
+    </property>
+    <property name="title" >
+     <string>DF Fix Status</string>
+    </property>
+    <widget class="QGroupBox" name="groupBox_3" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>220</y>
+       <width>331</width>
+       <height>71</height>
+      </rect>
      </property>
+     <property name="title" >
+      <string>Maximum Likliehood Fix</string>
+     </property>
+     <widget class="QWidget" name="layoutWidget_2" >
+      <property name="geometry" >
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>301</width>
+        <height>44</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout_3" >
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_6" >
+         <property name="text" >
+          <string>Longitude:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLabel" name="label_ML_Longitude" >
+         <property name="text" >
+          <string>Not Available</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label_7" >
+         <property name="text" >
+          <string>Latitude:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLabel" name="label_ML_Latitude" >
+         <property name="text" >
+          <string>Not Available</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_2" >
      <property name="geometry" >
@@ -106,58 +160,27 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="groupBox_3" >
+    <widget class="QWidget" name="" >
      <property name="geometry" >
       <rect>
        <x>10</x>
-       <y>220</y>
-       <width>331</width>
-       <height>71</height>
+       <y>30</y>
+       <width>173</width>
+       <height>25</height>
       </rect>
      </property>
-     <property name="title" >
-      <string>Maximum Likliehood Fix</string>
-     </property>
-     <widget class="QWidget" name="layoutWidget_2" >
-      <property name="geometry" >
-       <rect>
-        <x>20</x>
-        <y>20</y>
-        <width>301</width>
-        <height>44</height>
-       </rect>
-      </property>
-      <layout class="QFormLayout" name="formLayout_3" >
-       <item row="0" column="0" >
-        <widget class="QLabel" name="label_6" >
-         <property name="text" >
-          <string>Longitude:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1" >
-        <widget class="QLabel" name="label_ML_Longitude" >
-         <property name="text" >
-          <string>Not Available</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" >
-        <widget class="QLabel" name="label_7" >
-         <property name="text" >
-          <string>Latitude:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" >
-        <widget class="QLabel" name="label_ML_Latitude" >
-         <property name="text" >
-          <string>Not Available</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout" >
+      <item>
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Number of reports:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLCDNumber" name="lcdNumberNReports" />
+      </item>
+     </layout>
     </widget>
     <widget class="QGroupBox" name="groupBox" >
      <property name="geometry" >
@@ -252,49 +275,29 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
     </widget>
-    <widget class="QWidget" name="" >
+   </widget>
+   <widget class="QGroupBox" name="groupBox_5" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>320</y>
+      <width>791</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <property name="title" >
+     <string>APRS</string>
+    </property>
+    <widget class="QListWidget" name="listWidget" >
      <property name="geometry" >
       <rect>
        <x>10</x>
-       <y>30</y>
-       <width>173</width>
-       <height>25</height>
+       <y>20</y>
+       <width>771</width>
+       <height>181</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout" >
-      <item>
-       <widget class="QLabel" name="label" >
-        <property name="text" >
-         <string>Number of reports:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLCDNumber" name="lcdNumberNReports" />
-      </item>
-     </layout>
     </widget>
-   </widget>
-   <widget class="QListWidget" name="reportListWidget" >
-    <property name="geometry" >
-     <rect>
-      <x>360</x>
-      <y>10</y>
-      <width>421</width>
-      <height>311</height>
-     </rect>
-    </property>
-    <property name="whatsThis" >
-     <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This area of the screen displays a summary of the reports entered so far.&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">It shows the report name, the longitude and latitude in the default coordinate system (WGS84), the &lt;span style=" font-style:italic;">true&lt;/span> bearing (not magnetic), bearing standard deviation in degrees, and whether the report is currently marked valid or invalid.&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Double clicking on a line will toggle the validity of that report and automatically update the DF fixes to reflect the new validity setting of that report.&lt;/p>&lt;/body>&lt;/html></string>
-    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar" >
@@ -317,10 +320,21 @@ p, li { white-space: pre-wrap; }
     <property name="title" >
      <string>&amp;File</string>
     </property>
+    <addaction name="actionOpen" />
+    <addaction name="actionSave" />
+    <addaction name="actionSave_As" />
+    <addaction name="separator" />
     <addaction name="actionE_xit" />
+   </widget>
+   <widget class="QMenu" name="menuHelp" >
+    <property name="title" >
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout" />
    </widget>
    <addaction name="menu_File" />
    <addaction name="menuReport" />
+   <addaction name="menuHelp" />
   </widget>
   <widget class="QStatusBar" name="statusbar" >
    <property name="geometry" >
@@ -331,6 +345,44 @@ p, li { white-space: pre-wrap; }
      <height>23</height>
     </rect>
    </property>
+  </widget>
+  <widget class="QToolBar" name="toolBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>26</y>
+     <width>11</width>
+     <height>11</height>
+    </rect>
+   </property>
+   <property name="windowTitle" >
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea" >
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QToolBar" name="toolBar_2" >
+   <property name="geometry" >
+    <rect>
+     <x>11</x>
+     <y>26</y>
+     <width>789</width>
+     <height>11</height>
+    </rect>
+   </property>
+   <property name="windowTitle" >
+    <string>toolBar_2</string>
+   </property>
+   <attribute name="toolBarArea" >
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
+   </attribute>
   </widget>
   <action name="actionNew_Report" >
    <property name="text" >
@@ -348,6 +400,26 @@ p, li { white-space: pre-wrap; }
   <action name="actionToggle_Validity" >
    <property name="text" >
     <string>Toggle &amp;Validity</string>
+   </property>
+  </action>
+  <action name="actionAbout" >
+   <property name="text" >
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionSave_As" >
+   <property name="text" >
+    <string>Save &amp;As...</string>
+   </property>
+  </action>
+  <action name="actionOpen" >
+   <property name="text" >
+    <string>&amp;Open...</string>
+   </property>
+  </action>
+  <action name="actionSave" >
+   <property name="text" >
+    <string>&amp;Save</string>
    </property>
   </action>
  </widget>

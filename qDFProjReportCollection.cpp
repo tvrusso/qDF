@@ -1,6 +1,8 @@
 #include <iostream>
 using namespace std;
 
+#include <QDataStream>
+
 #include "qDFProjReport.hpp"
 #include "qDFProjReportCollection.hpp"
 
@@ -13,6 +15,11 @@ qDFProjReportCollection::~qDFProjReportCollection()
 {
 }
 
+void qDFProjReportCollection::deleteReports()
+{
+  DFLib::ReportCollection::deleteReports();
+  emit collectionCleared();
+}
 
 int qDFProjReportCollection::addReport(qDFProjReport * aReport)
 {
@@ -50,4 +57,56 @@ string qDFProjReportCollection::getReportSummary(int reportIndex,
                                                  const vector<string> & projArgs) const
 {
   return ((dynamic_cast<const qDFProjReport *>(getReport(reportIndex))->getReportSummary(projArgs)));
+}
+
+QDataStream & operator<<(QDataStream &out, const qDFProjReportCollection &tC)
+{
+  out << quint32(tC.size());
+  for (int i=0; i<tC.size(); i++)
+  {
+    out << *(dynamic_cast<const qDFProjReport *> (tC.getReport(i)));
+  }
+
+  return out;
+
+}
+
+QDataStream & operator>>(QDataStream &in, qDFProjReportCollection &tC)
+{
+
+  quint32 nrep;
+
+  in >> nrep;
+
+  for (int i=0; i<nrep; i++)
+  {
+    QString reportName;
+    vector<double> coords(2);
+    double bearing;
+    double sigma;
+    bool validity;
+    QString csName;
+    quint32 zone;
+
+    CoordSysBuilder csB;
+    in >> reportName;
+    in >> coords[0] >> coords[1];
+    in >> bearing >> sigma;
+    in >> validity;
+    in >> csName;
+    in >> zone;
+
+    CoordSys CS=csB.getCoordSys(csName.toStdString());
+    if (CS.isZoneRequired())
+      CS.setZone(zone);
+
+    qDFProjReport *nR = new qDFProjReport(coords,bearing,sigma,reportName.
+                                          toStdString(),CS);
+    if (validity)
+      nR->setValid();
+    else
+      nR->setInvalid();
+    tC.addReport(nR);
+  }
+  return in;
 }

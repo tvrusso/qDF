@@ -22,10 +22,15 @@ class CoordSys
     CoordSys(std::string name,std::vector<std::string> &p4P,
              std::vector<std::string> & cN, bool zR, int z=-1);
     CoordSys& operator=(const CoordSys& rhs);
+
     inline const std::vector<std::string> & getProj4Params() const
       {return (proj4Params_);};
+
     inline const std::vector<std::string> & getCoordinateNames() const
       {return (coordinateNames_);};
+
+    inline int getZone() const {return (zone_);};
+
     void setZone(int z);
     std::string getName() const;
     std::string getBaseName() const;
