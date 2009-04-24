@@ -21,6 +21,10 @@ public:
                        const QString &symbol,const QString &comment);
   QString createDFObject(const QString &oName, const vector<double> &coords,
                          double bearing, double sigma, const QString &comment);
+  QString createDFErrorObject(const QString &oName,
+                              const vector<double> &coords,
+                              double axisLon,double axisLat);
+
   QString deleteObject(const QString &oName);
   QStringList deleteAllObjects();
 
@@ -36,14 +40,24 @@ public:
   const QString &getCallpass() const;
   const quint16 getPort() const;
 
+  QString makeMultiline(const vector<double> &lon,const vector<double>&lat,
+                        char colorStyle, int lineType, const QString &sequence,
+                        double *lonCentr, double *latCentr);
+  void generateEllipse(double lonCentr, double latCentr, 
+                       double axisLon, double axisLat,
+                       int numPoints,
+                       vector<double> &lons, vector<double> &lats);
+  
+
 
 private:
+  QMap<QString,QString> activeObjects;
   QString server_;
   quint16 port_;
   QString callsign_;
   QString callpass_;
 
-  QMap<QString,QString> activeObjects;
+
 
 private slots:
   void processPendingDatagrams();

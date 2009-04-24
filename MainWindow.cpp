@@ -13,14 +13,18 @@ using namespace std;
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent),
     dirtyCollection(false),
-    currentFileName(""),
-    theAPRS("localhost",2023,"KM5VY-8","21753")
+    currentFileName("")
 {
   setupUi(this);
 
   menuHelp->addAction(QWhatsThis::createAction());
 
   readSettings();
+  theAPRS.setPort(theSettings_.getAPRSPort());
+  theAPRS.setServer(theSettings_.getAPRSServer());
+  theAPRS.setCallsign(theSettings_.getAPRSCallsign());
+  theAPRS.setCallpass(theSettings_.getAPRSCallpass());
+
 }
 
 MainWindow::~MainWindow()
@@ -151,7 +155,7 @@ void MainWindow::newReportReceived(qDFProjReport *report)
    
    if (nreports>=2)
    {
-     CoordSys myCS=theSettings_.getCoordSys("WGS84 Lat/Lon");
+     CoordSys myCS=theSettings_.getDefaultCS();
      
      vector<double> foo(2,0.0);
      vector<double> FCA_stddev(2);
@@ -211,14 +215,22 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      label_FCA_Longitude->setText(QString::fromStdString(formattedCoords[0]));
      label_FCA_Latitude->setText(QString::fromStdString(formattedCoords[1]));
 
-     // APRS object for it:
-     QString aprsPosit=theAPRS.createObject("FCA_Fix",FCA_point,
-                                            "An"," Fix Cut Averate Solution");
-     listWidgetAPRS->addItem(aprsPosit);
-     // Also create a multline for the standard deviation if nonzero...
+     // APRS object for it, if it's not invalid through bad cuts:
+     if (FCA_point[0] !=0 && FCA_point[1] != 0)
+     {
+       QString aprsPosit=theAPRS.createObject("FCA_Fix",FCA_point,
+                                              "An"," Fix Cut Average Solution");
+       listWidgetAPRS->addItem(aprsPosit);
 
-     //     cout << " Standard deviation of FCA is " << FCA_stddev[0] << " longitude"
-     //          << " and " << FCA_stddev[1] << " latitude." << endl;
+       if (FCA_stddev[0] != 0 && FCA_stddev[1] != 0)
+       {
+         QString errorEllipse=theAPRS.createDFErrorObject("FCA_err",
+                                                          FCA_point,
+                                                          FCA_stddev[0],
+                                                          FCA_stddev[1]);
+         listWidgetAPRS->addItem(errorEllipse);
+       }
+     }
 
     
      ostringstream os;
@@ -246,6 +258,8 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      aprsPosit=theAPRS.deleteObject("LS_Fix");
      if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
      aprsPosit=theAPRS.deleteObject("FCA_Fix");
+     if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
+     aprsPosit=theAPRS.deleteObject("FCA_err");
      if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
    }       
      
@@ -319,8 +333,7 @@ void MainWindow::clearCollectionDisplay()
 
 void MainWindow::updateCollectionDisplay(int reportIndex)
 {
-  CoordSys myCS=theSettings_.getCoordSys("WGS84 Lat/Lon");
-  vector<string> theProj4Params=myCS.getProj4Params();
+  vector<string> theProj4Params=theSettings_.getDefaultCS().getProj4Params();
   QString theReportSummary=QString::fromStdString(theReportCollection.getReportSummary(reportIndex,theProj4Params) );
 
 
@@ -354,11 +367,12 @@ void MainWindow::updateCollectionDisplay(int reportIndex)
   if (report->isValid())
   {
     DFLib::Proj::Point tempPoint=report->getReceiverPoint();
+    tempPoint.setUserProj(theSettings_.getDefaultCS().getProj4Params());
     vector<double> coords(2);
     coords=tempPoint.getUserCoords();
     QString oName=QString::fromStdString(report->getReportName());
     QString aprsPosit=theAPRS.createDFObject(oName,coords,report->getBearing(),
-                                             report->getSigma()," Hey, Foo!");
+                                             report->getSigma()," de KM5VY via qDF");
     listWidgetAPRS->addItem(aprsPosit);
   }
   else
@@ -456,6 +470,24 @@ void MainWindow::readSettings()
                                theSettings_.getDefaultUTMZone()).toInt();
   theSettings_.setDefaultUTMZone(defZone);
 
+  quint16 defPort=qsettings.value("aprsPort",
+                                  theSettings_.getAPRSPort()).toInt();
+  theSettings_.setAPRSPort(defPort);
+
+  QString aprsServer=qsettings.value("aprsServer",
+                                theSettings_.getAPRSServer()).toString();
+  theSettings_.setAPRSServer(aprsServer);
+
+  QString aprsCallsign=qsettings.value("aprsCallsign",
+                                theSettings_.getAPRSCallsign()).toString();
+  theSettings_.setAPRSCallsign(aprsCallsign);
+
+  QString aprsCallpass=qsettings.value("aprsCallpass",
+                                theSettings_.getAPRSCallpass()).toString();
+  theSettings_.setAPRSCallpass(aprsCallpass);
+
+
+
   // can't do the equipment map exactly.  Work it out...
 }
 
@@ -468,6 +500,10 @@ void MainWindow::writeSettings()
   settings.setValue("defaultDeclination",theSettings_.getDefaultDeclination());
   settings.setValue("defaultFCAMinAngle",theSettings_.getDefaultFCAMinAngle());
   settings.setValue("defaultUTMZone",theSettings_.getDefaultUTMZone());
+  settings.setValue("aprsPort",theSettings_.getAPRSPort());
+  settings.setValue("aprsCallsign",theSettings_.getAPRSCallsign());
+  settings.setValue("aprsCallpass",theSettings_.getAPRSCallpass());
+  settings.setValue("aprsServer",theSettings_.getAPRSServer());
 }
 
 bool MainWindow::writeFile(const QString &fileName)

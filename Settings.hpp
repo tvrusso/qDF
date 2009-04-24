@@ -18,6 +18,11 @@ private:
   int defaultUTMZone_;
   double defaultFCAMinAngle_;
 
+  QString aprsServer_;
+  QString aprsCallsign_;
+  QString aprsCallpass_;
+  quint16 aprsPort_;
+
 public:
   Settings();
   Settings(const Settings &right);
@@ -31,6 +36,11 @@ public:
   double getDefaultDeclination() const {return(defaultDeclination_);};
   double getDefaultFCAMinAngle() const {return(defaultFCAMinAngle_);};
   int getDefaultUTMZone() const { return(defaultUTMZone_);};
+  int getAPRSPort() const{return(aprsPort_);};
+  QString getAPRSServer() const {return(aprsServer_);};
+  QString getAPRSCallsign() const {return(aprsCallsign_);};
+  QString getAPRSCallpass() const {return(aprsCallpass_);};
+
   CoordSys getCoordSys(const QString &csName) const;
   QList<QString> getSupportedCoordSys() const;
   QString getDefaultCSName() const;
@@ -51,6 +61,10 @@ public:
   inline void setDefaultUTMZone(int defUTMZ)
   {defaultUTMZone_=defUTMZ;};
 
+  inline void setAPRSCallsign(const QString &c) {aprsCallsign_=c;};
+  inline void setAPRSCallpass(const QString &c) {aprsCallpass_=c;};
+  inline void setAPRSServer(const QString &c) {aprsServer_=c;};
+  inline void setAPRSPort(int p) {aprsPort_=p;};
 };
 
 #endif

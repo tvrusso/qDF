@@ -5,7 +5,11 @@ using namespace std;
 Settings::Settings()
   :defaultDeclination_(9.3),
    defaultUTMZone_(13),
-   defaultFCAMinAngle_(5.0)
+   defaultFCAMinAngle_(5.0),
+   aprsServer_("localhost"),
+   aprsCallsign_("KM5VY-8"),
+   aprsCallpass_("21753"),
+   aprsPort_(2023)
 {
   defaultCS_=theCoordSysBuilder_.getCoordSys(QString("WGS84 Lat/Lon"));
 

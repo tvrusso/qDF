@@ -8,6 +8,7 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 QT += network
+CONFIG += debug
 
 # Input
 HEADERS += CoordSysBuilder.hpp \
