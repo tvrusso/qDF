@@ -10,6 +10,7 @@ INCLUDEPATH += .
 # Input
 HEADERS += CoordSysBuilder.hpp \
            Settings.hpp \
+           APRS.hpp \
            getReportDialog.h \
            reportToggleDialog.h \
            MainWindow.h \
@@ -18,6 +19,7 @@ HEADERS += CoordSysBuilder.hpp \
 FORMS += getReportDialog.ui MainWindow.ui reportToggleDialog.ui
 SOURCES += CoordSysBuilder.cpp \
            Settings.cpp \
+           APRS.cpp \
            getReportDialog.cpp \
            reportToggleDialog.cpp \
            main.cpp \

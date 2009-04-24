@@ -7,6 +7,7 @@
 #include "qDFProjReport.hpp"
 #include "qDFProjReportCollection.hpp"
 #include "Settings.hpp"
+#include "APRS.hpp"
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -35,6 +36,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
   bool loadFile(const QString &fileName);
   bool dirtyCollection;
   QString currentFileName;
+
+  APRS theAPRS;
 
   private slots:
    void newReportClicked();
