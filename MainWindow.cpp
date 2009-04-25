@@ -180,7 +180,7 @@ void MainWindow::newReportReceived(qDFProjReport *report)
        label_LS_Longitude->setText(QString::fromStdString(formattedCoords[0]));
        label_LS_Latitude->setText(QString::fromStdString(formattedCoords[1]));
        // APRS object for it:
-       QString aprsPosit=theAPRS.createObject("LS_Fix",LS_point,
+       QString aprsPosit=theAPRS.createObject("LS-Fix",LS_point,
                                               "Ln"," Least Squares Solution");
        listWidgetAPRS->addItem(aprsPosit);
 
@@ -190,7 +190,7 @@ void MainWindow::newReportReceived(qDFProjReport *report)
        label_ML_Longitude->setText(QString::fromStdString(formattedCoords[0]));
        label_ML_Latitude->setText(QString::fromStdString(formattedCoords[1]));
        // APRS object for it:
-       aprsPosit=theAPRS.createObject("ML_Fix",ML_point,
+       aprsPosit=theAPRS.createObject("ML-Fix",ML_point,
                                       "Mn"," Maximum Likelihood Solution");
        listWidgetAPRS->addItem(aprsPosit);
      }
@@ -201,10 +201,10 @@ void MainWindow::newReportReceived(qDFProjReport *report)
        label_LS_Longitude->setText("Not Available");
        label_LS_Latitude->setText("Not Available");
 
-       QString aprsPosit=theAPRS.deleteObject("ML_Fix");
+       QString aprsPosit=theAPRS.deleteObject("ML-Fix");
        if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
 
-       aprsPosit=theAPRS.deleteObject("LS_Fix");
+       aprsPosit=theAPRS.deleteObject("LS-Fix");
        if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
        
      }       
@@ -218,13 +218,13 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      // APRS object for it, if it's not invalid through bad cuts:
      if (FCA_point[0] !=0 && FCA_point[1] != 0)
      {
-       QString aprsPosit=theAPRS.createObject("FCA_Fix",FCA_point,
+       QString aprsPosit=theAPRS.createObject("FCA-Fix",FCA_point,
                                               "An"," Fix Cut Average Solution");
        listWidgetAPRS->addItem(aprsPosit);
 
        if (FCA_stddev[0] != 0 && FCA_stddev[1] != 0)
        {
-         QString errorEllipse=theAPRS.createDFErrorObject("FCA_err",
+         QString errorEllipse=theAPRS.createDFErrorObject("FCA-err",
                                                           FCA_point,
                                                           FCA_stddev[0],
                                                           FCA_stddev[1]);
@@ -253,13 +253,13 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      label_LS_Longitude->setText("Not Available");
      label_LS_Latitude->setText("Not Available");
 
-     QString aprsPosit=theAPRS.deleteObject("ML_Fix");
+     QString aprsPosit=theAPRS.deleteObject("ML-Fix");
      if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
-     aprsPosit=theAPRS.deleteObject("LS_Fix");
+     aprsPosit=theAPRS.deleteObject("LS-Fix");
      if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
-     aprsPosit=theAPRS.deleteObject("FCA_Fix");
+     aprsPosit=theAPRS.deleteObject("FCA-Fix");
      if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
-     aprsPosit=theAPRS.deleteObject("FCA_err");
+     aprsPosit=theAPRS.deleteObject("FCA-err");
      if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
    }       
      
