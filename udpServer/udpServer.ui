@@ -1,0 +1,94 @@
+<ui version="4.0" >
+ <class>udpServer</class>
+ <widget class="QMainWindow" name="udpServer" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>720</width>
+    <height>577</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>udpServer</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>26</y>
+     <width>720</width>
+     <height>528</height>
+    </rect>
+   </property>
+   <widget class="QPlainTextEdit" name="plainTextEdit" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>691</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <property name="readOnly" >
+     <bool>true</bool>
+    </property>
+    <property name="plainText" >
+     <string>Hello, world.
+</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>720</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>File</string>
+    </property>
+    <addaction name="action_Exit" />
+   </widget>
+   <addaction name="menuFile" />
+  </widget>
+  <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>554</y>
+     <width>720</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <action name="action_Exit" >
+   <property name="text" >
+    <string>&amp;Exit</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>action_Exit</sender>
+   <signal>triggered()</signal>
+   <receiver>udpServer</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
