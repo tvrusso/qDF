@@ -1,7 +1,6 @@
 #ifndef APRS_HPP
 #define APRS_HPP
 
-#include <QObject>
 #include <QString>
 #include <QMap>
 #include <QStringList>
@@ -9,9 +8,8 @@
 #include <vector>
 using namespace std;
 
-class APRS:public QObject
+class APRS
 {
-  Q_OBJECT;
 
 public:
   APRS();
@@ -57,10 +55,6 @@ private:
   QString callsign_;
   QString callpass_;
 
-
-
-private slots:
-  void processPendingDatagrams();
 
 };
 

@@ -185,11 +185,7 @@ void APRS::sendPacketToServer(const QString &payload)
   {
 
     // Create a new udpSocket for this one packet (?)
-    QUdpSocket *theSocket  = new QUdpSocket(this);
-    // now set this socket up to listen there...
-    theSocket->bind(QHostAddress::LocalHost,port_);
-    // and set us up to handle anything the server sends back:
-    connect(theSocket,SIGNAL(readyRead()),this,SLOT(processPendingDatagrams()));
+    QUdpSocket *theSocket  = new QUdpSocket;
 
     // Now send our payload in the proper format.  Xastir is expecting:
     // CALL,CALLPASS\nPAYLOAD\n
@@ -207,45 +203,26 @@ void APRS::sendPacketToServer(const QString &payload)
     if (!info.addresses().isEmpty())
     {
       theSocket->writeDatagram(datagram,info.addresses().first(),port_);
-      
+      // now wait for the ack...
+      QHostAddress sender;
+      quint16 senderPort;
+      int bytesRead;
+      datagram.clear();
+      datagram.resize(256);
+      while ((bytesRead= theSocket->readDatagram(datagram.data(),
+                                                 datagram.size(),&sender,
+                                                 &senderPort)) == -1)
+      {}
+      QString nackorack(datagram);
+      cout << "udpClient: received a packet of "<< bytesRead << " " 
+           << nackorack.toStdString() << endl;;
+
     }
     else
     {
       cout << " sendPacketToServer error: host name could not be resolved." << endl;
     }
   }
-}
-
-void APRS::processPendingDatagrams()
-{
-  // The server will send an ACK or NACK back.  Get it, then close the socket.
-  // get the socket that generated the signal...
-  // This means that this method should ONLY ever be used as a slot connected
-  // to a readReady() signal of a QUdpSocket!  DANGER!
-  cout << " in processPendingDatagrams.  " << endl;
-
-  QUdpSocket *theSocket = dynamic_cast<QUdpSocket *>(QObject::sender());
-
-
-  QByteArray datagram;
-
-  do
-  {
-    QHostAddress sender;
-    quint16 senderPort;
-    datagram.resize(theSocket->pendingDatagramSize());
-    theSocket->readDatagram(datagram.data(),datagram.size(),&sender,&senderPort);
-    cout << " got datagram " << QString(datagram).toStdString() << endl;
-    QDataStream in(&datagram,QIODevice::ReadOnly);
-    in.setVersion(QDataStream::Qt_4_4);
-    
-    QString aprsPacket(datagram);
-    
-
-  } while (theSocket->hasPendingDatagrams());
-
-  // we're now done with this socket, delete it
-  delete theSocket;
 }
 
 
