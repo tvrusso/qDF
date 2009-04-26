@@ -10,6 +10,10 @@ INCLUDEPATH += .
 QT += network
 CONFIG += debug
 
+qDF.path=$$[QT_INSTALL_BINS]
+qDF.files=qDF
+INSTALLS += qDF
+
 # Input
 HEADERS += CoordSysBuilder.hpp \
            Settings.hpp \
