@@ -64,7 +64,7 @@ p, li { white-space: pre-wrap; }
       </rect>
      </property>
      <property name="title" >
-      <string>Maximum Likliehood Fix</string>
+      <string>Maximum Liklihood Fix</string>
      </property>
      <widget class="QWidget" name="layoutWidget_2" >
       <property name="geometry" >
