@@ -68,6 +68,7 @@ void MainWindow::setupConnections()
 
   // Help menu
   connect(actionAbout,SIGNAL(triggered()),this,SLOT(about()));
+  connect(actionAbout_Qt,SIGNAL(triggered()),this,SLOT(aboutQt()));
 
 }
 
@@ -384,6 +385,11 @@ void MainWindow::listItemDoubleClicked(QListWidgetItem *item)
   int theRow=reportListWidget->row(item);
   // we've assured that row and report index are the same.
   theReportCollection.toggleValidity(theRow);
+}
+
+void MainWindow::aboutQt()
+{
+  QMessageBox::aboutQt(this,tr("About Qt"));
 }
 
 void MainWindow::about()

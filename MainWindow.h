@@ -48,6 +48,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
    void clearCollectionDisplay();
    void listItemDoubleClicked(QListWidgetItem *);
    void about();
+   void aboutQt();
    bool saveAs();
    bool save();
    void open();
