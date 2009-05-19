@@ -5,232 +5,173 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>415</width>
-    <height>224</height>
+    <width>575</width>
+    <height>228</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Enter New DF Report</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox" >
-   <property name="geometry" >
-    <rect>
-     <x>310</x>
-     <y>10</y>
-     <width>81</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="orientation" >
-    <enum>Qt::Vertical</enum>
-   </property>
-   <property name="standardButtons" >
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_2" >
-   <property name="geometry" >
-    <rect>
-     <x>22</x>
-     <y>48</y>
-     <width>107</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Coordinate System:</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="comboBox_CoordSys" >
-   <property name="geometry" >
-    <rect>
-     <x>135</x>
-     <y>48</y>
-     <width>119</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="sizePolicy" >
-    <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="toolTip" >
-    <string>The name of the coordinate system</string>
-   </property>
-   <property name="insertPolicy" >
-    <enum>QComboBox::NoInsert</enum>
-   </property>
-   <item>
-    <property name="text" >
-     <string>NAD27 Lat/Lon</string>
-    </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="0" >
+    <layout class="QHBoxLayout" name="horizontalLayout" >
+     <item>
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>Report Name:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_ReportName" />
+     </item>
+    </layout>
    </item>
-   <item>
-    <property name="text" >
-     <string>WGS84 Lat/Lon</string>
-    </property>
+   <item rowspan="6" row="0" column="1" >
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
    </item>
-  </widget>
-  <widget class="QLabel" name="label_Coord0" >
-   <property name="geometry" >
-    <rect>
-     <x>22</x>
-     <y>83</y>
-     <width>58</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Longitude:</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_Coord1" >
-   <property name="geometry" >
-    <rect>
-     <x>22</x>
-     <y>117</y>
-     <width>47</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Latitude:</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEdit_Coord0" >
-   <property name="geometry" >
-    <rect>
-     <x>86</x>
-     <y>83</y>
-     <width>168</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEdit_Coord1" >
-   <property name="geometry" >
-    <rect>
-     <x>86</x>
-     <y>117</y>
-     <width>168</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QWidget" name="" >
-   <property name="geometry" >
-    <rect>
-     <x>21</x>
-     <y>11</y>
-     <width>234</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout" >
-    <item>
-     <widget class="QLabel" name="label" >
-      <property name="text" >
-       <string>Report Name:</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="lineEdit_ReportName" />
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="" >
-   <property name="geometry" >
-    <rect>
-     <x>21</x>
-     <y>151</y>
-     <width>277</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_3" >
-    <item>
-     <widget class="QLabel" name="label_3" >
-      <property name="text" >
-       <string>Magnetic Bearing:</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="lineEdit_bearing" />
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="" >
-   <property name="geometry" >
-    <rect>
-     <x>220</x>
-     <y>189</y>
-     <width>124</width>
-     <height>29</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_5" >
-    <item>
-     <widget class="QLabel" name="label_5" >
-      <property name="text" >
-       <string>Quality:</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QComboBox" name="comboBox_Quality" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="" >
-   <property name="geometry" >
-    <rect>
-     <x>23</x>
-     <y>189</y>
-     <width>145</width>
-     <height>29</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_4" >
-    <item>
-     <widget class="QLabel" name="label_4" >
-      <property name="text" >
-       <string>Equipment:</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QComboBox" name="comboBox_EquipmentType" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="insertPolicy" >
-       <enum>QComboBox::NoInsert</enum>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+   <item row="1" column="0" >
+    <layout class="QHBoxLayout" name="horizontalLayout_2" >
+     <item>
+      <widget class="QLabel" name="label_2" >
+       <property name="text" >
+        <string>Coordinate System:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox_CoordSys" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip" >
+        <string>The name of the coordinate system</string>
+       </property>
+       <property name="insertPolicy" >
+        <enum>QComboBox::NoInsert</enum>
+       </property>
+       <item>
+        <property name="text" >
+         <string>NAD27 Lat/Lon</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>WGS84 Lat/Lon</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0" >
+    <layout class="QHBoxLayout" name="horizontalLayout_6" >
+     <item>
+      <widget class="QLabel" name="label_Coord0" >
+       <property name="text" >
+        <string>Longitude:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_Coord0" />
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="0" >
+    <layout class="QHBoxLayout" name="horizontalLayout_7" >
+     <item>
+      <widget class="QLabel" name="label_Coord1" >
+       <property name="text" >
+        <string>Latitude:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_Coord1" />
+     </item>
+    </layout>
+   </item>
+   <item row="4" column="0" >
+    <layout class="QHBoxLayout" name="horizontalLayout_3" >
+     <item>
+      <widget class="QLabel" name="label_3" >
+       <property name="text" >
+        <string>Magnetic Bearing:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_bearing" />
+     </item>
+    </layout>
+   </item>
+   <item row="5" column="0" >
+    <layout class="QHBoxLayout" name="horizontalLayout_8" >
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4" >
+       <item>
+        <widget class="QLabel" name="label_4" >
+         <property name="text" >
+          <string>Equipment:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_EquipmentType" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="insertPolicy" >
+          <enum>QComboBox::NoInsert</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5" >
+       <item>
+        <widget class="QLabel" name="label_5" >
+         <property name="text" >
+          <string>Quality:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_Quality" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <tabstops>
   <tabstop>lineEdit_ReportName</tabstop>
   <tabstop>comboBox_CoordSys</tabstop>
   <tabstop>lineEdit_Coord0</tabstop>
   <tabstop>lineEdit_Coord1</tabstop>
-  <tabstop>lineEdit_bearing</tabstop>
   <tabstop>comboBox_EquipmentType</tabstop>
   <tabstop>comboBox_Quality</tabstop>
   <tabstop>buttonBox</tabstop>
