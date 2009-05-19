@@ -19,16 +19,20 @@ HEADERS += CoordSysBuilder.hpp \
            Settings.hpp \
            APRS.hpp \
            getReportDialog.h \
+           settingsDialog.h \
            reportToggleDialog.h \
+           latLonCoordinatewidget.h \
            MainWindow.h \
            qDFProjReport.hpp \
            qDFProjReportCollection.hpp
-FORMS += getReportDialog.ui MainWindow.ui reportToggleDialog.ui
+FORMS += getReportDialog.ui MainWindow.ui reportToggleDialog.ui latLonCoordinateWidget.ui  settingsDialog.ui
 SOURCES += CoordSysBuilder.cpp \
            Settings.cpp \
            APRS.cpp \
            getReportDialog.cpp \
+           latLonCoordinatewidget.cpp \
            reportToggleDialog.cpp \
+           settingsDialog.cpp \
            main.cpp \
            MainWindow.cpp \
            qDFProjReport.cpp \

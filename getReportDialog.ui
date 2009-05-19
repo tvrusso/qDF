@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>575</width>
-    <height>228</height>
+    <width>574</width>
+    <height>263</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -27,7 +27,7 @@
      </item>
     </layout>
    </item>
-   <item rowspan="6" row="0" column="1" >
+   <item rowspan="5" row="0" column="1" >
     <widget class="QDialogButtonBox" name="buttonBox" >
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -74,35 +74,7 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0" >
-    <layout class="QHBoxLayout" name="horizontalLayout_6" >
-     <item>
-      <widget class="QLabel" name="label_Coord0" >
-       <property name="text" >
-        <string>Longitude:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEdit_Coord0" />
-     </item>
-    </layout>
-   </item>
    <item row="3" column="0" >
-    <layout class="QHBoxLayout" name="horizontalLayout_7" >
-     <item>
-      <widget class="QLabel" name="label_Coord1" >
-       <property name="text" >
-        <string>Latitude:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEdit_Coord1" />
-     </item>
-    </layout>
-   </item>
-   <item row="4" column="0" >
     <layout class="QHBoxLayout" name="horizontalLayout_3" >
      <item>
       <widget class="QLabel" name="label_3" >
@@ -116,7 +88,7 @@
      </item>
     </layout>
    </item>
-   <item row="5" column="0" >
+   <item row="4" column="0" >
     <layout class="QHBoxLayout" name="horizontalLayout_8" >
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4" >
@@ -165,13 +137,22 @@
      </item>
     </layout>
    </item>
+   <item row="2" column="0" >
+    <widget class="latLonCoordinateWidget" name="latLon" />
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>latLonCoordinateWidget</class>
+   <extends>QWidget</extends>
+   <header>latLonCoordinateWidget.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>lineEdit_ReportName</tabstop>
   <tabstop>comboBox_CoordSys</tabstop>
-  <tabstop>lineEdit_Coord0</tabstop>
-  <tabstop>lineEdit_Coord1</tabstop>
+  <tabstop>lineEdit_bearing</tabstop>
   <tabstop>comboBox_EquipmentType</tabstop>
   <tabstop>comboBox_Quality</tabstop>
   <tabstop>buttonBox</tabstop>

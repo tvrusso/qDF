@@ -160,7 +160,7 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
     </widget>
-    <widget class="QWidget" name="" >
+    <widget class="QWidget" name="layoutWidget" >
      <property name="geometry" >
       <rect>
        <x>10</x>
@@ -234,7 +234,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="" >
+     <widget class="QWidget" name="layoutWidget" >
       <property name="geometry" >
        <rect>
         <x>21</x>
@@ -332,8 +332,16 @@ p, li { white-space: pre-wrap; }
      <string>Help</string>
     </property>
     <addaction name="actionAbout" />
+    <addaction name="actionAbout_Qt" />
+   </widget>
+   <widget class="QMenu" name="menuEdit" >
+    <property name="title" >
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="actionSettings" />
    </widget>
    <addaction name="menu_File" />
+   <addaction name="menuEdit" />
    <addaction name="menuReport" />
    <addaction name="menuHelp" />
   </widget>
@@ -388,6 +396,16 @@ p, li { white-space: pre-wrap; }
   <action name="actionClose" >
    <property name="text" >
     <string>&amp;Close</string>
+   </property>
+  </action>
+  <action name="actionSettings" >
+   <property name="text" >
+    <string>&amp;Settings...</string>
+   </property>
+  </action>
+  <action name="actionAbout_Qt" >
+   <property name="text" >
+    <string>About Qt</string>
    </property>
   </action>
  </widget>

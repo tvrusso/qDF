@@ -7,6 +7,7 @@ using namespace std;
 #include "Settings.hpp"
 #include "getReportDialog.h"
 #include "reportToggleDialog.h"
+#include "settingsDialog.h"
 #include "qDFProjReport.hpp"
 #include <Util_Misc.hpp>
 
@@ -34,14 +35,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupConnections()
 {
-  // Report menu
-  connect(actionNew_Report, SIGNAL(triggered()), this, SLOT(newReportClicked()));
+  // File menu
   connect(actionSave_As, SIGNAL(triggered()), this, SLOT(saveAs()));
   connect(actionSave, SIGNAL(triggered()), this, SLOT(save()));
   connect(actionOpen, SIGNAL(triggered()), this, SLOT(open()));
   connect(actionClose, SIGNAL(triggered()), this, SLOT(closeFile()));
 
+  // Edit menu:
+  connect(actionSettings, SIGNAL(triggered()), this, SLOT(editSettings()));
+
   // Report menu
+  connect(actionNew_Report, SIGNAL(triggered()), this, SLOT(newReportClicked()));
   connect(actionToggle_Validity, SIGNAL(triggered()), this, SLOT(toggleValidityClicked()));
 
   connect(this, SIGNAL(newReportCreated(qDFProjReport *)), 
@@ -92,8 +96,6 @@ void MainWindow::newReportClicked()
   {
     string reportName= theRD.lineEdit_ReportName->text().toStdString();
     QString coordSysName=theRD.comboBox_CoordSys->currentText();
-    string coord0=theRD.lineEdit_Coord0->text().toStdString();
-    string coord1=theRD.lineEdit_Coord1->text().toStdString();
     double bearing=theRD.lineEdit_bearing->text().toDouble()+9.8;
     double sd=
       theSettings_.getStandardDeviation(theRD.comboBox_EquipmentType->currentText(),
@@ -104,21 +106,13 @@ void MainWindow::newReportClicked()
     //    CoordSysBuilder myCSB;
     CoordSys myCS=theSettings_.getCoordSys(coordSysName);
 
+    QVector<double> llCoords(2);
+    theRD.latLon->getCoords(llCoords);
     vector<double> coords(2,0.0);
-
-    //KLUDGE!  Only convert DMS strings if the coordinate system is lat/lon!
-    DFLib::Proj::Point junk(coords,myCS.getProj4Params());
-    if (junk.isUserProjLatLong())
-    {
-      coords[0]=dmstor(coord0.c_str(),NULL)*RAD_TO_DEG;
-      coords[1]=dmstor(coord1.c_str(),NULL)*RAD_TO_DEG;
-    }
-    else
-    {
-      coords[0]=strtod(coord0.c_str(),NULL);
-      coords[1]=strtod(coord1.c_str(),NULL);
-    }
-      
+    coords[0]=llCoords[1]; // llCoords[1] is latitude
+    coords[1]=llCoords[0]; // llcoords[0] is longitude.  Rearrange for DFLib,
+                           // which expects longitude (X) and latitude (Y) in 
+                           // that order.
 
     qDFProjReport *theNewReport = new qDFProjReport(coords,bearing,sd,
                                                     reportName,myCS);
@@ -619,4 +613,19 @@ bool MainWindow::saveFile(const QString &fileName)
   }
 
   return(retcode);
+}
+
+void MainWindow::editSettings()
+{
+  settingsDialog theSD(theSettings_);
+
+  if (theSD.exec())
+  {
+    theSD.retrieveSettings(theSettings_);
+    theAPRS.setPort(theSettings_.getAPRSPort());
+    theAPRS.setServer(theSettings_.getAPRSServer());
+    theAPRS.setCallsign(theSettings_.getAPRSCallsign());
+    theAPRS.setCallpass(theSettings_.getAPRSCallpass());
+  }
+
 }
