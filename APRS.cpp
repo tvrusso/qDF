@@ -4,6 +4,9 @@
 #include <QUdpSocket>
 #include <QHostInfo>
 #include <QHostAddress>
+#include <QTimer>
+#include <QMessageBox>
+
 #include <iostream>
 using namespace std;
 
@@ -11,15 +14,17 @@ APRS::APRS()
   :server_(""),
    port_(0),
    callsign_(""),
-   callpass_("")
+   callpass_(""),
+   timerActive(false)
 {
 }
 
 APRS::APRS(const QString &server,quint16 port, const QString &callsign,const QString &callpass)
-  :server_(server),
+ :server_(server),
    port_(port),
    callsign_(callsign),
-   callpass_(callpass)
+  callpass_(callpass),
+  timerActive(false)
 {
 }
 
@@ -203,10 +208,13 @@ void APRS::sendPacketToServer(const QString &payload)
     if (!info.addresses().isEmpty())
     {
       theSocket->writeDatagram(datagram,info.addresses().first(),port_);
+      udpSockets.append(QPair<QUdpSocket *,int>(theSocket,0));
+#if 0
       // now wait for the ack...
       QHostAddress sender;
       quint16 senderPort;
       int bytesRead;
+
       datagram.clear();
       datagram.resize(256);
       while ((bytesRead= theSocket->readDatagram(datagram.data(),
@@ -216,11 +224,18 @@ void APRS::sendPacketToServer(const QString &payload)
       QString nackorack(datagram);
       cout << "udpClient: received a packet of "<< bytesRead << " " 
            << nackorack.toStdString() << endl;;
-
+#endif
+      if (!timerActive)
+      {
+        QTimer::singleShot(1000,this,SLOT(checkPendingDatagrams()));
+        timerActive=true;
+      }
     }
     else
     {
-      cout << " sendPacketToServer error: host name could not be resolved." << endl;
+      QMessageBox::warning(0,tr("APRS"),
+                           QString("Host name %1 could not be resolved.").arg(server_),
+                           QMessageBox::Ok);
     }
   }
 }
@@ -410,3 +425,67 @@ QString APRS::createDFErrorObject(const QString &oName,
 
   return(createObject(oName,coords,"\\l",theMultiline));
 }
+
+void APRS::checkPendingDatagrams()
+{
+  QUdpSocket *theSocket;
+  QList<QPair<QUdpSocket *,int> >::iterator iter;
+  QList<QPair<QUdpSocket *,int> >::iterator listEnd=udpSockets.end();
+  QVector<QList<QPair<QUdpSocket *,int> >::iterator> itersToDelete;
+  itersToDelete.clear();
+  int socketnum=0;
+
+  for (iter=udpSockets.begin();iter!=listEnd;++iter)
+  {
+    theSocket=(*iter).first;
+    int numTries=(*iter).second;
+    int bytesRead;
+    QByteArray datagram;
+    QHostAddress sender;
+    quint16 senderPort;
+    datagram.resize(256);
+    
+    if ((bytesRead=theSocket->readDatagram(datagram.data(),
+                                          datagram.size(),&sender,
+                                           &senderPort))!= -1)
+    {
+
+      // don't care what it was --- we know it was an ack      
+      theSocket->deleteLater();  // we don't need this anymore, tell it to go away.
+      itersToDelete.append(iter);
+    }
+    else
+    {
+      if (numTries<10)
+      {
+        ((*iter).second)++;
+      }
+      else
+      {
+        // it ain't ack'd after 10 seconds, give up on it.
+        theSocket->deleteLater();
+        itersToDelete.append(iter);
+      }
+    }
+    socketnum++;
+  }
+  // Delete any iterators we flagged
+  if (itersToDelete.size()!= 0)
+  {
+    for (int i=0; i<itersToDelete.size(); ++i)
+      udpSockets.erase(itersToDelete[i]);
+  }
+
+  // If we still haven't emptied the udpSockets list, then some socket still
+  // hasn't acked.  Reset the timer.
+  if (udpSockets.size() != 0)
+  {
+    QTimer::singleShot(1000,this,SLOT(checkPendingDatagrams()));
+    timerActive=true;
+  }
+  else
+  {
+    timerActive=false;
+  }
+}
+

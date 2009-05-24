@@ -1,15 +1,18 @@
 #ifndef APRS_HPP
 #define APRS_HPP
 
+#include <QObject>
 #include <QString>
 #include <QMap>
 #include <QStringList>
+#include <QUdpSocket>
 
 #include <vector>
 using namespace std;
 
-class APRS
+class APRS:public QObject
 {
+  Q_OBJECT;
 
 public:
   APRS();
@@ -54,8 +57,11 @@ private:
   quint16 port_;
   QString callsign_;
   QString callpass_;
+  QList<QPair<QUdpSocket *,int> > udpSockets;
+  bool timerActive;
 
-
+private slots:
+  void checkPendingDatagrams();
 };
 
 #endif

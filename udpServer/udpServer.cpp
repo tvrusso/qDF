@@ -42,8 +42,6 @@ void udpServer::processPendingDatagrams()
     
     QString aprsPacket(datagram);
 
-    cout << "udpServer: received a packet: " << aprsPacket.toStdString() << endl;;
-    
     plainTextEdit->insertPlainText(aprsPacket);
     
     QByteArray ackDatagram("ACK");
