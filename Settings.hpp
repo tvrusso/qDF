@@ -22,6 +22,7 @@ private:
   QString aprsCallsign_;
   QString aprsCallpass_;
   quint16 aprsPort_;
+  bool publishAPRS_;
 
 public:
   Settings();
@@ -65,6 +66,10 @@ public:
   inline void setAPRSCallpass(const QString &c) {aprsCallpass_=c;};
   inline void setAPRSServer(const QString &c) {aprsServer_=c;};
   inline void setAPRSPort(int p) {aprsPort_=p;};
+
+  inline bool publishAPRS() const {return publishAPRS_;};
+  inline void setPublishAPRS(bool p) {publishAPRS_=p;};
+
 };
 
 #endif

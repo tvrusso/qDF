@@ -25,7 +25,12 @@ public:
   QString createDFErrorObject(const QString &oName,
                               const vector<double> &coords,
                               double axisLon,double axisLat);
-
+  QString createMultilineObject(const QString &oName,
+                                const vector<double> &lats, 
+                                const vector<double> &lons,
+                                const vector<double> &coords,
+                                char colorStyle, int lineType,
+                                const QString &oSym);
   QString deleteObject(const QString &oName);
   QStringList deleteAllObjects();
 

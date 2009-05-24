@@ -9,7 +9,8 @@ Settings::Settings()
    aprsServer_("localhost"),
    aprsCallsign_("KM5VY-8"),
    aprsCallpass_("21753"),
-   aprsPort_(2023)
+   aprsPort_(2023),
+   publishAPRS_(true)
 {
   defaultCS_=theCoordSysBuilder_.getCoordSys(QString("WGS84 Lat/Lon"));
 
@@ -36,7 +37,13 @@ Settings::Settings(const Settings &right)
    equipQualSDMap_(right.equipQualSDMap_),
    defaultDeclination_(right.defaultDeclination_),
    defaultUTMZone_(right.defaultUTMZone_),
-   defaultFCAMinAngle_(right.defaultFCAMinAngle_)
+   defaultFCAMinAngle_(right.defaultFCAMinAngle_),
+   aprsServer_(right.aprsServer_),
+   aprsCallsign_(right.aprsCallsign_),
+   aprsCallpass_(right.aprsCallpass_),
+   aprsPort_(right.aprsPort_),
+   publishAPRS_(right.publishAPRS_)
+
 {
 }
 

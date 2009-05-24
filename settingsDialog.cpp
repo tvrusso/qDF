@@ -27,6 +27,7 @@ settingsDialog::settingsDialog(const Settings &theSettings, QWidget *parent)
   CallSignLineEdit->setText(theSettings.getAPRSCallsign());
   CallPassLineEdit->setText(theSettings.getAPRSCallpass());
 
+  APRSPublishCheckBox->setChecked(theSettings.publishAPRS());
 }
 
 void settingsDialog::retrieveSettings(Settings &theSettings)
@@ -44,5 +45,5 @@ void settingsDialog::retrieveSettings(Settings &theSettings)
   theSettings.setAPRSPort(APRSServerPortLineEdit->text().toInt());
   theSettings.setAPRSCallsign(CallSignLineEdit->text());
   theSettings.setAPRSCallpass(CallPassLineEdit->text());
-
+  theSettings.setPublishAPRS(APRSPublishCheckBox->isChecked());
 }

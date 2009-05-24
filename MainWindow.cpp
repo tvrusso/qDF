@@ -157,37 +157,97 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      vector<string> formattedCoords;
 
      DFLib::Proj::Point FCA(foo,myCS.getProj4Params());
-     theReportCollection.computeFixCutAverage(FCA,FCA_stddev,
-                                              theSettings_.getDefaultFCAMinAngle());
+     bool FCA_computed=false;
+     DFLib::Proj::Point LSFix=FCA;
+     bool LSFix_computed=false;
+     DFLib::Proj::Point MLFix=LSFix;
+     bool MLFix_computed=false;
+     DFLib::Proj::Point StansfieldFix=LSFix;
+     bool StansfieldFix_computed=false;
 
+     FCA_computed=theReportCollection.computeFixCutAverage(FCA,FCA_stddev,
+                                         theSettings_.getDefaultFCAMinAngle());
      
      if (nreports>2)
      {
-       DFLib::Proj::Point LSFix=FCA;
        theReportCollection.computeLeastSquaresFix(LSFix);
+       LSFix_computed=true;
 
-       DFLib::Proj::Point MLFix=LSFix;
-       theReportCollection.computeMLFix(MLFix);
+       try
+       {
+         theReportCollection.computeMLFix(MLFix);
+         MLFix_computed=checkValidMLFix(MLFix);
+         if (!MLFix_computed)
+         {
+           MLFix=LSFix; // reset
+           theReportCollection.aggressiveComputeMLFix(MLFix);
+           MLFix_computed=checkValidMLFix(MLFix);
+         }
+       }
+       catch (...)
+       {
+         // If computeMLFix throws an exception, such as for
+         // convergence failures, ignore it
+         MLFix_computed=false;
+       }
+
+       // Compute the Stansfield fix and its error ellipse parameters:
+       double am2,bm2,phi;
+       try
+       {
+         theReportCollection.computeStansfieldFix(StansfieldFix,am2,bm2,phi);
+         StansfieldFix_computed=true;
+       }
+       catch (...)
+       {
+         StansfieldFix_computed=false;
+       }
 
        vector<double> LS_point=LSFix.getUserCoords();
        //       printCoords(LS_point,string("Least Squares Fix"));
        formatCoords(LS_point,formattedCoords);
        label_LS_Longitude->setText(QString::fromStdString(formattedCoords[0]));
        label_LS_Latitude->setText(QString::fromStdString(formattedCoords[1]));
-       // APRS object for it:
-       QString aprsPosit=theAPRS.createObject("LS-Fix",LS_point,
-                                              "Ln"," Least Squares Solution");
-       listWidgetAPRS->addItem(aprsPosit);
 
-       vector<double> ML_point=MLFix.getUserCoords();
-       //       printCoords(ML_point,string("Maximum Likelihood Fix"));
-       formatCoords(ML_point,formattedCoords);
-       label_ML_Longitude->setText(QString::fromStdString(formattedCoords[0]));
-       label_ML_Latitude->setText(QString::fromStdString(formattedCoords[1]));
-       // APRS object for it:
-       aprsPosit=theAPRS.createObject("ML-Fix",ML_point,
-                                      "Mn"," Maximum Likelihood Solution");
-       listWidgetAPRS->addItem(aprsPosit);
+
+       aprsPointObject("LS-Fix",LS_point,"Ln"," Least Squares Solution");
+
+       if (MLFix_computed)
+       {
+         vector<double> ML_point=MLFix.getUserCoords();
+         //       printCoords(ML_point,string("Maximum Likelihood Fix"));
+         formatCoords(ML_point,formattedCoords);
+         label_ML_Longitude->setText(QString::fromStdString(formattedCoords[0]));
+         label_ML_Latitude->setText(QString::fromStdString(formattedCoords[1]));
+         
+         aprsPointObject("ML-Fix",ML_point,"Mn"," Maximum Likelihood Solution");
+       }
+       else
+       {
+         label_ML_Longitude->setText("Invalid");
+         label_ML_Latitude->setText("Invalid");
+       }
+
+       if (StansfieldFix_computed)
+       {
+         vector<double> Stansfield_point=StansfieldFix.getUserCoords();
+         //       printCoords(ML_point,string("Maximum Likelihood Fix"));
+         formatCoords(Stansfield_point,formattedCoords);
+         label_Stansfield_Longitude->setText(QString::fromStdString(formattedCoords[0]));
+         label_Stansfield_Latitude->setText(QString::fromStdString(formattedCoords[1]));
+         
+         aprsPointObject("BPE-Fix",Stansfield_point,"Sn"," Stansfield BPE");
+
+         aprsStansfieldEllipse(StansfieldFix,am2,bm2,phi,50);
+         aprsStansfieldEllipse(StansfieldFix,am2,bm2,phi,75);
+         aprsStansfieldEllipse(StansfieldFix,am2,bm2,phi,95);
+       }
+       else
+       {
+         label_Stansfield_Longitude->setText("Invalid");
+         label_Stansfield_Latitude->setText("Invalid");
+       }
+
      }
      else
      {
@@ -196,46 +256,39 @@ void MainWindow::newReportReceived(qDFProjReport *report)
        label_LS_Longitude->setText("Not Available");
        label_LS_Latitude->setText("Not Available");
 
-       QString aprsPosit=theAPRS.deleteObject("ML-Fix");
-       if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
-
-       aprsPosit=theAPRS.deleteObject("LS-Fix");
-       if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
+       deleteAPRSObject("ML-Fix");
+       deleteAPRSObject("LS-Fix");
        
      }       
-
-     vector<double> FCA_point=FCA.getUserCoords();
-     //     printCoords(FCA_point,string("Fix Cut Average"));
-     formatCoords(FCA_point,formattedCoords);
-     label_FCA_Longitude->setText(QString::fromStdString(formattedCoords[0]));
-     label_FCA_Latitude->setText(QString::fromStdString(formattedCoords[1]));
-
-     // APRS object for it, if it's not invalid through bad cuts:
-     if (FCA_point[0] !=0 && FCA_point[1] != 0)
+     if (FCA_computed)
      {
-       QString aprsPosit=theAPRS.createObject("FCA-Fix",FCA_point,
-                                              "An"," Fix Cut Average Solution");
-       listWidgetAPRS->addItem(aprsPosit);
+       vector<double> FCA_point=FCA.getUserCoords();
+       //     printCoords(FCA_point,string("Fix Cut Average"));
+       formatCoords(FCA_point,formattedCoords);
+       label_FCA_Longitude->setText(QString::fromStdString(formattedCoords[0]));
+       label_FCA_Latitude->setText(QString::fromStdString(formattedCoords[1]));
+       ostringstream os;
+       os << FCA_stddev[0];
+       label_FCA_Longitude_SD->setText(QString::fromStdString(os.str()));
+       os.str("");
+       os << FCA_stddev[1];
+       label_FCA_Latitude_SD->setText(QString::fromStdString(os.str()));
+       
+       aprsPointObject("FCA-Fix",FCA_point, "An"," Fix Cut Average Solution");
 
        if (FCA_stddev[0] != 0 && FCA_stddev[1] != 0)
        {
-         QString errorEllipse=theAPRS.createDFErrorObject("FCA-err",
-                                                          FCA_point,
-                                                          FCA_stddev[0],
-                                                          FCA_stddev[1]);
-         listWidgetAPRS->addItem(errorEllipse);
+         aprsDFErrorObject("FCA-err", FCA_point,FCA_stddev);
        }
      }
-
-    
-     ostringstream os;
-     os << FCA_stddev[0];
-     label_FCA_Longitude_SD->setText(QString::fromStdString(os.str()));
-     os.str("");
-     os << FCA_stddev[1];
-     label_FCA_Latitude_SD->setText(QString::fromStdString(os.str()));
-
-
+     else
+     {
+       label_FCA_Longitude->setText("Not Available");
+       label_FCA_Latitude->setText("Not Available");
+       label_FCA_Longitude_SD->setText("Not Available");
+       label_FCA_Latitude_SD->setText("Not Available");
+     }
+       
    }
    else
    {
@@ -248,14 +301,10 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      label_LS_Longitude->setText("Not Available");
      label_LS_Latitude->setText("Not Available");
 
-     QString aprsPosit=theAPRS.deleteObject("ML-Fix");
-     if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
-     aprsPosit=theAPRS.deleteObject("LS-Fix");
-     if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
-     aprsPosit=theAPRS.deleteObject("FCA-Fix");
-     if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
-     aprsPosit=theAPRS.deleteObject("FCA-err");
-     if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
+     deleteAPRSObject("ML-Fix");
+     deleteAPRSObject("LS-Fix");
+     deleteAPRSObject("FCA-Fix");
+     deleteAPRSObject("FCA-err");
    }       
      
      
@@ -321,8 +370,7 @@ void MainWindow::clearCollectionDisplay()
   reportListWidget->clear();
 
   //APRS: must delete all objects here, too
-  QStringList foo=theAPRS.deleteAllObjects();
-  listWidgetAPRS->addItems(foo);
+  deleteAllAPRSObjects();
 
 }
 
@@ -358,24 +406,7 @@ void MainWindow::updateCollectionDisplay(int reportIndex)
 
 
   // Next job is to send objects to APRS
-  const qDFProjReport * report=dynamic_cast<const qDFProjReport *>(theReportCollection.getReport(reportIndex));
-  if (report->isValid())
-  {
-    DFLib::Proj::Point tempPoint=report->getReceiverPoint();
-    tempPoint.setUserProj(theSettings_.getDefaultCS().getProj4Params());
-    vector<double> coords(2);
-    coords=tempPoint.getUserCoords();
-    QString oName=QString::fromStdString(report->getReportName());
-    QString aprsPosit=theAPRS.createDFObject(oName,coords,report->getBearing(),
-                                             report->getSigma()," de KM5VY via qDF");
-    listWidgetAPRS->addItem(aprsPosit);
-  }
-  else
-  {
-    QString oName=QString::fromStdString(report->getReportName());
-    QString aprsPosit=theAPRS.deleteObject(oName);
-    if (!aprsPosit.isEmpty()) listWidgetAPRS->addItem(aprsPosit);
-  }
+  sendReportAPRS(dynamic_cast<const qDFProjReport *>(theReportCollection.getReport(reportIndex)));
     
 
 }
@@ -487,6 +518,9 @@ void MainWindow::readSettings()
   theSettings_.setAPRSCallpass(aprsCallpass);
 
 
+  bool publishAPRS=qsettings.value("publishAPRS",
+                                   theSettings_.publishAPRS()).toBool();
+  theSettings_.setPublishAPRS(publishAPRS);
 
   // can't do the equipment map exactly.  Work it out...
 }
@@ -504,6 +538,7 @@ void MainWindow::writeSettings()
   settings.setValue("aprsCallsign",theSettings_.getAPRSCallsign());
   settings.setValue("aprsCallpass",theSettings_.getAPRSCallpass());
   settings.setValue("aprsServer",theSettings_.getAPRSServer());
+  settings.setValue("publishAPRS",theSettings_.publishAPRS());
 }
 
 bool MainWindow::writeFile(const QString &fileName)
@@ -635,3 +670,180 @@ void MainWindow::editSettings()
   }
 
 }
+
+void MainWindow::displayAPRSText(const QString & str)
+{
+  aprsPacketsTextEdit->insertPlainText(str);
+  aprsPacketsTextEdit->insertPlainText("\n");
+}  
+
+void MainWindow::sendReportAPRS(const qDFProjReport *theReport)
+{
+  if (theSettings_.publishAPRS())
+  {
+    if (theReport->isValid())
+    {
+      DFLib::Proj::Point tempPoint=theReport->getReceiverPoint();
+      tempPoint.setUserProj(theSettings_.getDefaultCS().getProj4Params());
+      vector<double> coords(2);
+      coords=tempPoint.getUserCoords();
+      QString oName=QString::fromStdString(theReport->getReportName());
+      QString aprsPosit=theAPRS.createDFObject(oName,coords,
+                                               theReport->getBearing(),
+                                               theReport->getSigma(),
+                                               " via qDF");
+      displayAPRSText(aprsPosit);
+    }
+    else
+    {
+      QString oName=QString::fromStdString(theReport->getReportName());
+      QString aprsPosit=theAPRS.deleteObject(oName);
+      if (!aprsPosit.isEmpty()) displayAPRSText(aprsPosit);
+    }
+  }
+}
+
+void MainWindow::aprsPointObject(const QString &oName, 
+                                 const vector<double>& oPoint,
+                                 const QString &oSym,
+                                 const QString & oComment)
+{
+  if (theSettings_.publishAPRS())
+  {
+    QString aprsPosit=theAPRS.createObject(oName,oPoint,oSym,oComment);
+    displayAPRSText(aprsPosit);
+  }
+}
+
+void MainWindow::aprsDFErrorObject(const QString &oName,
+                                   const vector<double>&oPoint,
+                                   const vector<double>&oSDs)
+{
+  if (theSettings_.publishAPRS())
+  {
+    QString aprsPosit=theAPRS.createDFErrorObject(oName,oPoint,oSDs[0],oSDs[1]);
+    displayAPRSText(aprsPosit);
+  }
+}
+
+void MainWindow::deleteAPRSObject(const QString &oName)
+{
+  if (theSettings_.publishAPRS())
+  {
+    QString aprsPosit=theAPRS.deleteObject(oName);
+    if (!aprsPosit.isEmpty()) 
+      displayAPRSText(aprsPosit);
+  }
+}
+
+void MainWindow::deleteAllAPRSObjects()
+{
+  if (theSettings_.publishAPRS())
+  {
+    QStringList foo=theAPRS.deleteAllObjects();
+    foreach (QString str,foo)
+    {
+      displayAPRSText(str);
+    }
+  }
+}
+
+void MainWindow::aprsStansfieldEllipse(DFLib::Proj::Point &thePoint,
+                                       double am2, double bm2, double phi,
+                                       int percent)
+{
+  if (theSettings_.publishAPRS())
+  {
+    if (am2>0 && bm2>0)
+    {
+      
+      // this is tricky.  We need to calculate the Stansfield ellipses in 
+      // XY coordinates, then convert their points to lat/lon before generating
+      // the APRS object.
+      
+      double P=((double)percent)/100.0;
+      double rho=-2*log(1-P);
+      DFLib::Proj::Point tempPoint(thePoint);
+      vector<double> lats;
+      vector<double> lons;
+      vector<double> centerCoords=thePoint.getXY();
+      vector<double> tempCoords(2);
+      double a=sqrt(1.0/am2);
+      double b=sqrt(1.0/bm2);
+      double cosphi=cos(phi);
+      double sinphi=sin(phi);
+      const double pi=4*atan(1.0);
+
+      // this is the equation of an ellipse of axis a*rho and b*rho, rotated
+      // by an angle phi.
+      for (int i=0;i<16;i++)
+      {
+        tempCoords[0]=centerCoords[0]
+          +a*rho*cosphi*cos(2.0*pi/15.0*i)-b*rho*sinphi*sin(2.0*pi/15.0*i);
+        tempCoords[1]=centerCoords[1]
+          +a*rho*sinphi*cos(2.0*pi/15.0*i)+b*rho*cosphi*sin(2.0*pi/15.0*i);
+
+        // those are the coordinates in XY.  Now get 'em in lat/lon
+        tempPoint.setXY(tempCoords);
+        tempCoords=tempPoint.getUserCoords();
+        lons.push_back(tempCoords[0]);
+        lats.push_back(tempCoords[1]);
+      }
+
+      // we now have our rotated ellipse transformed to lat/lon.  Make the
+      // APRS object
+      char colorStyle;
+      if (percent>=50)
+        colorStyle='g';
+      if (percent>=75)
+        colorStyle='e';
+      if (percent>90)
+        colorStyle='a';
+      centerCoords=thePoint.getUserCoords();
+      QString aprsPosit=
+        theAPRS.createMultilineObject(QString("SErr%1").arg(percent),
+                                      lats,lons,centerCoords,
+                                      colorStyle,0,
+                                      "\\l");
+      displayAPRSText(aprsPosit);
+    }
+  }
+}
+
+// ML sometimes returns complete garbage for the ML fix.  When it does,
+// the point is off at infinity.  Sanity check:
+bool MainWindow::checkValidMLFix(DFLib::Proj::Point &thePoint)
+{
+  
+  DFLib::Proj::Point tempPoint=thePoint;
+
+  for (int i=0; i<theReportCollection.size();i++)
+  {
+    if (theReportCollection.isValid(i))
+    {
+      tempPoint=dynamic_cast<const DFLib::Proj::Report *>(theReportCollection.getReport(i))->getReceiverPoint();
+      break;
+    }
+  }
+  tempPoint.setUserProj(theSettings_.getDefaultCS().getProj4Params());
+  vector<double>latlon=thePoint.getUserCoords();
+  vector<double>merc=thePoint.getXY();
+  vector<double>r0_coords=tempPoint.getUserCoords();
+
+  if (!(isinf(latlon[0])||isinf(latlon[1])||isnan(latlon[0])||isnan(latlon[1])
+        ||
+        isinf(merc[0])||isinf(merc[1])||isnan(merc[0])||isnan(merc[1])))
+  {
+    // Use the Haversine formula to compute the distance between the fix and
+    // the first valid report location we have.
+    // compute very rough distance on sphere with haversine formula:
+    double dlon=(latlon[0]-r0_coords[0])/RAD_TO_DEG;
+    double dlat=(latlon[1]-r0_coords[1])/RAD_TO_DEG;
+    double haversin_a=sin(dlat/2.0)*sin(dlat/2.0)+cos(latlon[1]/RAD_TO_DEG)*cos(r0_coords[1]/RAD_TO_DEG)*sin(dlon/2)*sin(dlon/2);
+    double haversin_c=2*atan2(sqrt(haversin_a),sqrt(1-haversin_a));
+    double haversin_d=3596*haversin_c;   // miles, give or take
+    return (haversin_d<100);
+  }
+  return(false);
+}
+

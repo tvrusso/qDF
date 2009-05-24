@@ -35,9 +35,24 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
   bool writeFile(const QString &fileName);
   bool loadFile(const QString &fileName);
   bool dirtyCollection;
+  void displayAPRSText(const QString &str);
   QString currentFileName;
 
   APRS theAPRS;
+
+  void sendReportAPRS(const qDFProjReport * theReport);
+  void aprsPointObject(const QString &oName,const vector<double> & oPoint,
+                       const QString &oSym,
+                       const QString &oComment);
+  void aprsDFErrorObject(const QString &oName,const vector<double> &oPoint,
+                         const vector<double> &oSDs);
+  void aprsStansfieldEllipse(DFLib::Proj::Point &thePoint,
+                             double am2, double bm2, double phi, int percent);
+
+  void deleteAPRSObject(const QString &oName);
+  void deleteAllAPRSObjects();
+  
+  bool checkValidMLFix(DFLib::Proj::Point &thePoint);
 
   private slots:
    void newReportClicked();

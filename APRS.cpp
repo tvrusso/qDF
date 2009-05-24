@@ -403,8 +403,8 @@ void APRS::generateEllipse(double lonCentr, double latCentr,
   lats.resize(numPoints);
   for (iPair = 0; iPair < numPoints; ++iPair)
   {
-    lons[iPair] = lonCentr + axisLon*cos(2.0*pi/((double)numPoints)*iPair);
-    lats[iPair] = latCentr + axisLat*sin(2.0*pi/((double)numPoints)*iPair);
+    lons[iPair] = lonCentr + axisLon*cos(2.0*pi/((double)(numPoints-1))*iPair);
+    lats[iPair] = latCentr + axisLat*sin(2.0*pi/((double)(numPoints-1))*iPair);
   }
 }
 
@@ -414,18 +414,30 @@ QString APRS::createDFErrorObject(const QString &oName,
 {
   vector<double> lats;
   vector<double> lons;
+
+  generateEllipse(coords[0],coords[1],axisLon,axisLat,16,lons,lats);
+  return(createMultilineObject(oName,lats,lons,coords,'e',0,"\\l"));
+}
+
+QString APRS::createMultilineObject(const QString &oName,
+                                    const vector<double> &lats, 
+                                    const vector<double> &lons,
+                                    const vector<double> &coords,
+                                    char colorStyle, int lineType,
+                                    const QString &oSym)
+{
   double latC=coords[1];
   double lonC=coords[0];
 
-  generateEllipse(coords[0],coords[1],axisLon,axisLat,16,lons,lats);
-  QString theMultiline=makeMultiline(lons,lats,'e',1,"error",
+  QString theMultiline=makeMultiline(lons,lats,colorStyle,lineType,"qDFxx",
                                      &lonC,&latC);
   if (theMultiline.isEmpty())
     return (QString(""));
 
-  return(createObject(oName,coords,"\\l",theMultiline));
+  return(createObject(oName,coords,oSym,theMultiline));
 }
-
+ 
+  
 void APRS::checkPendingDatagrams()
 {
   QUdpSocket *theSocket;
