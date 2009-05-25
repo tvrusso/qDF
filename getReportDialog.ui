@@ -138,7 +138,11 @@
     </layout>
    </item>
    <item row="2" column="0" >
-    <widget class="latLonCoordinateWidget" name="latLon" />
+    <widget class="latLonCoordinateWidget" name="latLon" >
+     <property name="focusPolicy" >
+      <enum>Qt::StrongFocus</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -152,6 +156,7 @@
  <tabstops>
   <tabstop>lineEdit_ReportName</tabstop>
   <tabstop>comboBox_CoordSys</tabstop>
+  <tabstop>latLon</tabstop>
   <tabstop>lineEdit_bearing</tabstop>
   <tabstop>comboBox_EquipmentType</tabstop>
   <tabstop>comboBox_Quality</tabstop>

@@ -9,6 +9,9 @@
     <height>104</height>
    </rect>
   </property>
+  <property name="focusPolicy" >
+   <enum>Qt::StrongFocus</enum>
+  </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
@@ -183,8 +186,6 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
   </layout>
-  <zorder>layoutWidget</zorder>
-  <zorder>label_3</zorder>
  </widget>
  <tabstops>
   <tabstop>latDegLineEdit</tabstop>

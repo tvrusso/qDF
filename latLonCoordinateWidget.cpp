@@ -5,6 +5,7 @@ latLonCoordinateWidget::latLonCoordinateWidget(QWidget *parent)
   :QWidget(parent)
 {
   setupUi(this);
+  QWidget::setFocusProxy(latDegLineEdit);
 
   // Initialize the regexps:
   latDegRegExp=QRegExp("[0-9]{1,2}(?:\\.[0-9]*){0,1}");
