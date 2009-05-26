@@ -195,12 +195,8 @@ void APRS::sendPacketToServer(const QString &payload)
     // Now send our payload in the proper format.  Xastir is expecting:
     // CALL,CALLPASS\nPAYLOAD\n
 
-    QString sendText=callsign_;
-    sendText.append(",");
-    sendText.append(callpass_);
-    sendText.append("\n");
-    sendText.append(payload);
-    sendText.append("\n");
+   QString sendText=QString("%1,%2\n%3\n").arg(callsign_).arg(callpass_)
+     .arg(payload);
 
     QByteArray datagram=sendText.toAscii();
 

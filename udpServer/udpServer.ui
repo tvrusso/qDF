@@ -50,7 +50,7 @@
    </property>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="action_Exit" />
    </widget>
@@ -68,7 +68,7 @@
   </widget>
   <action name="action_Exit" >
    <property name="text" >
-    <string>&amp;Exit</string>
+    <string>E&amp;xit</string>
    </property>
   </action>
  </widget>

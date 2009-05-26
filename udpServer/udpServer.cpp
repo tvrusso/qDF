@@ -48,7 +48,7 @@ void udpServer::processPendingDatagrams()
 
     udpSocket->writeDatagram(ackDatagram,sender,senderPort);
 
-    plainTextEdit->insertPlainText(QString(ackDatagram));
+    plainTextEdit->insertPlainText(QString(ackDatagram).append("\n"));
 
   } while (udpSocket->hasPendingDatagrams());
 }
