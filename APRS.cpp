@@ -15,7 +15,8 @@ APRS::APRS()
    port_(0),
    callsign_(""),
    callpass_(""),
-   timerActive(false)
+   timerActive(false),
+   theSocket(0)
 {
 }
 
@@ -24,7 +25,8 @@ APRS::APRS(const QString &server,quint16 port, const QString &callsign,const QSt
    port_(port),
    callsign_(callsign),
   callpass_(callpass),
-  timerActive(false)
+  timerActive(false),
+  theSocket(0)
 {
 }
 
@@ -188,50 +190,14 @@ void APRS::sendPacketToServer(const QString &payload)
 
   if (!payload.isEmpty())
   {
-
-    // Create a new udpSocket for this one packet (?)
-    QUdpSocket *theSocket  = new QUdpSocket;
-
-    // Now send our payload in the proper format.  Xastir is expecting:
-    // CALL,CALLPASS\nPAYLOAD\n
-
-   QString sendText=QString("%1,%2\n%3\n").arg(callsign_).arg(callpass_)
-     .arg(payload);
-
-    QByteArray datagram=sendText.toAscii();
-
-    QHostInfo info=QHostInfo::fromName(server_);
-    if (!info.addresses().isEmpty())
+    // simply add to the queue of pending packets
+    pendingPackets.enqueue(QPair<QString,int>(payload,0));
+    // if there's more than one in the queue, then we will be taken care of
+    // eventually.  But if the queue's empty except for us, need to start the
+    // processing of the queue
+    if (pendingPackets.size()==1)
     {
-      theSocket->writeDatagram(datagram,info.addresses().first(),port_);
-      udpSockets.append(QPair<QUdpSocket *,int>(theSocket,0));
-#if 0
-      // now wait for the ack...
-      QHostAddress sender;
-      quint16 senderPort;
-      int bytesRead;
-
-      datagram.clear();
-      datagram.resize(256);
-      while ((bytesRead= theSocket->readDatagram(datagram.data(),
-                                                 datagram.size(),&sender,
-                                                 &senderPort)) == -1)
-      {}
-      QString nackorack(datagram);
-      cout << "udpClient: received a packet of "<< bytesRead << " " 
-           << nackorack.toStdString() << endl;;
-#endif
-      if (!timerActive)
-      {
-        QTimer::singleShot(1000,this,SLOT(checkPendingDatagrams()));
-        timerActive=true;
-      }
-    }
-    else
-    {
-      QMessageBox::warning(0,tr("APRS"),
-                           QString("Host name %1 could not be resolved.").arg(server_),
-                           QMessageBox::Ok);
+      checkPendingDatagrams();
     }
   }
 }
@@ -436,64 +402,100 @@ QString APRS::createMultilineObject(const QString &oName,
   
 void APRS::checkPendingDatagrams()
 {
-  QUdpSocket *theSocket;
-  QList<QPair<QUdpSocket *,int> >::iterator iter;
-  QList<QPair<QUdpSocket *,int> >::iterator listEnd=udpSockets.end();
-  QVector<QList<QPair<QUdpSocket *,int> >::iterator> itersToDelete;
-  itersToDelete.clear();
-  int socketnum=0;
-
-  for (iter=udpSockets.begin();iter!=listEnd;++iter)
+  // do nothing if queue is empty
+  if (pendingPackets.size())
   {
-    theSocket=(*iter).first;
-    int numTries=(*iter).second;
-    int bytesRead;
-    QByteArray datagram;
-    QHostAddress sender;
-    quint16 senderPort;
-    datagram.resize(256);
-    
-    if ((bytesRead=theSocket->readDatagram(datagram.data(),
-                                          datagram.size(),&sender,
-                                           &senderPort))!= -1)
-    {
+    QPair<QString,int> packet=pendingPackets.head();
+    int ntries=packet.second;
+    QString payload=packet.first;
 
-      // don't care what it was --- we know it was an ack      
-      theSocket->deleteLater();  // we don't need this anymore, tell it to go away.
-      itersToDelete.append(iter);
-    }
-    else
+    // check that we have a socket opened
+    if (theSocket==0)
     {
-      if (numTries<10)
+      theSocket = new QUdpSocket;
+    }
+    bool sendIt=false;
+    bool acked=false;
+    if (ntries>0) // we have already sent it, check for its ack
+    {
+      ntries++;
+      int bytesRead;
+      QByteArray datagram;
+      QHostAddress sender;
+      quint16 senderPort;
+      datagram.resize(256);
+      bool retry=false;
+      if ((bytesRead=theSocket->readDatagram(datagram.data(),
+                                             datagram.size(),&sender,
+                                             &senderPort))!= -1)
       {
-        ((*iter).second)++;
+        QString theDatagram(datagram);
+        if (theDatagram=="NAK")
+          retry=true;
+        else
+          acked=true;
+        // either way, we got a packet from this, so delete the socket and
+        // open a new one.  It seems that trying to reuse the socket
+        // gets us weird warnings from the abstract socket class.
+        theSocket->deleteLater();
+        theSocket=new QUdpSocket;
+      }
+      // save the updated ntries
+      pendingPackets.head().second=ntries;
+      if (retry && ntries<10)
+        sendIt=true;
+      if (acked||ntries>=10)
+      {
+        pendingPackets.dequeue(); // remove if from the queue
+        
+        // just grab next one, whose retries is definitely 0 if there is one.
+        if (pendingPackets.size())
+        {
+          packet=pendingPackets.head();
+          ntries=packet.second;
+          payload=packet.first;
+          sendIt=true;
+        }
+      }
+    }
+    
+    if (sendIt || ntries==0)
+    {
+      QString sendText=QString("%1,%2\n%3\n").arg(callsign_).arg(callpass_)
+        .arg(payload);
+      
+      QByteArray datagram=sendText.toAscii();
+      
+      QHostInfo info=QHostInfo::fromName(server_);
+      if (!info.addresses().isEmpty())
+      {
+        theSocket->writeDatagram(datagram,info.addresses().first(),port_);
       }
       else
       {
-        // it ain't ack'd after 10 seconds, give up on it.
-        theSocket->deleteLater();
-        itersToDelete.append(iter);
+        QMessageBox::warning(0,tr("APRS"),
+                             QString("Host name %1 could not be resolved.")
+                             .arg(server_),
+                             QMessageBox::Ok);
       }
-    }
-    socketnum++;
-  }
-  // Delete any iterators we flagged
-  if (itersToDelete.size()!= 0)
-  {
-    for (int i=0; i<itersToDelete.size(); ++i)
-      udpSockets.erase(itersToDelete[i]);
-  }
 
-  // If we still haven't emptied the udpSockets list, then some socket still
-  // hasn't acked.  Reset the timer.
-  if (udpSockets.size() != 0)
-  {
-    QTimer::singleShot(1000,this,SLOT(checkPendingDatagrams()));
-    timerActive=true;
+      if (ntries==0) ntries=1; // only bump tries if this is the first attempt,
+                               // otherwise we already bumped it
+      pendingPackets.head().second=ntries;
+    }
+    
+    // When we get here, we've either cleared the queue or we're waiting for
+    // an ack.  set a timer to come back here in 1ms.
+    if (pendingPackets.size())
+      QTimer::singleShot(10,this,SLOT(checkPendingDatagrams()));
+    else
+      emit(queueCleared());
   }
   else
   {
-    timerActive=false;
+    emit(queueCleared());
   }
+
+
 }
 

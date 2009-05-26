@@ -246,6 +246,10 @@ void MainWindow::newReportReceived(qDFProjReport *report)
        {
          label_Stansfield_Longitude->setText("Invalid");
          label_Stansfield_Latitude->setText("Invalid");
+         deleteAPRSObject("BPE-Fix");
+         deleteAPRSObject("SErr50");
+         deleteAPRSObject("SErr75");
+         deleteAPRSObject("SErr95");
        }
 
      }
@@ -451,7 +455,18 @@ void MainWindow::closeEvent(QCloseEvent *event)
     } else {
       event->ignore();
     }
-    theReportCollection.deleteReports();
+    if (theReportCollection.size())
+    {
+      theReportCollection.deleteReports();
+      // Now we have an issue.  If we just exit now, the (possibly lengthy)
+      // process of deleting APRS objects has only just begun.  So what we'll do
+      // is ignore this event and set it up so that when APRS emits a signal 
+      // that the queue is cleared, we get called again.  At that point,
+      // theReportCollection will have been emptied, so this will work.
+      connect(&theAPRS,SIGNAL(queueCleared()),this,SLOT(close()));
+      event->ignore();
+    }
+
 }
 
 bool MainWindow::okToContinue()

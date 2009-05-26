@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QQueue>
 #include <QMap>
 #include <QStringList>
 #include <QUdpSocket>
@@ -62,11 +63,17 @@ private:
   quint16 port_;
   QString callsign_;
   QString callpass_;
-  QList<QPair<QUdpSocket *,int> > udpSockets;
+  //  QList<QPair<QUdpSocket *,int> > udpSockets;
+  QQueue<QPair<QString,int> > pendingPackets;
   bool timerActive;
+  QUdpSocket *theSocket;
 
 private slots:
   void checkPendingDatagrams();
+
+signals:
+  void queueCleared();
+
 };
 
 #endif
