@@ -8,11 +8,11 @@ latLonCoordinateWidget::latLonCoordinateWidget(QWidget *parent)
   QWidget::setFocusProxy(latDegLineEdit);
 
   // Initialize the regexps:
-  latDegRegExp=QRegExp("[0-9]{1,2}(?:\\.[0-9]*){0,1}");
-  lonDegRegExp=QRegExp("[0-9]{1,3}(?:\\.[0-9]*){0,1}");
+  latDegRegExp=QRegExp("([0-8]{0,1}[0-9]||90)(?:\\.[0-9]*){0,1}");
+  lonDegRegExp=QRegExp("([0]{0,1}[0-9]{1,2}||1[0-7][0-9]||180)(?:\\.[0-9]*){0,1}");
   minSecDecRegExp=QRegExp("[0-5]{0,1}[0-9](?:\\.[0-9]*){0,1}");
   intRegExp=QRegExp("[0-5]{0,1}[0-9]");
-  intLonRegExp=QRegExp("([0]{0,1}[0-9]{1,2}||1[0-7][0-9]||18[0-9])");
+  intLonRegExp=QRegExp("([0]{0,1}[0-9]{1,2}||1[0-7][0-9]||180)");
   intLatRegExp=QRegExp("([0-8]{0,1}[0-9]||90)");
 
   // Our initial validators (will be modified as text is entered)
