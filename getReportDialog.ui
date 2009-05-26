@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>574</width>
-    <height>263</height>
+    <width>616</width>
+    <height>295</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -26,16 +26,6 @@
       <widget class="QLineEdit" name="lineEdit_ReportName" />
      </item>
     </layout>
-   </item>
-   <item rowspan="5" row="0" column="1" >
-    <widget class="QDialogButtonBox" name="buttonBox" >
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="standardButtons" >
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
    </item>
    <item row="1" column="0" >
     <layout class="QHBoxLayout" name="horizontalLayout_2" >
@@ -144,6 +134,16 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="1" >
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -160,7 +160,6 @@
   <tabstop>lineEdit_bearing</tabstop>
   <tabstop>comboBox_EquipmentType</tabstop>
   <tabstop>comboBox_Quality</tabstop>
-  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -171,12 +170,12 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>310</x>
-     <y>80</y>
+     <x>566</x>
+     <y>47</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>157</x>
-     <y>223</y>
+     <x>307</x>
+     <y>147</y>
     </hint>
    </hints>
   </connection>
@@ -187,12 +186,12 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>336</x>
-     <y>80</y>
+     <x>566</x>
+     <y>47</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>286</x>
-     <y>223</y>
+     <x>307</x>
+     <y>147</y>
     </hint>
    </hints>
   </connection>
