@@ -463,8 +463,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
       // is ignore this event and set it up so that when APRS emits a signal 
       // that the queue is cleared, we get called again.  At that point,
       // theReportCollection will have been emptied, so this will work.
-      connect(&theAPRS,SIGNAL(queueCleared()),this,SLOT(close()));
-      event->ignore();
+      if (theSettings_.publishAPRS())
+      {
+        connect(&theAPRS,SIGNAL(queueCleared()),this,SLOT(close()));
+        event->ignore();
+      }
     }
 
 }
