@@ -1,3 +1,10 @@
+#ifdef _MSC_VER
+#define _USE_MATH_DEFINES
+#include <cfloat>
+inline bool isnan(double v) {return _isnan(v)!=0;}
+inline bool isinf(double v) {return !_finite(v);}
+#endif
+
 #include <QtGui>
 #include <sstream>
 #include <iostream>
