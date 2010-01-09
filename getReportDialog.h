@@ -17,7 +17,7 @@ class getReportDialog : public QDialog, public Ui::getReportDialog
 
  private slots:
   void equipmentChanged(const QString &);
-
+  void somethingChanged();
   
 };
 

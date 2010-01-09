@@ -17,7 +17,11 @@
   </property>
   <layout class="QGridLayout" name="gridLayout" >
    <item row="0" column="1" >
-    <widget class="QLineEdit" name="latDegLineEdit" />
+    <widget class="QLineEdit" name="latDegLineEdit" >
+     <property name="toolTip" >
+      <string>Integer or decimal degrees.  Entering a decimal here disables minutes and seconds.</string>
+     </property>
+    </widget>
    </item>
    <item row="0" column="2" >
     <widget class="QLabel" name="label_7" >
@@ -27,7 +31,11 @@
     </widget>
    </item>
    <item row="0" column="3" >
-    <widget class="QLineEdit" name="latMinLineEdit" />
+    <widget class="QLineEdit" name="latMinLineEdit" >
+     <property name="toolTip" >
+      <string>Integer or decimal minutes.  Entering a decimal here disables seconds.</string>
+     </property>
+    </widget>
    </item>
    <item row="0" column="4" >
     <widget class="QLabel" name="label_5" >
@@ -37,7 +45,11 @@
     </widget>
    </item>
    <item row="0" column="5" >
-    <widget class="QLineEdit" name="latSecLineEdit" />
+    <widget class="QLineEdit" name="latSecLineEdit" >
+     <property name="toolTip" >
+      <string>Integer or decimal seconds.</string>
+     </property>
+    </widget>
    </item>
    <item row="0" column="6" >
     <widget class="QLabel" name="label_9" >
@@ -100,7 +112,11 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="1" column="1" >
-    <widget class="QLineEdit" name="lonDegLineEdit" />
+    <widget class="QLineEdit" name="lonDegLineEdit" >
+     <property name="toolTip" >
+      <string>Integer or decimal degrees.  Entering a decimal here disables minutes and seconds.</string>
+     </property>
+    </widget>
    </item>
    <item row="1" column="2" >
     <widget class="QLabel" name="label_6" >
@@ -110,7 +126,11 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="1" column="3" >
-    <widget class="QLineEdit" name="lonMinLineEdit" />
+    <widget class="QLineEdit" name="lonMinLineEdit" >
+     <property name="toolTip" >
+      <string>Integer or decimal minutes.  Entering a decimal here disables seconds.</string>
+     </property>
+    </widget>
    </item>
    <item row="1" column="4" >
     <widget class="QLabel" name="label_8" >
@@ -120,7 +140,11 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="1" column="5" >
-    <widget class="QLineEdit" name="lonSecLineEdit" />
+    <widget class="QLineEdit" name="lonSecLineEdit" >
+     <property name="toolTip" >
+      <string>Integer or decimal seconds.</string>
+     </property>
+    </widget>
    </item>
    <item row="1" column="6" >
     <widget class="QLabel" name="label_10" >

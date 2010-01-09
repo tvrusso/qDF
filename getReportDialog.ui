@@ -23,7 +23,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_ReportName" />
+      <widget class="QLineEdit" name="lineEdit_ReportName" >
+       <property name="toolTip" >
+        <string>Enter a unique name for this report.</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -74,7 +78,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_bearing" />
+      <widget class="QLineEdit" name="lineEdit_bearing" >
+       <property name="toolTip" >
+        <string>Magnetic bearing in degrees</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
