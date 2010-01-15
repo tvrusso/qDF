@@ -1,0 +1,21 @@
+- Create abstract class for DF display
+- Implementations of DFDisplay interface for main window and APRS
+- Implement All Topo Maps display class on Windows
+- Allow user to turn off each display class other than main window in settings
+  dialog
+
+- allow editing of DF reports!
+
+- Add WMM geomagnetic model and automatic computation of declination
+
+- add VOR database
+- add computation of bearing/range between any two points (geodesic,
+  spherical earth OK)
+- Add bearing/range from VOR for fixes
+- add computation of location given bearing/range from VOR
+- Add ability to plot airborne reports given bearing/range from VOR or Lat/Lon
+  and altitude (use SAR School text for parameters needed to compute footprint)
+
+- Allow persistent TCP connection to APRS stream
+- Receive APRS data from stream (drop all on floor but DF reports)
+- Allow ability to import selected DF reports from APRS stream
