@@ -68,7 +68,7 @@ const CoordSys &Settings::getDefaultCS() const { return defaultCS_;};
 
 QString Settings::getDefaultCSName() const
 {
-  QString theName=QString::fromStdString(defaultCS_.getBaseName());
+  QString theName=defaultCS_.getBaseName();
   return (theName);
 }
 

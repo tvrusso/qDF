@@ -98,17 +98,21 @@ void MainWindow::toggleValidityClicked()
 
 void MainWindow::newReportClicked()
 {
-  getReportDialog theRD(theSettings_);
+  QList<QString> existingNames=theReportCollection.getReportNames();
+
+  getReportDialog theRD(theSettings_,existingNames);
 
   if (theRD.exec())
   {
     string reportName= theRD.lineEdit_ReportName->text().toStdString();
     QString coordSysName=theRD.comboBox_CoordSys->currentText();
-    double bearing=theRD.lineEdit_bearing->text().toDouble()+9.8;
+    QString equipType=theRD.comboBox_EquipmentType->currentText();
+    QString quality=theRD.comboBox_Quality->currentText();
+    double bearing=theRD.lineEdit_bearing->text().toDouble()+
+      theSettings_.getDefaultDeclination();
     double sd=
-      theSettings_.getStandardDeviation(theRD.comboBox_EquipmentType->currentText(),
-                                        theRD.comboBox_Quality->currentText());
-
+      theSettings_.getStandardDeviation(equipType, quality);
+    bool isValid=theRD.checkBox_validity->isChecked();
 
     // This is not right yet..., need to check for zone.  Don't worry now.
     //    CoordSysBuilder myCSB;
@@ -123,7 +127,13 @@ void MainWindow::newReportClicked()
                            // that order.
 
     qDFProjReport *theNewReport = new qDFProjReport(coords,bearing,sd,
-                                                    reportName,myCS);
+                                                    reportName,myCS,
+                                                    equipType, quality);
+    if (isValid)
+      theNewReport->setValid();
+    else
+      theNewReport->setInvalid();
+
     emit newReportCreated(theNewReport);
   }
   else
@@ -303,6 +313,8 @@ void MainWindow::newReportReceived(qDFProjReport *report)
    }
    else
    {
+     // we don't have enough reports do do any analysis, make sure we don't
+     // show data for the fixes.
      label_FCA_Longitude->setText("Not Available");
      label_FCA_Latitude->setText("Not Available");
      label_FCA_Longitude_SD->setText("Not Available");
@@ -311,11 +323,17 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      label_ML_Latitude->setText("Not Available");
      label_LS_Longitude->setText("Not Available");
      label_LS_Latitude->setText("Not Available");
+     label_Stansfield_Longitude->setText("Not Available");
+     label_Stansfield_Latitude->setText("Not Available");
 
      deleteAPRSObject("ML-Fix");
      deleteAPRSObject("LS-Fix");
      deleteAPRSObject("FCA-Fix");
      deleteAPRSObject("FCA-err");
+     deleteAPRSObject("BPE-Fix");
+     deleteAPRSObject("SErr50");
+     deleteAPRSObject("SErr75");
+     deleteAPRSObject("SErr95");
    }       
      
      
@@ -388,7 +406,8 @@ void MainWindow::clearCollectionDisplay()
 void MainWindow::updateCollectionDisplay(int reportIndex)
 {
   vector<string> theProj4Params=theSettings_.getDefaultCS().getProj4Params();
-  QString theReportSummary=QString::fromStdString(theReportCollection.getReportSummary(reportIndex,theProj4Params) );
+  QString theReportName=theReportCollection.getReportName(reportIndex);
+  QString theReportSummary=QString::fromStdString(theReportCollection.getReportSummary(theReportName,theProj4Params) );
 
 
   // First job is to update the display in the clickable list
@@ -396,12 +415,17 @@ void MainWindow::updateCollectionDisplay(int reportIndex)
   // add (or replace) the report summary to the list
   QListWidgetItem *theWidgetItem=reportListWidget->item(reportIndex);
   if(theWidgetItem)
+  {
     theWidgetItem->setText(theReportSummary);
+  }
   else
   {
     reportListWidget->insertItem(reportIndex,theReportSummary);
     theWidgetItem=reportListWidget->item(reportIndex);
   }
+
+  // set the data for the listitem to be our name.
+  theWidgetItem->setData(Qt::UserRole,theReportName);
 
   // set the validity indicator
   QFont theItemFont=theWidgetItem->font();
@@ -424,9 +448,54 @@ void MainWindow::updateCollectionDisplay(int reportIndex)
 
 void MainWindow::listItemDoubleClicked(QListWidgetItem *item)
 {
-  int theRow=reportListWidget->row(item);
-  // we've assured that row and report index are the same.
-  theReportCollection.toggleValidity(theRow);
+  //  int theReportIndex=theReportCollection.getReportIndex(item->data(Qt::UserRole).toString().toStdString());
+  //  theReportCollection.toggleValidity(theReportIndex);
+  
+
+  QString reportName=item->data(Qt::UserRole).toString();
+
+  editReport(reportName);
+}
+
+void MainWindow::editReport(QString & rN)
+{
+  qDFProjReport * theReportPtr = theReportCollection.getReportPointer(rN);
+
+  if (theReportPtr)
+  {
+    getReportDialog theRD(theSettings_,theReportPtr);
+
+    if (theRD.exec())
+    {
+      QString coordSysName=theRD.comboBox_CoordSys->currentText();
+      QString equipType=theRD.comboBox_EquipmentType->currentText();
+      QString quality=theRD.comboBox_Quality->currentText();
+      double bearing=theRD.lineEdit_bearing->text().toDouble()+
+        theSettings_.getDefaultDeclination();
+      double sd=
+        theSettings_.getStandardDeviation(equipType, quality);
+      bool isValid=theRD.checkBox_validity->isChecked();
+      
+      // This is not right yet..., need to check for zone.  Don't worry now.
+      //    CoordSysBuilder myCSB;
+      CoordSys myCS=theSettings_.getCoordSys(coordSysName);
+      
+      QVector<double> llCoords(2);
+      theRD.latLon->getCoords(llCoords);
+      vector<double> coords(2,0.0);
+      coords[0]=llCoords[1]; // llCoords[1] is latitude
+      coords[1]=llCoords[0]; // llcoords[0] is longitude.  Rearrange for DFLib,
+                             // which expects longitude (X) and latitude (Y) in 
+                             // that order.
+
+      if (isValid)
+        theReportPtr->setValid();
+      else
+        theReportPtr->setInvalid();
+      // The next line takes care of the "emit" of a reportChanged"
+      theReportPtr->setAll(coords,bearing,sd,myCS,equipType,quality);
+    }
+  }
 }
 
 void MainWindow::aboutQt()
@@ -439,11 +508,11 @@ void MainWindow::about()
   QMessageBox::about(this,tr("About qDF"),
                      tr("<h2>qDF 0.1</h2>"
                         "<p>Copyright &copy; 2009 Tom Russo."
-                        "<p>qDF is a simple application for computing "
+                        "<p>qDF is an application for computing "
                         "fixes of transmitter location from bearings-only "
                         "measurements by receivers."
                         "<p>It computes the Fix Cut Average, Least Squares, "
-                        "and Maximum Likelihood fixes."
+                        "Maximum Likelihood, and Stansfield fixes."
                         "<p>The Fix Cut Average is the average position of "
                         "pairwise intersections of report lines."
                         "<p>The Least Squares fix is the point that minimizes "
@@ -451,7 +520,12 @@ void MainWindow::about()
                         "bearing lines."
                         "<p>The Maximum Likelihood fix is the point that "
                         "maximizes the probability distribution assuming "
-                        "Gaussian distributions of error from each receiver."));
+                        "Gaussian distributions of error from each receiver."
+                        "<p>The Stansfield fix is a version of the Maximum "
+                        "Likelihood fix that incorporates the assumption that "
+                        "angular error is small and distance between receiver "
+                        "and transmitter is large.  It is based on the seminal "
+                        "1947 paper by R.G. Stansfield."));
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -607,7 +681,7 @@ bool MainWindow::loadFile(const QString &fileName)
   if (magic != MagicNumber)
   {
     QMessageBox::warning(this,tr("qDF"),
-                         tr("The file is not a qDF file."));
+                         tr("The file is not a qDF file for this version of qDF."));
     return false;
   }
 

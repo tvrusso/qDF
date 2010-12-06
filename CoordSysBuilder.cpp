@@ -94,7 +94,7 @@
     coordinateNames_.clear();
   }
 
-  CoordSys::CoordSys(std::string n, std::vector<std::string> & p4P,
+  CoordSys::CoordSys(QString n, std::vector<std::string> & p4P,
                      std::vector<std::string> & cN, bool zR, int z)
     :csName_(n),
      proj4Params_(p4P),
@@ -132,15 +132,15 @@
     return *this;
   }
 
-  std::string CoordSys::getBaseName() const
+  QString CoordSys::getBaseName() const
   {
     return (csName_);
   }
 
-  std::string CoordSys::getName() const
+  QString CoordSys::getName() const
   {
     ostringstream returnName;
-    returnName << csName_;
+    returnName << csName_.toStdString();
 
     if (zoneRequired_)
     {
@@ -153,7 +153,7 @@
         returnName << " Zone " << zone_;
       }
     }
-    return (returnName.str());
+    return (QString::fromStdString(returnName.str()));
   }
 
   void CoordSys::setZone(int z)

@@ -11,7 +11,7 @@
 class CoordSys
   {
   private:
-    std::string csName_;
+    QString csName_;
     std::vector<std::string> proj4Params_;
     std::vector<std::string> coordinateNames_;
     bool zoneRequired_;
@@ -19,7 +19,7 @@ class CoordSys
   public:
     CoordSys();
     CoordSys(const CoordSys & right);
-    CoordSys(std::string name,std::vector<std::string> &p4P,
+    CoordSys(QString name,std::vector<std::string> &p4P,
              std::vector<std::string> & cN, bool zR, int z=-1);
     CoordSys& operator=(const CoordSys& rhs);
 
@@ -32,8 +32,8 @@ class CoordSys
     inline int getZone() const {return (zone_);};
 
     void setZone(int z);
-    std::string getName() const;
-    std::string getBaseName() const;
+    QString getName() const;
+    QString getBaseName() const;
     inline bool isZoneRequired() const { return(zoneRequired_);};
   };
 

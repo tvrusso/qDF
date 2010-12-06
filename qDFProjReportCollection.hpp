@@ -3,6 +3,8 @@
 
 #include <DF_Report_Collection.hpp>
 #include <QObject>
+#include <QMap>
+#include <QString>
 #include "qDFProjReport.hpp"
 
 class qDFProjReportCollection: public QObject, public DFLib::ReportCollection
@@ -14,8 +16,15 @@ public:
   ~qDFProjReportCollection();
 
   int addReport(qDFProjReport *theReport);
-  string getReportSummary(int reportIndex,const vector<string>&projArgs) const;
+  string getReportSummary(const QString &reportName,
+                          const vector<string>&projArgs) const;
+  QString getReportName(int reportIndex);
   virtual void deleteReports();
+  QList<QString> getReportNames() { return reportMap_.keys();};
+  qDFProjReport * getReportPointer(const QString & rN);
+
+private:
+  QMap<QString,qDFProjReport*> reportMap_;
 
 signals:
   void collectionChanged();
@@ -23,7 +32,7 @@ signals:
   void collectionChanged(int i);
                         
 public slots:
-  void reportChanged();
+  void reportChanged(qDFProjReport *);
   void newReport(qDFProjReport *theReport);
 
   friend QDataStream &operator<<(QDataStream &out, 

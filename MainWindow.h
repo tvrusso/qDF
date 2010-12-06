@@ -22,7 +22,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
   void closeEvent(QCloseEvent *event);
 
  private:
-  enum { MagicNumber = 0xA550DEAD};
+  enum { MagicNumber = 0xDFDFa550};
 
   qDFProjReportCollection theReportCollection;
   void printCoords(const vector<double> &ll,const string &text);
@@ -53,6 +53,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
   void deleteAllAPRSObjects();
   
   bool checkValidMLFix(DFLib::Proj::Point &thePoint);
+  void editReport(QString &rN);
 
   private slots:
    void newReportClicked();

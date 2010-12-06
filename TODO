@@ -1,12 +1,12 @@
 - Create abstract class for DF display
 - Implementations of DFDisplay interface for main window and APRS
 - Implement All Topo Maps display class on Windows
+- Implement KML (preferrably a live one) display class on all platforms.
 - Allow user to turn off each display class other than main window in settings
   dialog
 
-- allow editing of DF reports!
-
 - Add WMM geomagnetic model and automatic computation of declination
+   The new version that creates a library might be usable directly!
 
 - add VOR database
 - add computation of bearing/range between any two points (geodesic,

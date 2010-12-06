@@ -36,7 +36,8 @@ latLonCoordinateWidget::latLonCoordinateWidget(QWidget *parent)
   connect(latSRadioButton,SIGNAL(toggled(bool)),this,SLOT(updateLatitude()));
   connect(lonERadioButton,SIGNAL(toggled(bool)),this,SLOT(updateLongitude()));
   connect(lonWRadioButton,SIGNAL(toggled(bool)),this,SLOT(updateLongitude()));
-
+  latitude=0;
+  longitude=0;
 }
 
 latLonCoordinateWidget::~latLonCoordinateWidget()
@@ -257,6 +258,79 @@ void latLonCoordinateWidget::getCoords(QVector<double> &coordVect)
   coordVect[0]=latitude;
   coordVect[1]=longitude;
 
+}
+
+// allows programmatic setting of lat/lon, as for setting up a dialog for
+// editing existing report
+void latLonCoordinateWidget::setCoords(QVector<double> &coordVect)
+{
+  // flags for whether to set South button or West button
+  bool S=false;
+  bool W=false;
+  double templat, templon;
+  int deg, min;
+  double sec;
+
+  // get latitude
+  latitude=templat=coordVect[0];
+  if (latitude<0)
+  {
+    S=true;
+    templat *= -1;
+  }
+
+  deg = templat;
+  min = (templat-deg)*60;
+  sec = ((templat-deg)*60-min)*60;
+
+  latDegLineEdit->setText(QString::number(deg));
+  latMinLineEdit->setText(QString::number(min));
+  latSecLineEdit->setText(QString::number(sec));
+  if (S)
+  {
+    latSRadioButton->setChecked(true);
+    latNRadioButton->setChecked(false);
+  }
+  else
+  {
+    latSRadioButton->setChecked(false);
+    latNRadioButton->setChecked(true);
+  }
+
+  // get longitude
+  longitude=templon=coordVect[1];
+  if (longitude<0)
+  {
+    W=true;
+    templon *= -1;
+  }
+
+  deg = templon;
+  min = (templon-deg)*60;
+  sec = ((templon-deg)*60-min)*60;
+
+  lonDegLineEdit->setText(QString::number(deg));
+  lonMinLineEdit->setText(QString::number(min));
+  lonSecLineEdit->setText(QString::number(sec));
+  if (W)
+  {
+    lonWRadioButton->setChecked(true);
+    lonERadioButton->setChecked(false);
+  }
+  else
+  {
+    lonWRadioButton->setChecked(false);
+    lonERadioButton->setChecked(true);
+  }
+
+  latDegLineEdit->setValidator(new QRegExpValidator(intRegExp, this));
+  lonDegLineEdit->setValidator(new QRegExpValidator(intRegExp, this));
+  latMinLineEdit->setValidator(new QRegExpValidator(intRegExp, this));
+  lonMinLineEdit->setValidator(new QRegExpValidator(intRegExp, this));
+  latSecLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
+  lonSecLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
+
+  emit(coordsChanged());
 }
 
 bool latLonCoordinateWidget::isValid()
