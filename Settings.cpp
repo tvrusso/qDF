@@ -7,8 +7,8 @@ Settings::Settings()
    defaultUTMZone_(13),
    defaultFCAMinAngle_(5.0),
    aprsServer_("localhost"),
-   aprsCallsign_("KM5VY-8"),
-   aprsCallpass_("21753"),
+   aprsCallsign_("NOCALL"),
+   aprsCallpass_("0"),
    aprsPort_(2023),
    publishAPRS_(true)
 {

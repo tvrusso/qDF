@@ -1,3 +1,7 @@
+- Fix up miscellaneous warnings from DFLib (e.g. signed/unsigned compares)
+- Figure out what the heck happened on Windows --- "release" build crashes
+  with no explanation, "debug" works Just Fine.  
+
 - Create abstract class for DF display
 - Implementations of DFDisplay interface for main window and APRS
 - Implement All Topo Maps display class on Windows
