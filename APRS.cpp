@@ -474,7 +474,7 @@ void APRS::checkPendingDatagrams()
       else
       {
         QMessageBox::warning(0,tr("APRS"),
-                             QString("Host name %1 could not be resolved.")
+                             QString(tr("Host name %1 could not be resolved."))
                              .arg(server_),
                              QMessageBox::Ok);
       }

@@ -38,6 +38,7 @@ SOURCES += CoordSysBuilder.cpp \
            qDFProjReport.cpp \
            qDFProjReportCollection.cpp
 
-LIBS += -L/home/russo/src/DFLib/build -lDFLib -lproj
-INCLUDEPATH += /home/russo/src/DFLib
+
+LIBS += -L/users/tvrusso/src/DFLib/build -lDFLib -lproj
+INCLUDEPATH += /users/tvrusso/src/DFLib
 

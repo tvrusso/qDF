@@ -106,19 +106,19 @@ void getReportDialog::somethingChanged()
       !(lineEdit_bearing->text().isEmpty()))
   {
     enableOK=true;
-    okButton->setToolTip("Click to enter the report.");
+    okButton->setToolTip(tr("Click to enter the report."));
   }
   else
   {
     enableOK=false;
     if (lineEdit_ReportName->text().isEmpty())
-      okButton->setToolTip("You must enter a report name");
+      okButton->setToolTip(tr("You must enter a report name"));
     else if (existingNames_.indexOf(lineEdit_ReportName->text())!=-1)
-      okButton->setToolTip("You have entered the name of an existing report.  Please choose another name.");
+      okButton->setToolTip(tr("You have entered the name of an existing report.  Please choose another name."));
     else if (!latLon->isValid())
-      okButton->setToolTip("You must enter a valid latitude and longitude.");
+      okButton->setToolTip(tr("You must enter a valid latitude and longitude."));
     else 
-      okButton->setToolTip("You must enter a valid bearing.");
+      okButton->setToolTip(tr("You must enter a valid bearing."));
 
   }
 
