@@ -1,3 +1,7 @@
+- Add setting for default hemisphere.  Use this to initialize N/S, E/W buttons
+  in latLonCoordinateWidget for new reports.  Think outside North America,
+  since first alpha tester is actually in Norway.  This will require a 
+  setDefaultHemisphere method in the widget, too.
 - Add computation and display of error ellipses for ML fix.
 - Add setting for changing name of DF fix objects
 - Fix up miscellaneous warnings from DFLib (e.g. signed/unsigned compares)
