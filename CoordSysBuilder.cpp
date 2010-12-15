@@ -159,7 +159,7 @@
   void CoordSys::setZone(int z)
   {
     ostringstream zoneString;
-    zoneString << "zone = " << z;
+    zoneString << "zone=" << z;
 
     if (zone_ == -1)  // never been set
     {

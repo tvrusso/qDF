@@ -861,7 +861,7 @@ void MainWindow::aprsStansfieldEllipse(DFLib::Proj::Point &thePoint,
       // the APRS object.
       
       double P=((double)percent)/100.0;
-      double rho=-2*log(1-P);
+      double rho=sqrt(-2*log(1-P));
       DFLib::Proj::Point tempPoint(thePoint);
       vector<double> lats;
       vector<double> lons;
