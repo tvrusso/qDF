@@ -8,8 +8,9 @@
 #include "qDFProjReportCollection.hpp"
 #include "Settings.hpp"
 #include "APRS.hpp"
+#include "qDFDisplayInterface.hpp"
 
-class MainWindow : public QMainWindow, public Ui::MainWindow
+class MainWindow : public QMainWindow, public Ui::MainWindow, public qDFDisplayInterface
 {
   Q_OBJECT ;
  public:
@@ -18,6 +19,21 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
   void setupConnections();
 
+  // display interface methods
+  virtual void clear();
+  virtual void initialize();
+  virtual void displayDFReport(const qDFProjReport *theReport);
+  //  virtual void undisplayDFReport(const qDFProjReport *theReport);
+  virtual void displayLSFix(DFLib::Proj::Point & LSFixPoint);
+  virtual void undisplayLSFix();
+  virtual void displayFCAFix(DFLib::Proj::Point & FCAFixPoint, std::vector<double> stddevs);
+  virtual void undisplayFCAFix();
+  virtual void displayMLFix(DFLib::Proj::Point & MLFixPoint, double am2=0, double bm2=0, double phi=0);
+  virtual void undisplayMLFix();
+  virtual void displayBPEFix(DFLib::Proj::Point & BPEFixPoint, double am2=0, double bm2=0, double phi=0);
+  virtual void undisplayBPEFix();
+
+  
  protected:
   void closeEvent(QCloseEvent *event);
 

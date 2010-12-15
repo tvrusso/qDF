@@ -23,10 +23,11 @@ public:
   virtual void setSigma(double Sigma);
   virtual void setUserProj(const vector<string> &projArgs);
   virtual void toggleValidity();
+  virtual QString getReportNameQS() const;
   void  setEquipType(const QString & equipType);
   void  setQuality(const QString & quality);
   void  setCS(const CoordSys & cs);
-  virtual string getReportSummary(const vector<string> &projArgs) const;
+  virtual QString getReportSummary(const vector<string> &projArgs) const;
   const QString & getEquipType() const;
   const QString & getQuality() const;
   const QString getCSName() const;

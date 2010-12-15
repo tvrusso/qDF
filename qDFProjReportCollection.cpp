@@ -56,7 +56,7 @@ void qDFProjReportCollection::reportChanged(qDFProjReport *theChangedReport)
 
 QString qDFProjReportCollection::getReportName(int reportIndex)
 {
-  return (QString::fromStdString(dynamic_cast<const qDFProjReport *>(getReport(reportIndex))->getReportName()));
+  return (dynamic_cast<const qDFProjReport *>(getReport(reportIndex))->getReportNameQS());
 }
 
 
@@ -66,7 +66,7 @@ qDFProjReport * qDFProjReportCollection::getReportPointer(const QString &rN)
   // will return 0 if report doesn't exist.  Let the caller figure that out.
 }
 
-string qDFProjReportCollection::getReportSummary(const QString &reportName,
+QString qDFProjReportCollection::getReportSummary(const QString &reportName,
                                                  const vector<string> & projArgs) const
 {
   return (reportMap_[reportName]->getReportSummary(projArgs));

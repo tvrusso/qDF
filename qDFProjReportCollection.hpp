@@ -16,7 +16,7 @@ public:
   ~qDFProjReportCollection();
 
   int addReport(qDFProjReport *theReport);
-  string getReportSummary(const QString &reportName,
+  QString getReportSummary(const QString &reportName,
                           const vector<string>&projArgs) const;
   QString getReportName(int reportIndex);
   virtual void deleteReports();

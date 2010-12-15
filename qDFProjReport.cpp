@@ -104,6 +104,11 @@ void qDFProjReport::toggleValidity()
   emit reportChanged(this);
 }
 
+QString qDFProjReport::getReportNameQS() const
+{
+  QString name=QString::fromStdString(getReportName());
+  return (name);
+}
 
 void qDFProjReport::setAll(const vector<double> &theLocationUser,
                            const double &bearing,
@@ -122,7 +127,7 @@ void qDFProjReport::setAll(const vector<double> &theLocationUser,
                        // be sure, just in case there's a queueing issue.
 }
   
-string qDFProjReport::getReportSummary(const vector<string> &projArgs) const
+QString qDFProjReport::getReportSummary(const vector<string> &projArgs) const
 {
 
   // Get a copy of the point
@@ -144,7 +149,7 @@ string qDFProjReport::getReportSummary(const vector<string> &projArgs) const
   else 
     os << " Invalid ";
 
-  return (os.str());
+  return (QString::fromStdString(os.str()));
 }
 
 QDataStream &operator<<(QDataStream &out,const qDFProjReport &tR)

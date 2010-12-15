@@ -220,38 +220,28 @@ void MainWindow::newReportReceived(qDFProjReport *report)
          StansfieldFix_computed=false;
        }
 
+       displayLSFix(LSFix);
+
        vector<double> LS_point=LSFix.getUserCoords();
-       //       printCoords(LS_point,string("Least Squares Fix"));
-       formatCoords(LS_point,formattedCoords);
-       label_LS_Longitude->setText(QString::fromStdString(formattedCoords[0]));
-       label_LS_Latitude->setText(QString::fromStdString(formattedCoords[1]));
-
-
        aprsPointObject("LS-Fix",LS_point,"Ln"," Least Squares Solution");
 
        if (MLFix_computed)
        {
          vector<double> ML_point=MLFix.getUserCoords();
-         //       printCoords(ML_point,string("Maximum Likelihood Fix"));
-         formatCoords(ML_point,formattedCoords);
-         label_ML_Longitude->setText(QString::fromStdString(formattedCoords[0]));
-         label_ML_Latitude->setText(QString::fromStdString(formattedCoords[1]));
+         // For now we're neither computing nor displaying error ellipses for ML fix.
+         displayMLFix(MLFix);
          
          aprsPointObject("ML-Fix",ML_point,"Mn"," Maximum Likelihood Solution");
        }
        else
        {
-         label_ML_Longitude->setText("Invalid");
-         label_ML_Latitude->setText("Invalid");
+         undisplayMLFix();
        }
 
        if (StansfieldFix_computed)
        {
          vector<double> Stansfield_point=StansfieldFix.getUserCoords();
-         //       printCoords(ML_point,string("Maximum Likelihood Fix"));
-         formatCoords(Stansfield_point,formattedCoords);
-         label_Stansfield_Longitude->setText(QString::fromStdString(formattedCoords[0]));
-         label_Stansfield_Latitude->setText(QString::fromStdString(formattedCoords[1]));
+         displayBPEFix(StansfieldFix,am2,bm2,phi);
          
          aprsPointObject("BPE-Fix",Stansfield_point,"Sn"," Stansfield BPE");
 
@@ -261,8 +251,7 @@ void MainWindow::newReportReceived(qDFProjReport *report)
        }
        else
        {
-         label_Stansfield_Longitude->setText("Invalid");
-         label_Stansfield_Latitude->setText("Invalid");
+         undisplayBPEFix();
          deleteAPRSObject("BPE-Fix");
          deleteAPRSObject("SErr50");
          deleteAPRSObject("SErr75");
@@ -272,10 +261,8 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      }
      else
      {
-       label_ML_Longitude->setText("Not Available");
-       label_ML_Latitude->setText("Not Available");
-       label_LS_Longitude->setText("Not Available");
-       label_LS_Latitude->setText("Not Available");
+       undisplayMLFix();
+       undisplayLSFix();
 
        deleteAPRSObject("ML-Fix");
        deleteAPRSObject("LS-Fix");
@@ -283,17 +270,8 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      }       
      if (FCA_computed)
      {
+       displayFCAFix(FCA,FCA_stddev);
        vector<double> FCA_point=FCA.getUserCoords();
-       //     printCoords(FCA_point,string("Fix Cut Average"));
-       formatCoords(FCA_point,formattedCoords);
-       label_FCA_Longitude->setText(QString::fromStdString(formattedCoords[0]));
-       label_FCA_Latitude->setText(QString::fromStdString(formattedCoords[1]));
-       ostringstream os;
-       os << FCA_stddev[0];
-       label_FCA_Longitude_SD->setText(QString::fromStdString(os.str()));
-       os.str("");
-       os << FCA_stddev[1];
-       label_FCA_Latitude_SD->setText(QString::fromStdString(os.str()));
        
        aprsPointObject("FCA-Fix",FCA_point, "An"," Fix Cut Average Solution");
 
@@ -304,10 +282,7 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      }
      else
      {
-       label_FCA_Longitude->setText("Not Available");
-       label_FCA_Latitude->setText("Not Available");
-       label_FCA_Longitude_SD->setText("Not Available");
-       label_FCA_Latitude_SD->setText("Not Available");
+       undisplayFCAFix();
      }
        
    }
@@ -315,16 +290,10 @@ void MainWindow::newReportReceived(qDFProjReport *report)
    {
      // we don't have enough reports do do any analysis, make sure we don't
      // show data for the fixes.
-     label_FCA_Longitude->setText("Not Available");
-     label_FCA_Latitude->setText("Not Available");
-     label_FCA_Longitude_SD->setText("Not Available");
-     label_FCA_Latitude_SD->setText("Not Available");
-     label_ML_Longitude->setText("Not Available");
-     label_ML_Latitude->setText("Not Available");
-     label_LS_Longitude->setText("Not Available");
-     label_LS_Latitude->setText("Not Available");
-     label_Stansfield_Longitude->setText("Not Available");
-     label_Stansfield_Latitude->setText("Not Available");
+     undisplayFCAFix();
+     undisplayMLFix();
+     undisplayLSFix();
+     undisplayBPEFix();
 
      deleteAPRSObject("ML-Fix");
      deleteAPRSObject("LS-Fix");
@@ -396,7 +365,7 @@ void MainWindow::formatCoords(const vector<double> &latlon,
 void MainWindow::clearCollectionDisplay()
 {
   dirtyCollection=false;
-  reportListWidget->clear();
+  clear();
 
   //APRS: must delete all objects here, too
   deleteAllAPRSObjects();
@@ -405,40 +374,7 @@ void MainWindow::clearCollectionDisplay()
 
 void MainWindow::updateCollectionDisplay(int reportIndex)
 {
-  vector<string> theProj4Params=theSettings_.getDefaultCS().getProj4Params();
-  QString theReportName=theReportCollection.getReportName(reportIndex);
-  QString theReportSummary=QString::fromStdString(theReportCollection.getReportSummary(theReportName,theProj4Params) );
-
-
-  // First job is to update the display in the clickable list
-
-  // add (or replace) the report summary to the list
-  QListWidgetItem *theWidgetItem=reportListWidget->item(reportIndex);
-  if(theWidgetItem)
-  {
-    theWidgetItem->setText(theReportSummary);
-  }
-  else
-  {
-    reportListWidget->insertItem(reportIndex,theReportSummary);
-    theWidgetItem=reportListWidget->item(reportIndex);
-  }
-
-  // set the data for the listitem to be our name.
-  theWidgetItem->setData(Qt::UserRole,theReportName);
-
-  // set the validity indicator
-  QFont theItemFont=theWidgetItem->font();
-  if (theReportCollection.isValid(reportIndex))
-  {
-    theItemFont.setItalic(false);
-  }
-  else
-  {
-    theItemFont.setItalic(true);
-  }
-  theWidgetItem->setFont(theItemFont);
-
+  displayDFReport(dynamic_cast<const qDFProjReport *>(theReportCollection.getReport(reportIndex)));
 
   // Next job is to send objects to APRS
   sendReportAPRS(dynamic_cast<const qDFProjReport *>(theReportCollection.getReport(reportIndex)));
@@ -946,3 +882,139 @@ bool MainWindow::checkValidMLFix(DFLib::Proj::Point &thePoint)
   return(false);
 }
 
+// qDFDisplayInterface methods
+void MainWindow::initialize()
+{
+  label_FCA_Longitude->setText("Not Available");
+  label_FCA_Latitude->setText("Not Available");
+  label_FCA_Longitude_SD->setText("Not Available");
+  label_FCA_Latitude_SD->setText("Not Available");
+  label_ML_Longitude->setText("Not Available");
+  label_ML_Latitude->setText("Not Available");
+  label_LS_Longitude->setText("Not Available");
+  label_LS_Latitude->setText("Not Available");
+  label_Stansfield_Longitude->setText("Not Available");
+  label_Stansfield_Latitude->setText("Not Available");
+
+  reportListWidget->clear();
+}
+
+void MainWindow::clear()
+{
+  initialize();
+}
+
+void MainWindow::displayDFReport(const qDFProjReport *theReport)
+{
+  vector<string> theProj4Params = theSettings_.getDefaultCS().getProj4Params();
+  QString theReportName=theReport->getReportNameQS();
+  QString theReportSummary=theReport->getReportSummary(theProj4Params);
+
+  // Don't like this, but we need the index to get at the item in the list widget
+  int reportIndex = theReportCollection.getReportIndex(theReport);
+  // First job is to update the display in the clickable list
+
+  // add (or replace) the report summary to the list
+  QListWidgetItem *theWidgetItem=reportListWidget->item(reportIndex);
+  if(theWidgetItem)
+  {
+    theWidgetItem->setText(theReportSummary);
+  }
+  else
+  {
+    reportListWidget->insertItem(reportIndex,theReportSummary);
+    theWidgetItem=reportListWidget->item(reportIndex);
+  }
+
+  // set the data for the listitem to be our name.
+  theWidgetItem->setData(Qt::UserRole,theReportName);
+
+  // set the validity indicator
+  QFont theItemFont=theWidgetItem->font();
+  if (theReportCollection.isValid(reportIndex))
+  {
+    theItemFont.setItalic(false);
+  }
+  else
+  {
+    theItemFont.setItalic(true);
+  }
+  theWidgetItem->setFont(theItemFont);
+
+}
+
+void MainWindow::displayLSFix(DFLib::Proj::Point & LSFix)
+{
+  
+  vector<string> formattedCoords;
+  vector<double> LS_point=LSFix.getUserCoords();
+  //       printCoords(LS_point,string("Least Squares Fix"));
+  formatCoords(LS_point,formattedCoords);
+  label_LS_Longitude->setText(QString::fromStdString(formattedCoords[0]));
+  label_LS_Latitude->setText(QString::fromStdString(formattedCoords[1]));
+}
+
+void MainWindow::undisplayLSFix()
+{
+  label_LS_Longitude->setText("Not Available");
+  label_LS_Latitude->setText("Not Available");
+}
+
+void MainWindow::displayFCAFix(DFLib::Proj::Point & FCAFix, std::vector<double> FCA_stddev)
+{
+  vector<string> formattedCoords;
+  vector<double> FCA_point=FCAFix.getUserCoords();
+  //     printCoords(FCA_point,string("Fix Cut Average"));
+  formatCoords(FCA_point,formattedCoords);
+  label_FCA_Longitude->setText(QString::fromStdString(formattedCoords[0]));
+  label_FCA_Latitude->setText(QString::fromStdString(formattedCoords[1]));
+  ostringstream os;
+  os << FCA_stddev[0];
+  label_FCA_Longitude_SD->setText(QString::fromStdString(os.str()));
+  os.str("");
+  os << FCA_stddev[1];
+  label_FCA_Latitude_SD->setText(QString::fromStdString(os.str()));
+}
+
+void MainWindow::undisplayFCAFix()
+{
+  label_FCA_Longitude->setText("Not Available");
+  label_FCA_Latitude->setText("Not Available");
+  label_FCA_Longitude_SD->setText("Not Available");
+  label_FCA_Latitude_SD->setText("Not Available");
+}
+
+void MainWindow::displayBPEFix(DFLib::Proj::Point & StansfieldFix, double am2, double bm2, double phi)
+{
+  vector<string> formattedCoords;
+  vector<double> Stansfield_point=StansfieldFix.getUserCoords();
+  //       printCoords(ML_point,string("Maximum Likelihood Fix"));
+  formatCoords(Stansfield_point,formattedCoords);
+  label_Stansfield_Longitude->setText(QString::fromStdString(formattedCoords[0]));
+  label_Stansfield_Latitude->setText(QString::fromStdString(formattedCoords[1]));
+
+  // we ignore the error stuff for the main window display
+}
+
+void MainWindow::undisplayBPEFix()
+{
+  label_Stansfield_Longitude->setText("Not Available");
+  label_Stansfield_Latitude->setText("Not Available");
+}
+
+void MainWindow::displayMLFix(DFLib::Proj::Point & MLFix, double am2, double bm2, double phi)
+{
+  vector<string> formattedCoords;
+  vector<double> ML_point=MLFix.getUserCoords();
+  
+  //       printCoords(ML_point,string("Maximum Likelihood Fix"));
+  formatCoords(ML_point,formattedCoords);
+  label_ML_Longitude->setText(QString::fromStdString(formattedCoords[0]));
+  label_ML_Latitude->setText(QString::fromStdString(formattedCoords[1]));
+}
+
+void MainWindow::undisplayMLFix()
+{
+  label_ML_Longitude->setText("Not Available");
+  label_ML_Latitude->setText("Not Available");
+}

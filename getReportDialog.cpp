@@ -68,7 +68,7 @@ getReportDialog::getReportDialog(const Settings &theSettings,const qDFProjReport
   latLon->setCoords(llCoords);
 
   // Initialize and disable the name
-  lineEdit_ReportName->setText(QString::fromStdString(theReport->getReportName()));
+  lineEdit_ReportName->setText(theReport->getReportNameQS());
   lineEdit_ReportName->setEnabled(false);
 
   // Initialize the bearing
