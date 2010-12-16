@@ -15,9 +15,9 @@ class aprsDisplay :  public qDFDisplayInterface
 
 public:
   aprsDisplay(APRS *theAPRS,  QPlainTextEdit *theAPRSTextEdit);
-  virtual void clear();
-  virtual void initialize();
-  virtual void close();
+  virtual void clearDisplay();
+  virtual void initializeDisplay();
+  virtual void closeDisplay();
   virtual void displayDFReport(const qDFProjReport *theReport);
   virtual void undisplayDFReport(const qDFProjReport *theReport);
   virtual void displayLSFix(DFLib::Proj::Point & LSFixPoint);

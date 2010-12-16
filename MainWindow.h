@@ -21,8 +21,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public qDFDisplayI
   void setupConnections();
 
   // display interface methods
-  virtual void clear();
-  virtual void initialize();
+  virtual void clearDisplay();
+  virtual void initializeDisplay();
+  virtual void closeDisplay();
   virtual void displayDFReport(const qDFProjReport *theReport);
   //  virtual void undisplayDFReport(const qDFProjReport *theReport);
   virtual void displayLSFix(DFLib::Proj::Point & LSFixPoint);

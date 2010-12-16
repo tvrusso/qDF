@@ -137,6 +137,16 @@ void MainWindow::newReportClicked()
     else
       theNewReport->setInvalid();
 
+
+    // At this point, if the collection is completely empty, intialize the displays.  WE'll add our
+    // new report after this, and the displays will get updated.
+    if (theReportCollection.size() == 0)
+    {
+      initializeDisplay();
+      if (theSettings_.publishAPRS())
+        theAPRSDisplay_->initializeDisplay();
+    }
+
     emit newReportCreated(theNewReport);
   }
   else
@@ -356,9 +366,9 @@ void MainWindow::formatCoords(const vector<double> &latlon,
 void MainWindow::clearCollectionDisplay()
 {
   dirtyCollection=false;
-  clear();
+  closeDisplay();
   if (theSettings_.publishAPRS())
-    theAPRSDisplay_->clear();
+    theAPRSDisplay_->closeDisplay();
 
 }
 
@@ -731,7 +741,7 @@ bool MainWindow::checkValidMLFix(DFLib::Proj::Point &thePoint)
 }
 
 // qDFDisplayInterface methods
-void MainWindow::initialize()
+void MainWindow::initializeDisplay()
 {
   label_FCA_Longitude->setText("Not Available");
   label_FCA_Latitude->setText("Not Available");
@@ -747,9 +757,14 @@ void MainWindow::initialize()
   reportListWidget->clear();
 }
 
-void MainWindow::clear()
+void MainWindow::clearDisplay()
 {
-  initialize();
+  initializeDisplay();
+}
+
+void MainWindow::closeDisplay()
+{
+  clearDisplay();
 }
 
 void MainWindow::displayDFReport(const qDFProjReport *theReport)

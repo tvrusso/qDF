@@ -18,12 +18,12 @@ aprsDisplay::aprsDisplay(APRS * theAPRS, QPlainTextEdit *theTextEdit)
 }
 
 // public implementations of qDFDisplayInterface methods
-void aprsDisplay::initialize()
+void aprsDisplay::initializeDisplay()
 {
-  clear();
+  clearDisplay();
 }
 
-void aprsDisplay::clear()
+void aprsDisplay::clearDisplay()
 {
   QStringList foo=theAPRS_->deleteAllObjects();
   foreach(QString str,foo)
@@ -32,9 +32,9 @@ void aprsDisplay::clear()
   }
 }
 
-void aprsDisplay::close()
+void aprsDisplay::closeDisplay()
 {
-  clear();
+  clearDisplay();
 }
 
 void aprsDisplay::displayDFReport(const qDFProjReport *theReport)
