@@ -1,3 +1,5 @@
+#ifndef qDFDisplayInterface_HPP
+#define qDFDisplayInterface_HPP
 // Base class for the qDF display interface
 
 // Include the header, because we need references even here in the abstract class
@@ -33,3 +35,4 @@ public:
   virtual void undisplayBPEFix(){};
 };
 
+#endif

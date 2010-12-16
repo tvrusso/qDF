@@ -16,6 +16,7 @@ using namespace std;
 #include "reportToggleDialog.h"
 #include "settingsDialog.h"
 #include "qDFProjReport.hpp"
+#include "aprsDisplay.hpp"
 #include <Util_Misc.hpp>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -32,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent)
   theAPRS.setServer(theSettings_.getAPRSServer());
   theAPRS.setCallsign(theSettings_.getAPRSCallsign());
   theAPRS.setCallpass(theSettings_.getAPRSCallpass());
+
+  theAPRSDisplay_ = new aprsDisplay(&theAPRS,aprsPacketsTextEdit);
 
 }
 
@@ -221,41 +224,34 @@ void MainWindow::newReportReceived(qDFProjReport *report)
        }
 
        displayLSFix(LSFix);
-
-       vector<double> LS_point=LSFix.getUserCoords();
-       aprsPointObject("LS-Fix",LS_point,"Ln"," Least Squares Solution");
+       if (theSettings_.publishAPRS())
+         theAPRSDisplay_->displayLSFix(LSFix);
 
        if (MLFix_computed)
        {
-         vector<double> ML_point=MLFix.getUserCoords();
          // For now we're neither computing nor displaying error ellipses for ML fix.
          displayMLFix(MLFix);
-         
-         aprsPointObject("ML-Fix",ML_point,"Mn"," Maximum Likelihood Solution");
+         if (theSettings_.publishAPRS())
+           theAPRSDisplay_->displayMLFix(MLFix);
        }
        else
        {
          undisplayMLFix();
+         if (theSettings_.publishAPRS())
+           theAPRSDisplay_->undisplayMLFix();
        }
 
        if (StansfieldFix_computed)
        {
-         vector<double> Stansfield_point=StansfieldFix.getUserCoords();
          displayBPEFix(StansfieldFix,am2,bm2,phi);
-         
-         aprsPointObject("BPE-Fix",Stansfield_point,"Sn"," Stansfield BPE");
-
-         aprsStansfieldEllipse(StansfieldFix,am2,bm2,phi,50);
-         aprsStansfieldEllipse(StansfieldFix,am2,bm2,phi,75);
-         aprsStansfieldEllipse(StansfieldFix,am2,bm2,phi,95);
+         if (theSettings_.publishAPRS())
+           theAPRSDisplay_->displayBPEFix(StansfieldFix,am2,bm2,phi);
        }
        else
        {
          undisplayBPEFix();
-         deleteAPRSObject("BPE-Fix");
-         deleteAPRSObject("SErr50");
-         deleteAPRSObject("SErr75");
-         deleteAPRSObject("SErr95");
+         if (theSettings_.publishAPRS())
+           theAPRSDisplay_->undisplayBPEFix();
        }
 
      }
@@ -263,26 +259,23 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      {
        undisplayMLFix();
        undisplayLSFix();
-
-       deleteAPRSObject("ML-Fix");
-       deleteAPRSObject("LS-Fix");
-       
+       if (theSettings_.publishAPRS())
+       {
+         theAPRSDisplay_->undisplayMLFix();
+         theAPRSDisplay_->undisplayLSFix();
+       }
      }       
      if (FCA_computed)
      {
        displayFCAFix(FCA,FCA_stddev);
-       vector<double> FCA_point=FCA.getUserCoords();
-       
-       aprsPointObject("FCA-Fix",FCA_point, "An"," Fix Cut Average Solution");
-
-       if (FCA_stddev[0] != 0 && FCA_stddev[1] != 0)
-       {
-         aprsDFErrorObject("FCA-err", FCA_point,FCA_stddev);
-       }
+       if (theSettings_.publishAPRS())
+         theAPRSDisplay_->displayFCAFix(FCA,FCA_stddev);
      }
      else
      {
        undisplayFCAFix();
+       if (theSettings_.publishAPRS())
+         theAPRSDisplay_->undisplayFCAFix();
      }
        
    }
@@ -294,15 +287,13 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      undisplayMLFix();
      undisplayLSFix();
      undisplayBPEFix();
-
-     deleteAPRSObject("ML-Fix");
-     deleteAPRSObject("LS-Fix");
-     deleteAPRSObject("FCA-Fix");
-     deleteAPRSObject("FCA-err");
-     deleteAPRSObject("BPE-Fix");
-     deleteAPRSObject("SErr50");
-     deleteAPRSObject("SErr75");
-     deleteAPRSObject("SErr95");
+     if (theSettings_.publishAPRS())
+     {
+       theAPRSDisplay_->undisplayFCAFix();
+       theAPRSDisplay_->undisplayMLFix();
+       theAPRSDisplay_->undisplayLSFix();
+       theAPRSDisplay_->undisplayBPEFix();
+     }
    }       
      
      
@@ -366,20 +357,16 @@ void MainWindow::clearCollectionDisplay()
 {
   dirtyCollection=false;
   clear();
-
-  //APRS: must delete all objects here, too
-  deleteAllAPRSObjects();
+  if (theSettings_.publishAPRS())
+    theAPRSDisplay_->clear();
 
 }
 
 void MainWindow::updateCollectionDisplay(int reportIndex)
 {
   displayDFReport(dynamic_cast<const qDFProjReport *>(theReportCollection.getReport(reportIndex)));
-
-  // Next job is to send objects to APRS
-  sendReportAPRS(dynamic_cast<const qDFProjReport *>(theReportCollection.getReport(reportIndex)));
-    
-
+  if (theSettings_.publishAPRS())
+    theAPRSDisplay_->displayDFReport(dynamic_cast<const qDFProjReport *>(theReportCollection.getReport(reportIndex)));
 }
 
 void MainWindow::listItemDoubleClicked(QListWidgetItem *item)
@@ -704,145 +691,6 @@ void MainWindow::editSettings()
     theAPRS.setCallpass(theSettings_.getAPRSCallpass());
   }
 
-}
-
-void MainWindow::displayAPRSText(const QString & str)
-{
-  aprsPacketsTextEdit->insertPlainText(str);
-  aprsPacketsTextEdit->insertPlainText("\n");
-}  
-
-void MainWindow::sendReportAPRS(const qDFProjReport *theReport)
-{
-  if (theSettings_.publishAPRS())
-  {
-    if (theReport->isValid())
-    {
-      DFLib::Proj::Point tempPoint=theReport->getReceiverPoint();
-      tempPoint.setUserProj(theSettings_.getDefaultCS().getProj4Params());
-      vector<double> coords(2);
-      coords=tempPoint.getUserCoords();
-      QString oName=QString::fromStdString(theReport->getReportName());
-      QString aprsPosit=theAPRS.createDFObject(oName,coords,
-                                               theReport->getBearing(),
-                                               theReport->getSigma(),
-                                               " via qDF");
-      displayAPRSText(aprsPosit);
-    }
-    else
-    {
-      QString oName=QString::fromStdString(theReport->getReportName());
-      QString aprsPosit=theAPRS.deleteObject(oName);
-      if (!aprsPosit.isEmpty()) displayAPRSText(aprsPosit);
-    }
-  }
-}
-
-void MainWindow::aprsPointObject(const QString &oName, 
-                                 const vector<double>& oPoint,
-                                 const QString &oSym,
-                                 const QString & oComment)
-{
-  if (theSettings_.publishAPRS())
-  {
-    QString aprsPosit=theAPRS.createObject(oName,oPoint,oSym,oComment);
-    displayAPRSText(aprsPosit);
-  }
-}
-
-void MainWindow::aprsDFErrorObject(const QString &oName,
-                                   const vector<double>&oPoint,
-                                   const vector<double>&oSDs)
-{
-  if (theSettings_.publishAPRS())
-  {
-    QString aprsPosit=theAPRS.createDFErrorObject(oName,oPoint,oSDs[0],oSDs[1]);
-    displayAPRSText(aprsPosit);
-  }
-}
-
-void MainWindow::deleteAPRSObject(const QString &oName)
-{
-  if (theSettings_.publishAPRS())
-  {
-    QString aprsPosit=theAPRS.deleteObject(oName);
-    if (!aprsPosit.isEmpty()) 
-      displayAPRSText(aprsPosit);
-  }
-}
-
-void MainWindow::deleteAllAPRSObjects()
-{
-  if (theSettings_.publishAPRS())
-  {
-    QStringList foo=theAPRS.deleteAllObjects();
-    foreach (QString str,foo)
-    {
-      displayAPRSText(str);
-    }
-  }
-}
-
-void MainWindow::aprsStansfieldEllipse(DFLib::Proj::Point &thePoint,
-                                       double am2, double bm2, double phi,
-                                       int percent)
-{
-  if (theSettings_.publishAPRS())
-  {
-    if (am2>0 && bm2>0)
-    {
-      
-      // this is tricky.  We need to calculate the Stansfield ellipses in 
-      // XY coordinates, then convert their points to lat/lon before generating
-      // the APRS object.
-      
-      double P=((double)percent)/100.0;
-      double rho=sqrt(-2*log(1-P));
-      DFLib::Proj::Point tempPoint(thePoint);
-      vector<double> lats;
-      vector<double> lons;
-      vector<double> centerCoords=thePoint.getXY();
-      vector<double> tempCoords(2);
-      double a=sqrt(1.0/am2);
-      double b=sqrt(1.0/bm2);
-      double cosphi=cos(phi);
-      double sinphi=sin(phi);
-      const double pi=4*atan(1.0);
-
-      // this is the equation of an ellipse of axis a*rho and b*rho, rotated
-      // by an angle phi.
-      for (int i=0;i<16;i++)
-      {
-        tempCoords[0]=centerCoords[0]
-          +a*rho*cosphi*cos(2.0*pi/15.0*i)-b*rho*sinphi*sin(2.0*pi/15.0*i);
-        tempCoords[1]=centerCoords[1]
-          +a*rho*sinphi*cos(2.0*pi/15.0*i)+b*rho*cosphi*sin(2.0*pi/15.0*i);
-
-        // those are the coordinates in XY.  Now get 'em in lat/lon
-        tempPoint.setXY(tempCoords);
-        tempCoords=tempPoint.getUserCoords();
-        lons.push_back(tempCoords[0]);
-        lats.push_back(tempCoords[1]);
-      }
-
-      // we now have our rotated ellipse transformed to lat/lon.  Make the
-      // APRS object
-      char colorStyle;
-      if (percent>=50)
-        colorStyle='g';
-      if (percent>=75)
-        colorStyle='e';
-      if (percent>90)
-        colorStyle='a';
-      centerCoords=thePoint.getUserCoords();
-      QString aprsPosit=
-        theAPRS.createMultilineObject(QString("SErr%1").arg(percent),
-                                      lats,lons,centerCoords,
-                                      colorStyle,0,
-                                      "\\l");
-      displayAPRSText(aprsPosit);
-    }
-  }
 }
 
 // ML sometimes returns complete garbage for the ML fix.  When it does,

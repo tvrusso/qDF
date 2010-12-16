@@ -10,6 +10,7 @@
 #include "APRS.hpp"
 #include "qDFDisplayInterface.hpp"
 
+class aprsDisplay;
 class MainWindow : public QMainWindow, public Ui::MainWindow, public qDFDisplayInterface
 {
   Q_OBJECT ;
@@ -55,19 +56,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public qDFDisplayI
   QString currentFileName;
 
   APRS theAPRS;
+  aprsDisplay *theAPRSDisplay_;
 
-  void sendReportAPRS(const qDFProjReport * theReport);
-  void aprsPointObject(const QString &oName,const vector<double> & oPoint,
-                       const QString &oSym,
-                       const QString &oComment);
-  void aprsDFErrorObject(const QString &oName,const vector<double> &oPoint,
-                         const vector<double> &oSDs);
-  void aprsStansfieldEllipse(DFLib::Proj::Point &thePoint,
-                             double am2, double bm2, double phi, int percent);
-
-  void deleteAPRSObject(const QString &oName);
-  void deleteAllAPRSObjects();
-  
   bool checkValidMLFix(DFLib::Proj::Point &thePoint);
   void editReport(QString &rN);
 
