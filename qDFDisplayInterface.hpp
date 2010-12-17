@@ -15,6 +15,7 @@ public:
   // This is largely an abstract class, so
   // the constructor does nothing at all.
   qDFDisplayInterface() {};
+  virtual ~qDFDisplayInterface(){};
 
   // A pure virtual member to force the class to be abstract
   // These methods *must* get implemented.

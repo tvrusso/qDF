@@ -12,6 +12,7 @@
 #include "qDFDisplayManager.hpp"
 
 class aprsDisplay;
+class rawTextDisplay;
 class MainWindow : public QMainWindow, public Ui::MainWindow, public qDFDisplayInterface
 {
   Q_OBJECT ;
@@ -59,6 +60,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public qDFDisplayI
 
   APRS theAPRS;
   aprsDisplay *theAPRSDisplay_;
+  rawTextDisplay *theRTDisplay_;
 
   qDFDisplayManager theDisplayManager;
 

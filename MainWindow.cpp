@@ -17,6 +17,7 @@ using namespace std;
 #include "settingsDialog.h"
 #include "qDFProjReport.hpp"
 #include "aprsDisplay.hpp"
+#include "rawTextDisplay.hpp"
 #include "qDFDisplayManager.hpp"
 #include <Util_Misc.hpp>
 
@@ -36,10 +37,11 @@ MainWindow::MainWindow(QWidget *parent)
   theAPRS.setCallpass(theSettings_.getAPRSCallpass());
 
   theAPRSDisplay_ = new aprsDisplay(&theAPRS,aprsPacketsTextEdit);
+  theRTDisplay_ = new rawTextDisplay();
 
   theDisplayManager.addDisplay("MainWindow",this,true);
   theDisplayManager.addDisplay("APRS",theAPRSDisplay_,theSettings_.publishAPRS());
-
+  theDisplayManager.addDisplay("RawText",theRTDisplay_,true);
 }
 
 MainWindow::~MainWindow()
@@ -590,7 +592,8 @@ bool MainWindow::loadFile(const QString &fileName)
   }
 
   theReportCollection.deleteReports();
-  
+  theDisplayManager.initializeDisplays();
+
   QApplication::setOverrideCursor(Qt::WaitCursor);
 
   in >> theReportCollection;
