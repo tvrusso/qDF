@@ -17,6 +17,7 @@ using namespace std;
 #include "settingsDialog.h"
 #include "qDFProjReport.hpp"
 #include "aprsDisplay.hpp"
+#include "qDFDisplayManager.hpp"
 #include <Util_Misc.hpp>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -35,6 +36,9 @@ MainWindow::MainWindow(QWidget *parent)
   theAPRS.setCallpass(theSettings_.getAPRSCallpass());
 
   theAPRSDisplay_ = new aprsDisplay(&theAPRS,aprsPacketsTextEdit);
+
+  theDisplayManager.addDisplay("MainWindow",this,true);
+  theDisplayManager.addDisplay("APRS",theAPRSDisplay_,theSettings_.publishAPRS());
 
 }
 
@@ -142,9 +146,7 @@ void MainWindow::newReportClicked()
     // new report after this, and the displays will get updated.
     if (theReportCollection.size() == 0)
     {
-      initializeDisplay();
-      if (theSettings_.publishAPRS())
-        theAPRSDisplay_->initializeDisplay();
+      theDisplayManager.initializeDisplays();
     }
 
     emit newReportCreated(theNewReport);
@@ -233,59 +235,40 @@ void MainWindow::newReportReceived(qDFProjReport *report)
          StansfieldFix_computed=false;
        }
 
-       displayLSFix(LSFix);
-       if (theSettings_.publishAPRS())
-         theAPRSDisplay_->displayLSFix(LSFix);
+       theDisplayManager.displayLSFix(LSFix);
 
        if (MLFix_computed)
        {
          // For now we're neither computing nor displaying error ellipses for ML fix.
-         displayMLFix(MLFix);
-         if (theSettings_.publishAPRS())
-           theAPRSDisplay_->displayMLFix(MLFix);
+         theDisplayManager.displayMLFix(MLFix);
        }
        else
        {
-         undisplayMLFix();
-         if (theSettings_.publishAPRS())
-           theAPRSDisplay_->undisplayMLFix();
+         theDisplayManager.undisplayMLFix();
        }
 
        if (StansfieldFix_computed)
        {
-         displayBPEFix(StansfieldFix,am2,bm2,phi);
-         if (theSettings_.publishAPRS())
-           theAPRSDisplay_->displayBPEFix(StansfieldFix,am2,bm2,phi);
+         theDisplayManager.displayBPEFix(StansfieldFix,am2,bm2,phi);
        }
        else
        {
-         undisplayBPEFix();
-         if (theSettings_.publishAPRS())
-           theAPRSDisplay_->undisplayBPEFix();
+         theDisplayManager.undisplayBPEFix();
        }
 
      }
      else
      {
-       undisplayMLFix();
-       undisplayLSFix();
-       if (theSettings_.publishAPRS())
-       {
-         theAPRSDisplay_->undisplayMLFix();
-         theAPRSDisplay_->undisplayLSFix();
-       }
+       theDisplayManager.undisplayMLFix();
+       theDisplayManager.undisplayLSFix();
      }       
      if (FCA_computed)
      {
-       displayFCAFix(FCA,FCA_stddev);
-       if (theSettings_.publishAPRS())
-         theAPRSDisplay_->displayFCAFix(FCA,FCA_stddev);
+       theDisplayManager.displayFCAFix(FCA,FCA_stddev);
      }
      else
      {
-       undisplayFCAFix();
-       if (theSettings_.publishAPRS())
-         theAPRSDisplay_->undisplayFCAFix();
+       theDisplayManager.undisplayFCAFix();
      }
        
    }
@@ -293,17 +276,10 @@ void MainWindow::newReportReceived(qDFProjReport *report)
    {
      // we don't have enough reports do do any analysis, make sure we don't
      // show data for the fixes.
-     undisplayFCAFix();
-     undisplayMLFix();
-     undisplayLSFix();
-     undisplayBPEFix();
-     if (theSettings_.publishAPRS())
-     {
-       theAPRSDisplay_->undisplayFCAFix();
-       theAPRSDisplay_->undisplayMLFix();
-       theAPRSDisplay_->undisplayLSFix();
-       theAPRSDisplay_->undisplayBPEFix();
-     }
+     theDisplayManager.undisplayFCAFix();
+     theDisplayManager.undisplayMLFix();
+     theDisplayManager.undisplayLSFix();
+     theDisplayManager.undisplayBPEFix();
    }       
      
      
@@ -366,17 +342,12 @@ void MainWindow::formatCoords(const vector<double> &latlon,
 void MainWindow::clearCollectionDisplay()
 {
   dirtyCollection=false;
-  closeDisplay();
-  if (theSettings_.publishAPRS())
-    theAPRSDisplay_->closeDisplay();
-
+  theDisplayManager.closeDisplays();
 }
 
 void MainWindow::updateCollectionDisplay(int reportIndex)
 {
-  displayDFReport(dynamic_cast<const qDFProjReport *>(theReportCollection.getReport(reportIndex)));
-  if (theSettings_.publishAPRS())
-    theAPRSDisplay_->displayDFReport(dynamic_cast<const qDFProjReport *>(theReportCollection.getReport(reportIndex)));
+  theDisplayManager.displayDFReport(dynamic_cast<const qDFProjReport *>(theReportCollection.getReport(reportIndex)));
 }
 
 void MainWindow::listItemDoubleClicked(QListWidgetItem *item)
@@ -699,6 +670,12 @@ void MainWindow::editSettings()
     theAPRS.setServer(theSettings_.getAPRSServer());
     theAPRS.setCallsign(theSettings_.getAPRSCallsign());
     theAPRS.setCallpass(theSettings_.getAPRSCallpass());
+
+    if (theSettings_.publishAPRS())
+      theDisplayManager.enableDisplay("APRS");
+    else
+      theDisplayManager.disableDisplay("APRS");
+
   }
 
 }
@@ -743,6 +720,11 @@ bool MainWindow::checkValidMLFix(DFLib::Proj::Point &thePoint)
 // qDFDisplayInterface methods
 void MainWindow::initializeDisplay()
 {
+  // Takes no initialization steps
+}
+
+void MainWindow::clearDisplay()
+{
   label_FCA_Longitude->setText("Not Available");
   label_FCA_Latitude->setText("Not Available");
   label_FCA_Longitude_SD->setText("Not Available");
@@ -755,11 +737,6 @@ void MainWindow::initializeDisplay()
   label_Stansfield_Latitude->setText("Not Available");
 
   reportListWidget->clear();
-}
-
-void MainWindow::clearDisplay()
-{
-  initializeDisplay();
 }
 
 void MainWindow::closeDisplay()

@@ -20,7 +20,7 @@ aprsDisplay::aprsDisplay(APRS * theAPRS, QPlainTextEdit *theTextEdit)
 // public implementations of qDFDisplayInterface methods
 void aprsDisplay::initializeDisplay()
 {
-  clearDisplay();
+  // no need to initialize anything
 }
 
 void aprsDisplay::clearDisplay()
@@ -54,9 +54,7 @@ void aprsDisplay::displayDFReport(const qDFProjReport *theReport)
   }
   else
   {
-    QString oName=theReport->getReportNameQS();
-    QString aprsPosit=theAPRS_->deleteObject(oName);
-    if (!aprsPosit.isEmpty()) displayAPRSText_(aprsPosit);
+    undisplayDFReport(theReport);
   }
 }
 

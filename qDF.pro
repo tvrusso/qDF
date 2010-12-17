@@ -26,7 +26,8 @@ HEADERS += CoordSysBuilder.hpp \
            qDFProjReport.hpp \
            qDFProjReportCollection.hpp\
            qDFDisplayInterface.hpp \
-           aprsDisplay.hpp
+           aprsDisplay.hpp \
+           qDFDisplayManager.hpp
 FORMS += getReportDialog.ui MainWindow.ui reportToggleDialog.ui latLonCoordinateWidget.ui  settingsDialog.ui
 SOURCES += CoordSysBuilder.cpp \
            Settings.cpp \
@@ -38,8 +39,9 @@ SOURCES += CoordSysBuilder.cpp \
            main.cpp \
            MainWindow.cpp \
            qDFProjReport.cpp \
-           qDFProjReportCollection.cpp\
-           aprsDisplay.cpp
+           qDFProjReportCollection.cpp \
+           aprsDisplay.cpp \
+           qDFDisplayManager.cpp
 
 LIBS += -L/users/tvrusso/src/DFLib/build -lDFLib -lproj
 INCLUDEPATH += /users/tvrusso/src/DFLib

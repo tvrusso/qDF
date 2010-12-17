@@ -9,6 +9,7 @@
 #include "Settings.hpp"
 #include "APRS.hpp"
 #include "qDFDisplayInterface.hpp"
+#include "qDFDisplayManager.hpp"
 
 class aprsDisplay;
 class MainWindow : public QMainWindow, public Ui::MainWindow, public qDFDisplayInterface
@@ -58,6 +59,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public qDFDisplayI
 
   APRS theAPRS;
   aprsDisplay *theAPRSDisplay_;
+
+  qDFDisplayManager theDisplayManager;
 
   bool checkValidMLFix(DFLib::Proj::Point &thePoint);
   void editReport(QString &rN);

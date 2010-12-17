@@ -25,7 +25,7 @@ public:
   virtual void closeDisplay() {};      // Close out a display when done with the problem.  May clear
                                        // but might not always (e.g. file-based displays might just
                                        // be closed with the final state of the solution still in them)
-  virtual void displayDFRreport(const qDFProjReport *theReport){};
+  virtual void displayDFReport(const qDFProjReport *theReport){};
   virtual void undisplayDFReport(const qDFProjReport *theReport){};
   virtual void displayLSFix(DFLib::Proj::Point & LSFixPoint){};
   virtual void undisplayLSFix(){};

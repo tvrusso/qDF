@@ -8,9 +8,6 @@
 - Figure out what the heck happened on Windows --- "release" build crashes
   with no explanation, "debug" works Just Fine.  
 
-- Migrate all calls to display classes into a display manager so that the main
-  code displays everything once through the manager, and the manager takes care
-  of all the optional displays.
 - Allow user to turn off each display class other than main window in settings
   dialog
 - Implement KML (preferrably a live one) display class on all platforms.
