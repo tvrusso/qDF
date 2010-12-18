@@ -2,7 +2,7 @@
 #define rawTextDisplay_HPP
 #include <QFile>
 #include <QTextStream>
-
+#include <QVector>
 #include <DF_Proj_Point.hpp>
 #include "CoordSysBuilder.hpp"
 #include "qDFDisplayInterface.hpp"
@@ -43,6 +43,12 @@ private:
   bool fileIsOpen_;
   CoordSys myCS_;
 
+  void computeRhumbline_(DFLib::Proj::Point & startingPoint, double azimuth, 
+                         double meters, int npoints, 
+                         QVector<double> &lats, QVector<double> &lons);
+  void computeEllipse_(DFLib::Proj::Point & centerPoint, double am2, double bm2,
+                       double phi, double rho, int npoints, 
+                       QVector<double> &lats, QVector<double> &lons);
 };
 
 #endif

@@ -45,6 +45,6 @@ SOURCES += CoordSysBuilder.cpp \
            rawTextDisplay.cpp \
            qDFDisplayManager.cpp
 
-LIBS += -L/users/tvrusso/src/DFLib/build -lDFLib -lproj
-INCLUDEPATH += /users/tvrusso/src/DFLib
+LIBS += -L/users/russo/DFLib/build -lDFLib -lproj
+INCLUDEPATH += /users/russo/DFLib
 

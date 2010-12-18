@@ -104,6 +104,9 @@ void aprsDisplay::displayMLFix(DFLib::Proj::Point & MLFixPoint,
   tempPoint.setUserProj(myCS_.getProj4Params());
   vector<double> ML_point=tempPoint.getUserCoords();
   aprsPointObject_("ML-Fix",ML_point,"Mn"," Maximum Likelihood Solution");
+  aprsRotatedEllipse_("MLErr50",MLFixPoint,am2,bm2,phi,50);
+  aprsRotatedEllipse_("MLErr75",MLFixPoint,am2,bm2,phi,75);
+  aprsRotatedEllipse_("MLErr95",MLFixPoint,am2,bm2,phi,95);
 
 }
 
