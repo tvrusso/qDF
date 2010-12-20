@@ -18,6 +18,7 @@ using namespace std;
 #include "qDFProjReport.hpp"
 #include "aprsDisplay.hpp"
 #include "rawTextDisplay.hpp"
+#include "kmlDisplay.hpp"
 #include "qDFDisplayManager.hpp"
 #include <Util_Misc.hpp>
 
@@ -38,10 +39,12 @@ MainWindow::MainWindow(QWidget *parent)
 
   theAPRSDisplay_ = new aprsDisplay(&theAPRS,aprsPacketsTextEdit);
   theRTDisplay_ = new rawTextDisplay();
+  theKMLDisplay_ = new kmlDisplay("qDF_GE.kml");
 
   theDisplayManager.addDisplay("MainWindow",this,true);
   theDisplayManager.addDisplay("APRS",theAPRSDisplay_,theSettings_.publishAPRS());
   theDisplayManager.addDisplay("RawText",theRTDisplay_,true);
+  theDisplayManager.addDisplay("KML",theKMLDisplay_,true);
 }
 
 MainWindow::~MainWindow()
@@ -444,6 +447,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     if (theReportCollection.size())
     {
+      theDisplayManager.closeDisplays();
       theReportCollection.deleteReports();
       // Now we have an issue.  If we just exit now, the (possibly lengthy)
       // process of deleting APRS objects has only just begun.  So what we'll do
@@ -644,6 +648,7 @@ void MainWindow::closeFile()
 {
   if (okToContinue()) 
   {
+    theDisplayManager.closeDisplays();
     theReportCollection.deleteReports();
     currentFileName="";
   }

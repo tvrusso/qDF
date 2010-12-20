@@ -1,6 +1,6 @@
 #include "qDFDisplayInterface.hpp"
 #include <DF_Proj_Point.hpp>
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
 #include <iostream>
 #endif
 #include "qDFDisplayManager.hpp"
@@ -25,7 +25,7 @@ void qDFDisplayManager::addDisplay(const QString displayName,
     if (enabled)
       theDisplay->initializeDisplay();
 
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
     std::cerr << " added display " << displayName.toStdString();
     if (enabled)
       std::cerr << " enabled";
@@ -45,7 +45,7 @@ void qDFDisplayManager::enableDisplay(const QString displayName)
     if (!enabledMap_.value(displayName))
       theDisplay->initializeDisplay();
     enabledMap_[displayName] = true;
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
     std::cerr << " enabled display " << displayName.toStdString() << std::endl;
 #endif
   }
@@ -60,7 +60,7 @@ void qDFDisplayManager::disableDisplay(const QString displayName)
     if (enabledMap_.value(displayName))
       theDisplay->closeDisplay();
     enabledMap_[displayName] = false;
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
     std::cerr << " disabled display " << displayName.toStdString() << std::endl;
 #endif
   }
@@ -74,7 +74,7 @@ void qDFDisplayManager::initializeDisplays()
     {
       if (interfacesMap_[theDisplayName])
         interfacesMap_[theDisplayName]->initializeDisplay();
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
       std::cerr << " initialized display " << theDisplayName.toStdString() << std::endl;
 #endif
     }
@@ -89,7 +89,7 @@ void qDFDisplayManager::closeDisplays()
     {
       if (interfacesMap_[theDisplayName])
         interfacesMap_[theDisplayName]->closeDisplay();
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
       std::cerr << " closed display " << theDisplayName.toStdString() << std::endl;
 #endif
     }
@@ -104,7 +104,7 @@ void qDFDisplayManager::clearDisplays()
     {
       if (interfacesMap_[theDisplayName])
         interfacesMap_[theDisplayName]->clearDisplay();
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
       std::cerr << " cleared display " << theDisplayName.toStdString() << std::endl;
 #endif
     }
@@ -119,7 +119,7 @@ void qDFDisplayManager::displayDFReport(const qDFProjReport *theReport)
     {
       if (interfacesMap_[theDisplayName])
         interfacesMap_[theDisplayName]->displayDFReport(theReport);
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
       std::cerr << " display report on " << theDisplayName.toStdString() << std::endl;
 #endif
     }
@@ -134,7 +134,7 @@ void qDFDisplayManager::undisplayDFReport(const qDFProjReport *theReport)
     {
       if (interfacesMap_[theDisplayName])
         interfacesMap_[theDisplayName]->undisplayDFReport(theReport);
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
       std::cerr << " undisplay report on " << theDisplayName.toStdString() << std::endl;
 #endif
     }
@@ -149,7 +149,7 @@ void qDFDisplayManager::displayLSFix(DFLib::Proj::Point & LSFixPoint)
     {
       if (interfacesMap_[theDisplayName])
         interfacesMap_[theDisplayName]->displayLSFix(LSFixPoint);
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
       std::cerr << " display LSfix on " << theDisplayName.toStdString() << std::endl;
 #endif
     }
@@ -163,7 +163,7 @@ void qDFDisplayManager::undisplayLSFix()
     {
       if (interfacesMap_[theDisplayName])
         interfacesMap_[theDisplayName]->undisplayLSFix();
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
       std::cerr << " undisplay LSfix on " << theDisplayName.toStdString() << std::endl;
 #endif
     }
@@ -178,7 +178,7 @@ void qDFDisplayManager::displayFCAFix(DFLib::Proj::Point & FCAFixPoint, std::vec
     {
       if (interfacesMap_[theDisplayName])
         interfacesMap_[theDisplayName]->displayFCAFix(FCAFixPoint,stddevs);
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
       std::cerr << " display FCA fix on " << theDisplayName.toStdString() << std::endl;
 #endif
     }
@@ -192,7 +192,7 @@ void qDFDisplayManager::undisplayFCAFix()
     {
       if (interfacesMap_[theDisplayName])
         interfacesMap_[theDisplayName]->undisplayFCAFix();
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
       std::cerr << " undisplay FCA fix on " << theDisplayName.toStdString() << std::endl;
 #endif
     }
@@ -206,7 +206,7 @@ void qDFDisplayManager::displayMLFix(DFLib::Proj::Point & MLFixPoint, double am2
     {
       if (interfacesMap_[theDisplayName])
         interfacesMap_[theDisplayName]->displayMLFix(MLFixPoint,am2,bm2,phi);
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
       std::cerr << " display ML fix on " << theDisplayName.toStdString() << std::endl;
 #endif
 
@@ -221,7 +221,7 @@ void qDFDisplayManager::undisplayMLFix()
     {
       if (interfacesMap_[theDisplayName])
         interfacesMap_[theDisplayName]->undisplayMLFix();
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
       std::cerr << " undisplay ML fix on " << theDisplayName.toStdString() << std::endl;
 #endif
 
@@ -236,7 +236,7 @@ void qDFDisplayManager::displayBPEFix(DFLib::Proj::Point & BPEFixPoint, double a
     {
       if (interfacesMap_[theDisplayName])
         interfacesMap_[theDisplayName]->displayBPEFix(BPEFixPoint,am2,bm2,phi);
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
       std::cerr << " display BPE fix on " << theDisplayName.toStdString() << std::endl;
 #endif
 
@@ -251,7 +251,7 @@ void qDFDisplayManager::undisplayBPEFix()
     {
       if (interfacesMap_[theDisplayName])
         interfacesMap_[theDisplayName]->undisplayBPEFix();
-#if 0
+#ifdef qDF_DEBUG_DISPLAY_MANAGER
       std::cerr << " undisplay BPE fix on " << theDisplayName.toStdString() << std::endl;
 #endif
     }
