@@ -81,7 +81,7 @@ void kmlDisplay::displayDFReport(const qDFProjReport *theReport)
     QVector<double> lats;
     QVector<double> lons;
     computeRhumbline_(tempPoint, theReport->getBearing(),
-                      2000, 20, lats,lons);
+                      4000, 20, lats,lons);
     for (int i=0;i<lats.size();i++)
     {
       kmlStringStream_ << "       "<<lons[i]<<","<<lats[i]<<",0"<<endl;
