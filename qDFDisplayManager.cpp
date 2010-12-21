@@ -21,9 +21,6 @@ void qDFDisplayManager::addDisplay(const QString displayName,
   {
     enabledMap_[displayName] = enabled;
     interfacesMap_[displayName] = theDisplay;
-    
-    if (enabled)
-      theDisplay->initializeDisplay();
 
 #ifdef qDF_DEBUG_DISPLAY_MANAGER
     std::cerr << " added display " << displayName.toStdString();
