@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   theDisplayManager.addDisplay("MainWindow",this,true);
   theDisplayManager.addDisplay("APRS",theAPRSDisplay_,theSettings_.publishAPRS());
-  theDisplayManager.addDisplay("RawText",theRTDisplay_,true);
+  theDisplayManager.addDisplay("RawText",theRTDisplay_,false);
   theDisplayManager.addDisplay("KML",theKMLDisplay_,true);
 }
 
