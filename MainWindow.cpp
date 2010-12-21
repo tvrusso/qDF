@@ -227,6 +227,13 @@ void MainWindow::newReportReceived(qDFProjReport *report)
          // convergence failures, ignore it
          MLFix_computed=false;
        }
+       double am2ML=0;
+       double bm2ML=0;
+       double phiML;
+       if (MLFix_computed)
+       {
+         theReportCollection.computeCramerRaoBounds(MLFix,am2ML,bm2ML,phiML);
+       }
 
        // Compute the Stansfield fix and its error ellipse parameters:
        double am2,bm2,phi;
@@ -244,8 +251,7 @@ void MainWindow::newReportReceived(qDFProjReport *report)
 
        if (MLFix_computed)
        {
-         // For now we're neither computing nor displaying error ellipses for ML fix.
-         theDisplayManager.displayMLFix(MLFix);
+         theDisplayManager.displayMLFix(MLFix,am2ML,bm2ML,phiML);
        }
        else
        {
