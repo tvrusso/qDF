@@ -415,8 +415,8 @@ void MainWindow::aboutQt()
 void MainWindow::about()
 {
   QMessageBox::about(this,tr("About qDF"),
-                     tr("<h2>qDF 0.1</h2>"
-                        "<p>Copyright &copy; 2009 Tom Russo."
+                     tr("<h2>qDF 0.2</h2>"
+                        "<p>Copyright &copy; 2010 Tom Russo, KM5VY."
                         "<p>qDF is an application for computing "
                         "fixes of transmitter location from bearings-only "
                         "measurements by receivers."
