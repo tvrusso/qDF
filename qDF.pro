@@ -47,6 +47,6 @@ SOURCES += CoordSysBuilder.cpp \
            kmlDisplay.cpp \
            qDFDisplayManager.cpp
 
-LIBS += -L/home/russo/src/DFLib/build -lDFLib -lproj
-INCLUDEPATH += /home/russo/src/DFLib
+LIBS += -L/users/russo/DFLib/build -lDFLib -lproj
+INCLUDEPATH += /users/russo/DFLib
 
