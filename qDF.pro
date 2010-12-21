@@ -8,7 +8,8 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 QT += network
-CONFIG += debug
+CONFIG += warn_off
+#CONFIG += debug
 
 qDF.path=$$[QT_INSTALL_BINS]
 qDF.files=qDF
