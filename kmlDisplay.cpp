@@ -609,9 +609,9 @@ void kmlDisplay::computeEllipse_(DFLib::Proj::Point & centerPoint,
   for (int i=0;i<npoints;i++)
   {
     tempCoords[0]=centerCoords[0]
-      +a*rho*cosphi*cos(2.0*pi/((double)(npoints-1))*i)-b*rho*sinphi*sin(2.0*pi/15.0*i);
+      +a*rho*cosphi*cos(2.0*pi/((double)(npoints-1))*i)-b*rho*sinphi*sin(2.0*pi/((double)(npoints-1))*i);
     tempCoords[1]=centerCoords[1]
-      +a*rho*sinphi*cos(2.0*pi/((double)(npoints-1))*i)+b*rho*cosphi*sin(2.0*pi/15.0*i);
+      +a*rho*sinphi*cos(2.0*pi/((double)(npoints-1))*i)+b*rho*cosphi*sin(2.0*pi/((double)(npoints-1))*i);
     
     // those are the coordinates in XY.  Now get 'em in lat/lon
     tempPoint.setXY(tempCoords);
