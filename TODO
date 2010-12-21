@@ -8,9 +8,9 @@
 - Figure out what the heck happened on Windows --- "release" build crashes
   with no explanation, "debug" works Just Fine.  
 
+- Add file name selection for KML output.
 - Allow user to turn off each display class other than main window in settings
   dialog
-- Implement KML (preferrably a live one) display class on all platforms.
 - Implement All Topo Maps display class on Windows
 
 - Add WMM geomagnetic model and automatic computation of declination
