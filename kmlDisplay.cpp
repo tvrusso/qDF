@@ -490,19 +490,19 @@ void kmlDisplay::outputPreamble_()
     kmlFileOut_<<"    <Style id=\"50PercentEllipses\">"<<endl;
     kmlFileOut_<<"      <LineStyle>"<<endl;
     kmlFileOut_<<"        <width>1.5</width>"<<endl;
-    kmlFileOut_<<"        <color>4fff0000</color>"<<endl;
+    kmlFileOut_<<"        <color>7fff0000</color>"<<endl;
     kmlFileOut_<<"      </LineStyle>"<<endl;
     kmlFileOut_<<"    </Style>"<<endl;
     kmlFileOut_<<"    <Style id=\"75PercentEllipses\">"<<endl;
     kmlFileOut_<<"      <LineStyle>"<<endl;
     kmlFileOut_<<"        <width>1.5</width>"<<endl;
-    kmlFileOut_<<"        <color>4f00ffff</color>"<<endl;
+    kmlFileOut_<<"        <color>7f00ffff</color>"<<endl;
     kmlFileOut_<<"      </LineStyle>"<<endl;
     kmlFileOut_<<"    </Style>"<<endl;
     kmlFileOut_<<"    <Style id=\"95PercentEllipses\">"<<endl;
     kmlFileOut_<<"      <LineStyle>"<<endl;
     kmlFileOut_<<"        <width>1.5</width>"<<endl;
-    kmlFileOut_<<"        <color>4f0000ff</color>"<<endl;
+    kmlFileOut_<<"        <color>7f0000ff</color>"<<endl;
     kmlFileOut_<<"      </LineStyle>"<<endl;
     kmlFileOut_<<"    </Style>"<<endl;
 }
