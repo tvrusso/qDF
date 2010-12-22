@@ -1,29 +1,40 @@
+- Add file name selection for KML output.  Make sure a name has been 
+  selected by the time initializeDisplay is called.
 - Add setting for default hemisphere.  Use this to initialize N/S, E/W buttons
   in latLonCoordinateWidget for new reports.  Think outside North America,
   since first alpha tester is actually in Norway.  This will require a 
   setDefaultHemisphere method in the widget, too.
-- Add computation and display of error ellipses for ML fix.
+---- second alpha release
+
+- build Windows installer (excluding msvcrt --- require user to install via
+vcredist_XXX.exe for now)
+---- first windows alpha release to friendly users
+
+
+- Add WMM geomagnetic model and automatic computation of declination
+   The new version that creates a library might be usable directly!
 - Add setting for changing name of DF fix objects
 - Fix up miscellaneous warnings from DFLib (e.g. signed/unsigned compares)
-- Figure out what the heck happened on Windows --- "release" build crashes
-  with no explanation, "debug" works Just Fine.  
+- Allow persistent TCP connection to APRS stream rather than UDP
 
-- Add file name selection for KML output.
 - Allow user to turn off each display class other than main window in settings
   dialog
 - Implement All Topo Maps display class on Windows
 
-- Add WMM geomagnetic model and automatic computation of declination
-   The new version that creates a library might be usable directly!
+- Agrello doppler input?  How to compute SD?
 
-- add VOR database
+- Practice mode.  Allow input of actual transmitter location, computation of
+  bearing error.  Use this to accumulate data for SD computation?
+
+--------
 - add computation of bearing/range between any two points (geodesic,
   spherical earth OK)
+
+- add VOR database
 - Add bearing/range from VOR for fixes
 - add computation of location given bearing/range from VOR
 - Add ability to plot airborne reports given bearing/range from VOR or Lat/Lon
   and altitude (use SAR School text for parameters needed to compute footprint)
 
-- Allow persistent TCP connection to APRS stream
 - Receive APRS data from stream (drop all on floor but DF reports)
 - Allow ability to import selected DF reports from APRS stream
