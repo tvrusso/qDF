@@ -333,6 +333,32 @@ void latLonCoordinateWidget::setCoords(QVector<double> &coordVect)
   emit(coordsChanged());
 }
 
+void latLonCoordinateWidget::setDefaultHemispheres(int NS, int EW)
+{
+  if (NS<0)
+  {
+    latSRadioButton->setChecked(true);
+    latNRadioButton->setChecked(false);
+  }
+  else
+  {
+    latSRadioButton->setChecked(false);
+    latNRadioButton->setChecked(true);
+  }
+  updateLatitude();
+  if (EW<0)
+  {
+    lonWRadioButton->setChecked(true);
+    lonERadioButton->setChecked(false);
+  }
+  else
+  {
+    lonWRadioButton->setChecked(false);
+    lonERadioButton->setChecked(true);
+  }
+  updateLongitude();
+}
+
 bool latLonCoordinateWidget::isValid()
 {
   return (latValid() && lonValid());

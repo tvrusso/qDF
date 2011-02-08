@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>settingsDialog</class>
- <widget class="QDialog" name="settingsDialog" >
-  <property name="geometry" >
+ <widget class="QDialog" name="settingsDialog">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,195 +10,286 @@
     <height>468</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2" >
-   <item row="2" column="0" >
-    <widget class="QDialogButtonBox" name="buttonBox" >
-     <property name="orientation" >
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="2" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="standardButtons" >
+     <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QTabWidget" name="tabWidget" >
-     <property name="currentIndex" >
-      <number>2</number>
+   <item row="1" column="0">
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="tabCeo" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>514</width>
-        <height>384</height>
-       </rect>
-      </property>
-      <attribute name="title" >
+     <widget class="QWidget" name="tabCeo">
+      <attribute name="title">
        <string>Geographic Settings</string>
       </attribute>
-      <layout class="QFormLayout" name="formLayout_2" >
-       <item row="0" column="0" >
-        <widget class="QLabel" name="label" >
-         <property name="text" >
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
           <string>Default Coordinate System:</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1" >
-        <widget class="QComboBox" name="CSComboBox" >
+       <item row="0" column="1">
+        <widget class="QComboBox" name="CSComboBox">
          <item>
-          <property name="text" >
+          <property name="text">
            <string>NAD27 Lat/Lon</string>
           </property>
          </item>
          <item>
-          <property name="text" >
+          <property name="text">
            <string>WGS84 Lat/Lon</string>
           </property>
          </item>
         </widget>
        </item>
-       <item row="1" column="0" >
-        <widget class="QLabel" name="label_2" >
-         <property name="text" >
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
           <string>Default Declination:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1" >
-        <widget class="QLineEdit" name="DeclinationLineEdit" >
-         <property name="text" >
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="DeclinationLineEdit">
+         <property name="text">
           <string>9.3</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0" >
-        <widget class="QLabel" name="label_3" >
-         <property name="text" >
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
           <string>Default UTM Zone</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1" >
-        <widget class="QSpinBox" name="UTMZoneSpinBox" >
-         <property name="minimum" >
+       <item row="2" column="1">
+        <widget class="QSpinBox" name="UTMZoneSpinBox">
+         <property name="minimum">
           <number>1</number>
          </property>
-         <property name="maximum" >
+         <property name="maximum">
           <number>60</number>
          </property>
-         <property name="value" >
+         <property name="value">
           <number>13</number>
          </property>
         </widget>
        </item>
+       <item row="3" column="0" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>Default Hemisphere:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="minimumSize">
+              <size>
+               <width>71</width>
+               <height>31</height>
+              </size>
+             </property>
+             <property name="title">
+              <string>N/S</string>
+             </property>
+             <widget class="QWidget" name="layoutWidget_1">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>10</y>
+                <width>71</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <item>
+                <widget class="QRadioButton" name="latNRadioButton">
+                 <property name="text">
+                  <string>N</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="latSRadioButton">
+                 <property name="text">
+                  <string>S</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="minimumSize">
+              <size>
+               <width>71</width>
+               <height>31</height>
+              </size>
+             </property>
+             <property name="title">
+              <string>E/W</string>
+             </property>
+             <widget class="QWidget" name="layoutWidget_2">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>10</y>
+                <width>73</width>
+                <height>26</height>
+               </rect>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
+                <widget class="QRadioButton" name="lonWRadioButton">
+                 <property name="text">
+                  <string>W</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="lonERadioButton">
+                 <property name="text">
+                  <string>E</string>
+                 </property>
+                 <property name="checked">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabDF" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>514</width>
-        <height>384</height>
-       </rect>
-      </property>
-      <attribute name="title" >
+     <widget class="QWidget" name="tabDF">
+      <attribute name="title">
        <string>DF Fix Settings</string>
       </attribute>
-      <layout class="QFormLayout" name="formLayout" >
-       <item row="0" column="0" >
-        <widget class="QLabel" name="label_4" >
-         <property name="text" >
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
           <string>Minimum Fix Cut Angle:</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1" >
-        <widget class="QSpinBox" name="MinFCASpinBox" >
-         <property name="maximum" >
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="MinFCASpinBox">
+         <property name="maximum">
           <number>180</number>
          </property>
-         <property name="value" >
+         <property name="value">
           <number>5</number>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabAPRS" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>514</width>
-        <height>384</height>
-       </rect>
-      </property>
-      <attribute name="title" >
+     <widget class="QWidget" name="tabAPRS">
+      <attribute name="title">
        <string>APRS Settings</string>
       </attribute>
-      <layout class="QFormLayout" name="formLayout_3" >
-       <item row="0" column="0" >
-        <widget class="QLabel" name="label_5" >
-         <property name="text" >
+      <layout class="QFormLayout" name="formLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
           <string>APRS Server IP Address:</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1" >
-        <widget class="QLineEdit" name="APRSServerLineEdit" >
-         <property name="text" >
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="APRSServerLineEdit">
+         <property name="text">
           <string>127.0.0.1</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0" >
-        <widget class="QLabel" name="label_6" >
-         <property name="text" >
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
           <string>APRS Server Port:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1" >
-        <widget class="QLineEdit" name="APRSServerPortLineEdit" >
-         <property name="text" >
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="APRSServerPortLineEdit">
+         <property name="text">
           <string>2023</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0" >
-        <widget class="QLabel" name="label_7" >
-         <property name="text" >
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
           <string>APRS Call Sign:</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1" >
-        <widget class="QLineEdit" name="CallSignLineEdit" >
-         <property name="text" >
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="CallSignLineEdit">
+         <property name="text">
           <string/>
          </property>
         </widget>
        </item>
-       <item row="3" column="0" >
-        <widget class="QLabel" name="label_8" >
-         <property name="text" >
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
           <string>APRS CallPass:</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1" >
-        <widget class="QLineEdit" name="CallPassLineEdit" />
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="CallPassLineEdit"/>
        </item>
-       <item row="4" column="0" >
-        <widget class="QCheckBox" name="APRSPublishCheckBox" >
-         <property name="text" >
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="APRSPublishCheckBox">
+         <property name="text">
           <string>Publish Data on APRS?</string>
          </property>
         </widget>
@@ -227,11 +319,11 @@
    <receiver>settingsDialog</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>248</x>
      <y>254</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>157</x>
      <y>274</y>
     </hint>
@@ -243,11 +335,11 @@
    <receiver>settingsDialog</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>316</x>
      <y>260</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
     </hint>

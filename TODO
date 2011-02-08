@@ -1,9 +1,5 @@
 - Add file name selection for KML output.  Make sure a name has been 
   selected by the time initializeDisplay is called.
-- Add setting for default hemisphere.  Use this to initialize N/S, E/W buttons
-  in latLonCoordinateWidget for new reports.  Think outside North America,
-  since first alpha tester is actually in Norway.  This will require a 
-  setDefaultHemisphere method in the widget, too.
 ---- second alpha release
 
 - build Windows installer (excluding msvcrt --- require user to install via

@@ -11,13 +11,19 @@ class Settings
 {
 
 private:
+  // Geographic settings:
   CoordSysBuilder theCoordSysBuilder_;
   CoordSys defaultCS_;
   QMap<QString,QMap<QString,double> > equipQualSDMap_;
   double defaultDeclination_;
   int defaultUTMZone_;
+  int defaultNS_;
+  int defaultEW_;
+
+  // DF settings
   double defaultFCAMinAngle_;
 
+  // APRS settings
   QString aprsServer_;
   QString aprsCallsign_;
   QString aprsCallpass_;
@@ -46,6 +52,11 @@ public:
   QList<QString> getSupportedCoordSys() const;
   QString getDefaultCSName() const;
   const CoordSys &getDefaultCS() const;
+
+  void setDefaultNSHemisphere(int NS);
+  void setDefaultEWHemisphere(int EW);
+  int getDefaultNSHemisphere() const;
+  int getDefaultEWHemisphere() const;
 
   inline const QMap<QString,QMap<QString,double> > &getEQMap()
   {return(equipQualSDMap_);};

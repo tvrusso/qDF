@@ -17,6 +17,7 @@ class latLonCoordinateWidget : public QWidget, public Ui::latLonCoordinateWidget
   bool isValid();
   void getCoords(QVector<double> &coordVect);
   void setCoords(QVector<double> &coordVect);
+  void setDefaultHemispheres(int NS, int EW);
 
  private:
   QRegExp latDegRegExp;

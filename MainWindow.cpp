@@ -516,6 +516,13 @@ void MainWindow::readSettings()
                                theSettings_.getDefaultUTMZone()).toInt();
   theSettings_.setDefaultUTMZone(defZone);
 
+  int defNS=qsettings.value("defaultNS",
+                               theSettings_.getDefaultNSHemisphere()).toInt();
+  theSettings_.setDefaultNSHemisphere(defNS);
+  int defEW=qsettings.value("defaultEW",
+                               theSettings_.getDefaultEWHemisphere()).toInt();
+  theSettings_.setDefaultEWHemisphere(defEW);
+
   quint16 defPort=qsettings.value("aprsPort",
                                   theSettings_.getAPRSPort()).toInt();
   theSettings_.setAPRSPort(defPort);
@@ -549,6 +556,8 @@ void MainWindow::writeSettings()
   settings.setValue("defaultDeclination",theSettings_.getDefaultDeclination());
   settings.setValue("defaultFCAMinAngle",theSettings_.getDefaultFCAMinAngle());
   settings.setValue("defaultUTMZone",theSettings_.getDefaultUTMZone());
+  settings.setValue("defaultNS",theSettings_.getDefaultNSHemisphere());
+  settings.setValue("defaultEW",theSettings_.getDefaultEWHemisphere());
   settings.setValue("aprsPort",theSettings_.getAPRSPort());
   settings.setValue("aprsCallsign",theSettings_.getAPRSCallsign());
   settings.setValue("aprsCallpass",theSettings_.getAPRSCallpass());

@@ -15,6 +15,26 @@ settingsDialog::settingsDialog(const Settings &theSettings, QWidget *parent)
   CSComboBox->setCurrentIndex(theDefaultIndex);
   DeclinationLineEdit->setText(QString::number(theSettings.getDefaultDeclination()));
   UTMZoneSpinBox->setValue(theSettings.getDefaultUTMZone());
+  if (theSettings.getDefaultNSHemisphere()<0)
+  {
+    latSRadioButton->setChecked(true);
+    latNRadioButton->setChecked(false);
+  }
+  else
+  {
+    latSRadioButton->setChecked(false);
+    latNRadioButton->setChecked(true);
+  }
+  if (theSettings.getDefaultEWHemisphere()<0)
+  {
+    lonWRadioButton->setChecked(true);
+    lonERadioButton->setChecked(false);
+  }
+  else
+  {
+    lonWRadioButton->setChecked(false);
+    lonERadioButton->setChecked(true);
+  }
 
   // set up DF Settings
   MinFCASpinBox->setValue(theSettings.getDefaultFCAMinAngle());
@@ -36,6 +56,19 @@ void settingsDialog::retrieveSettings(Settings &theSettings)
   theSettings.setDefaultCS(CSComboBox->currentText());
   theSettings.setDefaultDeclination(DeclinationLineEdit->text().toDouble());
   theSettings.setDefaultUTMZone(UTMZoneSpinBox->value());
+
+  int NS=1;
+  if (latSRadioButton->isChecked())
+  {
+    NS=-1;
+  }
+  int EW=1;
+  if (lonWRadioButton->isChecked())
+  {
+    EW=-1;
+  }
+  theSettings.setDefaultNSHemisphere(NS);
+  theSettings.setDefaultEWHemisphere(EW);
 
   // DF settings:
   theSettings.setDefaultFCAMinAngle(MinFCASpinBox->value());

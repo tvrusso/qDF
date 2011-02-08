@@ -5,6 +5,8 @@ using namespace std;
 Settings::Settings()
   :defaultDeclination_(9.3),
    defaultUTMZone_(13),
+   defaultNS_(1),
+   defaultEW_(-1),
    defaultFCAMinAngle_(5.0),
    aprsServer_("localhost"),
    aprsCallsign_("NOCALL"),
@@ -37,6 +39,8 @@ Settings::Settings(const Settings &right)
    equipQualSDMap_(right.equipQualSDMap_),
    defaultDeclination_(right.defaultDeclination_),
    defaultUTMZone_(right.defaultUTMZone_),
+   defaultNS_(right.defaultNS_),
+   defaultEW_(right.defaultEW_),
    defaultFCAMinAngle_(right.defaultFCAMinAngle_),
    aprsServer_(right.aprsServer_),
    aprsCallsign_(right.aprsCallsign_),
@@ -78,3 +82,20 @@ void Settings::setDefaultCS(const QString & csName)
   defaultCS_=theCoordSysBuilder_.getCoordSys(csName);
 }
 
+void Settings::setDefaultNSHemisphere(int NS)
+{
+  defaultNS_=NS;
+}
+void Settings::setDefaultEWHemisphere(int EW)
+{
+  defaultEW_=EW;
+}
+
+int Settings::getDefaultNSHemisphere() const
+{
+  return defaultNS_;
+}
+int Settings::getDefaultEWHemisphere() const
+{
+  return defaultEW_;
+}

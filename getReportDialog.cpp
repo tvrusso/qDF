@@ -31,6 +31,8 @@ getReportDialog::getReportDialog(const Settings &theSettings,const QList<QString
   comboBox_EquipmentType->addItems(settings_.getEquipTypes());
   comboBox_EquipmentType->setCurrentIndex(0);
 
+  latLon->setDefaultHemispheres(settings_.getDefaultNSHemisphere(),settings_.getDefaultEWHemisphere());
+
   emit somethingChanged();
 }
 
