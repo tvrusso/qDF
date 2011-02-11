@@ -430,7 +430,7 @@ void APRS::checkPendingDatagrams()
                                              &senderPort))!= -1)
       {
         QString theDatagram(datagram);
-        if (theDatagram=="NAK")
+        if (theDatagram=="NACK")
           retry=true;
         else
           acked=true;
