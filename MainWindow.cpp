@@ -209,7 +209,9 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      {
        theReportCollection.computeLeastSquaresFix(LSFix);
        LSFix_computed=true;
-
+     }
+     if (nreports >= 2)
+     {
        try
        {
          theReportCollection.computeMLFix(MLFix);

@@ -113,6 +113,9 @@ void aprsDisplay::displayMLFix(DFLib::Proj::Point & MLFixPoint,
 void aprsDisplay::undisplayMLFix()
 {
   deleteAPRSObject_("ML-Fix");
+  deleteAPRSObject_("MLErr50");
+  deleteAPRSObject_("MLErr75");
+  deleteAPRSObject_("MLErr95");
 }
 
 void aprsDisplay::displayBPEFix(DFLib::Proj::Point & BPEFixPoint, 
