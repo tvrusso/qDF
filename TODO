@@ -6,6 +6,8 @@
 vcredist_XXX.exe for now)
 ---- first windows alpha release to friendly users
 
+-- Export To Text: allow raw text output of qDF data (including fixes) for
+   incident reports, etc.
 
 - Add WMM geomagnetic model and automatic computation of declination
    The new version that creates a library might be usable directly!
