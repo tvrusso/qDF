@@ -36,3 +36,7 @@ vcredist_XXX.exe for now)
 
 - Receive APRS data from stream (drop all on floor but DF reports)
 - Allow ability to import selected DF reports from APRS stream
+
+--------
+- upload to github?
+
