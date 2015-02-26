@@ -1,6 +1,3 @@
--- Add required hackage to get this to build with Qt5.  This is supposed to
-   be very easy and only a few lines.  Just Do It.
-   
 - Add file name selection for KML output.  Make sure a name has been 
   selected by the time initializeDisplay is called.
 ---- second alpha release

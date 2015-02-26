@@ -6,6 +6,9 @@ inline bool isinf(double v) {return !_finite(v);}
 #endif
 
 #include <QtGui>
+#if QT_VERSION >= 0x050000
+#include <QtWidgets>
+#endif
 #include <sstream>
 #include <iostream>
 using namespace std;

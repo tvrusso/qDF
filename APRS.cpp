@@ -464,7 +464,7 @@ void APRS::checkPendingDatagrams()
       QString sendText=QString("%1,%2\n%3\n").arg(callsign_).arg(callpass_)
         .arg(payload);
       
-      QByteArray datagram=sendText.toAscii();
+      QByteArray datagram=sendText.toLatin1();
       
       QHostInfo info=QHostInfo::fromName(server_);
       if (!info.addresses().isEmpty())
