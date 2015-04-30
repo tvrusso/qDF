@@ -17,7 +17,7 @@ public:
 
   int addReport(qDFProjReport *theReport);
   QString getReportSummary(const QString &reportName,
-                          const vector<string>&projArgs) const;
+                           const std::vector<std::string>&projArgs) const;
   QString getReportName(int reportIndex);
   virtual void deleteReports();
   QList<QString> getReportNames() { return reportMap_.keys();};

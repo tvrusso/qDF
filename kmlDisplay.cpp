@@ -69,7 +69,7 @@ void kmlDisplay::displayDFReport(const qDFProjReport *theReport)
     
     DFLib::Proj::Point tempPoint=theReport->getReceiverPoint();
     tempPoint.setUserProj(myCS_.getProj4Params());
-    vector<double> coords(2);
+    std::vector<double> coords(2);
     coords=tempPoint.getUserCoords();
     kmlStringStream_ << "     <coordinates>" << coords[0]<<","<<coords[1]
                      << ",0</coordinates>" << endl;
@@ -124,7 +124,7 @@ void kmlDisplay::displayLSFix(DFLib::Proj::Point & LSFixPoint)
     kmlStringStream_ << "  <Point>" << endl;
   DFLib::Proj::Point tempPoint = LSFixPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double> coords=tempPoint.getUserCoords();
+  std::vector<double> coords=tempPoint.getUserCoords();
   kmlStringStream_ << "Least Squares Fix:" << endl;
   kmlStringStream_ << "      <coordinates>" << coords[0]<<","<<coords[1]
           << ",0</coordinates>" << endl;
@@ -151,7 +151,7 @@ void kmlDisplay::displayMLFix(DFLib::Proj::Point & MLFixPoint,
   kmlStringStream_ << "  <Point>" << endl;
   DFLib::Proj::Point tempPoint = MLFixPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double> coords=tempPoint.getUserCoords();
+  std::vector<double> coords=tempPoint.getUserCoords();
   kmlStringStream_ << "      <coordinates>" << coords[0]<<","<<coords[1]
           << ",0</coordinates>" << endl;
   kmlStringStream_ << "    </Point>" << endl;
@@ -236,7 +236,7 @@ void kmlDisplay::displayBPEFix(DFLib::Proj::Point & BPEFixPoint,
   kmlStringStream_ << "  <Point>" << endl;
   DFLib::Proj::Point tempPoint = BPEFixPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double> coords=tempPoint.getUserCoords();
+  std::vector<double> coords=tempPoint.getUserCoords();
   kmlStringStream_ << "      <coordinates>" << coords[0]<<","<<coords[1]
           << ",0</coordinates>" << endl;
   kmlStringStream_ << "    </Point>" << endl;
@@ -321,7 +321,7 @@ void kmlDisplay::displayFCAFix(DFLib::Proj::Point & FCAFixPoint, std::vector<dou
   kmlStringStream_ << "  <Point>" << endl;
   DFLib::Proj::Point tempPoint = FCAFixPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double> coords=tempPoint.getUserCoords();
+  std::vector<double> coords=tempPoint.getUserCoords();
   kmlStringStream_ << "      <coordinates>" << coords[0]<<","<<coords[1]
           << ",0</coordinates>" << endl;
   kmlStringStream_ << "    </Point>" << endl;
@@ -560,12 +560,12 @@ void kmlDisplay::computeRhumbline_(DFLib::Proj::Point & startingPoint,
 {
   DFLib::Proj::Point tempPoint=startingPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double>  XYcoords=startingPoint.getXY();
+  std::vector<double>  XYcoords=startingPoint.getXY();
   double ds=meters/(npoints-1);
   double azimuthRadians=azimuth*M_PI/180.0;
   double sintheta=sin(azimuthRadians);
   double costheta=cos(azimuthRadians);
-  vector<double>tempCoords = XYcoords;
+  std::vector<double>tempCoords = XYcoords;
 
   lats.clear();
   lons.clear();
@@ -593,9 +593,9 @@ void kmlDisplay::computeEllipse_(DFLib::Proj::Point & centerPoint,
 
   DFLib::Proj::Point tempPoint=centerPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double>  XYcoords=centerPoint.getXY();
-  vector<double>centerCoords = XYcoords;
-  vector<double>tempCoords = XYcoords;
+  std::vector<double>  XYcoords=centerPoint.getXY();
+  std::vector<double>centerCoords = XYcoords;
+  std::vector<double>tempCoords = XYcoords;
   double a=sqrt(1.0/am2);
   double b=sqrt(1.0/bm2);
   double cosphi=cos(phi);

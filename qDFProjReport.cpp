@@ -4,9 +4,9 @@
 #include "qDFProjReport.hpp"
 #include <sstream>
 
-qDFProjReport::qDFProjReport(const vector <double> &theLocationUser,
+qDFProjReport::qDFProjReport(const std::vector <double> &theLocationUser,
                              const double &bearing, const double &std_dev,
-                             const string &theName, const CoordSys &aCS,
+                             const std::string &theName, const CoordSys &aCS,
                              const QString & equipmentType,
                              const QString & quality
                              )
@@ -22,13 +22,13 @@ qDFProjReport::~qDFProjReport()
 {
 }
 
-void qDFProjReport::setReceiverLocationUser(const vector<double> &theLocation)
+void qDFProjReport::setReceiverLocationUser(const std::vector<double> &theLocation)
 {
   DFLib::Proj::Report::setReceiverLocationUser(theLocation);
   emit reportChanged(this);
 }
 
-void qDFProjReport::setReceiverLocationMercator(const vector<double> &theLocation)
+void qDFProjReport::setReceiverLocationMercator(const std::vector<double> &theLocation)
 {
   DFLib::Proj::Report::setReceiverLocationMercator(theLocation);
   emit reportChanged(this);
@@ -46,7 +46,7 @@ void qDFProjReport::setSigma(double Sigma)
   emit reportChanged(this);
 }
 
-void qDFProjReport::setUserProj(const vector<string> &projArgs)
+void qDFProjReport::setUserProj(const std::vector<std::string> &projArgs)
 {
   DFLib::Proj::Report::setUserProj(projArgs);
   emit reportChanged(this);
@@ -91,7 +91,7 @@ const QString qDFProjReport::getCSName() const
 QVector<double> qDFProjReport::getReceiverLocationUser() const
 {
   QVector<double> theLoc(2);
-  vector<double> coords(2);
+  std::vector<double> coords(2);
   DFLib::Proj::Point tempPoint=getReceiverPoint();
   coords = tempPoint.getUserCoords();
   theLoc[1]=coords[0];
@@ -110,7 +110,7 @@ QString qDFProjReport::getReportNameQS() const
   return (name);
 }
 
-void qDFProjReport::setAll(const vector<double> &theLocationUser,
+void qDFProjReport::setAll(const std::vector<double> &theLocationUser,
                            const double &bearing,
                            const double &std_dev,
                            const CoordSys &CS,
@@ -127,7 +127,7 @@ void qDFProjReport::setAll(const vector<double> &theLocationUser,
                        // be sure, just in case there's a queueing issue.
 }
   
-QString qDFProjReport::getReportSummary(const vector<string> &projArgs) const
+QString qDFProjReport::getReportSummary(const std::vector<std::string> &projArgs) const
 {
 
   // Get a copy of the point
@@ -137,11 +137,11 @@ QString qDFProjReport::getReportSummary(const vector<string> &projArgs) const
   // get the coordinates in our requested projection (which might not be the
   // one that the report uses
 
-  vector <double> coords(2);
+  std::vector <double> coords(2);
   coords=tempPoint.getUserCoords();
 
   // Our summary will be "name lon lat bearing sd validity"
-  ostringstream os;
+  std::ostringstream os;
   os << getReportName() << " " << coords[0] << " " << coords[1] << " "
      << getBearing() << " " << getSigma();
   if (isValid())
@@ -156,7 +156,7 @@ QDataStream &operator<<(QDataStream &out,const qDFProjReport &tR)
 {
   // Get a copy of the point
   DFLib::Proj::Point tempPoint=tR.getReceiverPoint();
-  vector <double> coords(2);
+  std::vector <double> coords(2);
   coords=tempPoint.getUserCoords();
   out << QString::fromStdString(tR.getReportName());
   out << coords[0] << coords[1]

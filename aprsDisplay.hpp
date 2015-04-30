@@ -37,11 +37,11 @@ private:
                      int percent, std::vector<double> & lats, std::vector<double> & lons);
   void displayAPRSText_(const QString &);
   void aprsPointObject_(const QString &oName, 
-                        const vector<double>& oPoint,
+                        const std::vector<double>& oPoint,
                         const QString &oSym,
                         const QString & oComment);
-  void aprsDFErrorObject_(const QString &oName,const vector<double> &oPoint,
-                          const vector<double> &oSDs);
+  void aprsDFErrorObject_(const QString &oName,const std::vector<double> &oPoint,
+                          const std::vector<double> &oSDs);
 
   void aprsRotatedEllipse_(const QString &oName,DFLib::Proj::Point &thePoint,
                              double am2, double bm2, double phi, int percent);

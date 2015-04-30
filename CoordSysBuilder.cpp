@@ -139,7 +139,7 @@
 
   QString CoordSys::getName() const
   {
-    ostringstream returnName;
+    std::ostringstream returnName;
     returnName << csName_.toStdString();
 
     if (zoneRequired_)
@@ -158,7 +158,7 @@
 
   void CoordSys::setZone(int z)
   {
-    ostringstream zoneString;
+    std::ostringstream zoneString;
     zoneString << "zone=" << z;
 
     if (zone_ == -1)  // never been set

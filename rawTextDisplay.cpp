@@ -68,7 +68,7 @@ void rawTextDisplay::displayDFReport(const qDFProjReport *theReport)
     }
     DFLib::Proj::Point tempPoint=theReport->getReceiverPoint();
     tempPoint.setUserProj(myCS_.getProj4Params());
-    vector<double> coords(2);
+    std::vector<double> coords(2);
     coords=tempPoint.getUserCoords();
     rawTextOut_ << "     Coordinates: " << coords[0]<<","<<coords[1]<<endl;
     rawTextOut_ << "         Bearing: " << theReport->getBearing() << endl;
@@ -90,7 +90,7 @@ void rawTextDisplay::displayLSFix(DFLib::Proj::Point & LSFixPoint)
 {
   DFLib::Proj::Point tempPoint = LSFixPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double> coords=tempPoint.getUserCoords();
+  std::vector<double> coords=tempPoint.getUserCoords();
   if (fileIsOpen_)
   {
     rawTextOut_ << "Least Squares Fix:" << endl;
@@ -103,7 +103,7 @@ void rawTextDisplay::displayMLFix(DFLib::Proj::Point & MLFixPoint,
 {
   DFLib::Proj::Point tempPoint = MLFixPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double> coords=tempPoint.getUserCoords();
+  std::vector<double> coords=tempPoint.getUserCoords();
   if (fileIsOpen_)
   {
     rawTextOut_ << "ML Fix:" << endl;
@@ -117,7 +117,7 @@ void rawTextDisplay::displayBPEFix(DFLib::Proj::Point & BPEFixPoint,
 {
   DFLib::Proj::Point tempPoint = BPEFixPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double> coords=tempPoint.getUserCoords();
+  std::vector<double> coords=tempPoint.getUserCoords();
   if (fileIsOpen_)
   {
     rawTextOut_ << "BPE Fix:" << endl;
@@ -157,7 +157,7 @@ void rawTextDisplay::displayFCAFix(DFLib::Proj::Point & FCAFixPoint, std::vector
 {
   DFLib::Proj::Point tempPoint = FCAFixPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double> coords=tempPoint.getUserCoords();
+  std::vector<double> coords=tempPoint.getUserCoords();
   if (fileIsOpen_)
   {
     rawTextOut_ << "FCA Fix:" << endl;
@@ -222,12 +222,12 @@ void rawTextDisplay::computeRhumbline_(DFLib::Proj::Point & startingPoint,
 {
   DFLib::Proj::Point tempPoint=startingPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double>  XYcoords=startingPoint.getXY();
+  std::vector<double>  XYcoords=startingPoint.getXY();
   double ds=meters/(npoints-1);
   double azimuthRadians=azimuth*M_PI/180.0;
   double sintheta=sin(azimuthRadians);
   double costheta=cos(azimuthRadians);
-  vector<double>tempCoords = XYcoords;
+  std::vector<double>tempCoords = XYcoords;
 
   lats.clear();
   lons.clear();
@@ -255,9 +255,9 @@ void rawTextDisplay::computeEllipse_(DFLib::Proj::Point & centerPoint,
 
   DFLib::Proj::Point tempPoint=centerPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double>  XYcoords=centerPoint.getXY();
-  vector<double>centerCoords = XYcoords;
-  vector<double>tempCoords = XYcoords;
+  std::vector<double>  XYcoords=centerPoint.getXY();
+  std::vector<double>centerCoords = XYcoords;
+  std::vector<double>tempCoords = XYcoords;
   double a=sqrt(1.0/am2);
   double b=sqrt(1.0/bm2);
   double cosphi=cos(phi);
