@@ -1,6 +1,7 @@
 #ifndef qDFProjReport_HPP
 #define qDFProjReport_HPP
 
+#include <DF_Proj_Point.hpp>
 #include <DF_Proj_Report.hpp>
 #include <QDataStream>
 #include <QObject>
