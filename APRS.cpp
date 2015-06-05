@@ -252,7 +252,9 @@ QString APRS::makeMultiline(const vector<double> &lon, const vector<double> &lat
     // 43chars - 6 for the sequence number- 5 for the starting pattern leaves
     // 32 characters for lat/lon pairs, or 16 pairs
 
-    if ( numPairs > 16) {
+    int maxPairs = (43-max(sequence.length(),6)-5)/2;
+    
+    if ( numPairs > maxPairs) {
         returnString = "";
     } else {
         double minLat, minLon;
@@ -322,8 +324,8 @@ QString APRS::makeMultiline(const vector<double> &lon, const vector<double> &lat
             // multiline string is "}CTS" (literal "}" followed by
             // line Color-style specifier, followed by open/closed
             // Type specifier, followed by Scale character), followed
-            // by even number of character pairs, followed by "{seqnc"
-            // (sequence number).
+            // by even number of character pairs, followed by an optional
+            // "{seqnc" (sequence number).
 
 
             returnString=" }";
@@ -391,7 +393,7 @@ QString APRS::createMultilineObject(const QString &oName,
   double latC=coords[1];
   double lonC=coords[0];
 
-  QString theMultiline=makeMultiline(lons,lats,colorStyle,lineType,"qDFxx",
+  QString theMultiline=makeMultiline(lons,lats,colorStyle,lineType,"",
                                      &lonC,&latC);
   if (theMultiline.isEmpty())
     return (QString(""));
