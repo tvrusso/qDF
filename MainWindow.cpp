@@ -252,7 +252,10 @@ void MainWindow::newReportReceived(qDFProjReport *report)
          StansfieldFix_computed=false;
        }
 
-       theDisplayManager.displayLSFix(LSFix);
+       if (LSFix_computed)
+       {
+         theDisplayManager.displayLSFix(LSFix);
+       }
 
        if (MLFix_computed)
        {
