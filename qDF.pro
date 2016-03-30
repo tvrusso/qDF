@@ -13,7 +13,7 @@ QT += network
 CONFIG += warn_off
 #CONFIG += debug
 
-qDF.path=$$[QT_INSTALL_BINS]
+qDF.path=/usr/local/bin
 qDF.files=qDF
 INSTALLS += qDF
 
