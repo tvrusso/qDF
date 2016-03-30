@@ -1,6 +1,5 @@
 #include "Settings.hpp"
 #include <iostream>
-using namespace std;
 
 Settings::Settings()
   :defaultDeclination_(9.3),

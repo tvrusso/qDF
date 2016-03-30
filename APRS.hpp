@@ -9,7 +9,6 @@
 #include <QUdpSocket>
 
 #include <vector>
-using namespace std;
 
 class APRS:public QObject
 {
@@ -19,17 +18,17 @@ public:
   APRS();
   APRS(const QString &server,const quint16 port, const QString &callsign, 
        const QString &callpass);
-  QString createObject(const QString &oName,const vector<double> &coords,
+  QString createObject(const QString &oName,const std::vector<double> &coords,
                        const QString &symbol,const QString &comment);
-  QString createDFObject(const QString &oName, const vector<double> &coords,
+  QString createDFObject(const QString &oName, const std::vector<double> &coords,
                          double bearing, double sigma, const QString &comment);
   QString createDFErrorObject(const QString &oName,
-                              const vector<double> &coords,
+                              const std::vector<double> &coords,
                               double axisLon,double axisLat);
   QString createMultilineObject(const QString &oName,
-                                const vector<double> &lats, 
-                                const vector<double> &lons,
-                                const vector<double> &coords,
+                                const std::vector<double> &lats, 
+                                const std::vector<double> &lons,
+                                const std::vector<double> &coords,
                                 char colorStyle, int lineType,
                                 const QString &oSym);
   QString deleteObject(const QString &oName);
@@ -47,13 +46,13 @@ public:
   const QString &getCallpass() const;
   const quint16 getPort() const;
 
-  QString makeMultiline(const vector<double> &lon,const vector<double>&lat,
+  QString makeMultiline(const std::vector<double> &lon,const std::vector<double>&lat,
                         char colorStyle, int lineType, const QString &sequence,
                         double *lonCentr, double *latCentr);
   void generateEllipse(double lonCentr, double latCentr, 
                        double axisLon, double axisLat,
                        int numPoints,
-                       vector<double> &lons, vector<double> &lats);
+                       std::vector<double> &lons, std::vector<double> &lats);
   
 
 

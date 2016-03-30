@@ -11,7 +11,6 @@ inline bool isinf(double v) {return !_finite(v);}
 #endif
 #include <sstream>
 #include <iostream>
-using namespace std;
 
 #include "MainWindow.h"
 #include "Settings.hpp"
@@ -100,13 +99,13 @@ void MainWindow::toggleValidityClicked()
 
   if (theToggleDialog.exec())
   {
-    string reportName = theToggleDialog.lineEdit_ReportName->text().toStdString();
+    std::string reportName = theToggleDialog.lineEdit_ReportName->text().toStdString();
     int reportIndex = theReportCollection.getReportIndex(reportName);
 
     if (reportIndex != -1)
     {
       theReportCollection.toggleValidity(reportIndex);
-      //      cout << "Toggling validity of report number " << reportIndex << " named " << reportName << endl;
+      //      std::cout << "Toggling validity of report number " << reportIndex << " named " << reportName << std::endl;
     }
   }
 }
@@ -119,7 +118,7 @@ void MainWindow::newReportClicked()
 
   if (theRD.exec())
   {
-    string reportName= theRD.lineEdit_ReportName->text().toStdString();
+    std::string reportName= theRD.lineEdit_ReportName->text().toStdString();
     QString coordSysName=theRD.comboBox_CoordSys->currentText();
     QString equipType=theRD.comboBox_EquipmentType->currentText();
     QString quality=theRD.comboBox_Quality->currentText();
@@ -135,7 +134,7 @@ void MainWindow::newReportClicked()
 
     QVector<double> llCoords(2);
     theRD.latLon->getCoords(llCoords);
-    vector<double> coords(2,0.0);
+    std::vector<double> coords(2,0.0);
     coords[0]=llCoords[1]; // llCoords[1] is latitude
     coords[1]=llCoords[0]; // llcoords[0] is longitude.  Rearrange for DFLib,
                            // which expects longitude (X) and latitude (Y) in 
@@ -161,14 +160,14 @@ void MainWindow::newReportClicked()
   }
   else
   {
-    //    cout << "You clicked Cancel" << endl;
+    //    std::cout << "You clicked Cancel" << std::endl;
   }
 
 }
 
 void MainWindow::newReportReceived(qDFProjReport *report)
 {
-  //  cout << " received a new report, its pointer is " << report << endl;
+  //  std::cout << " received a new report, its pointer is " << report << std::endl;
   //  delete report;
 }
 
@@ -180,10 +179,10 @@ void MainWindow::newReportReceived(qDFProjReport *report)
    if (nreports>0)
      dirtyCollection=true;  // otherwise we might have cleared it!
 
-   //   cout << " in slot reportCollectionChanged." << endl;
-   //   cout << " collection now has " << nreports
+   //   std::cout << " in slot reportCollectionChanged." << std::endl;
+   //   std::cout << " collection now has " << nreports
    //        << " valid reports out of a total of " << theReportCollection.size()
-   //        << " reports. " <<endl;
+   //        << " reports. " <<std::endl;
 
    lcdNumberNReports->setSegmentStyle(QLCDNumber::Filled);
    lcdNumberNReports->display(nreports);
@@ -192,9 +191,9 @@ void MainWindow::newReportReceived(qDFProjReport *report)
    {
      CoordSys myCS=theSettings_.getDefaultCS();
      
-     vector<double> foo(2,0.0);
-     vector<double> FCA_stddev(2);
-     vector<string> formattedCoords;
+     std::vector<double> foo(2,0.0);
+     std::vector<double> FCA_stddev(2);
+     std::vector<std::string> formattedCoords;
 
      DFLib::Proj::Point FCA(foo,myCS.getProj4Params());
      bool FCA_computed=false;
@@ -304,23 +303,23 @@ void MainWindow::newReportReceived(qDFProjReport *report)
      
  }
 
-void MainWindow::printCoords(const vector<double> &latlon,const string &text)
+void MainWindow::printCoords(const std::vector<double> &latlon,const std::string &text)
 {
 
-  vector<string>formattedCoords;
+  std::vector<std::string>formattedCoords;
 
   formatCoords(latlon,formattedCoords);
 
-  cout << " Longitude of " << text << ": " << formattedCoords[0]
-       << endl;
+  std::cout << " Longitude of " << text << ": " << formattedCoords[0]
+       << std::endl;
 
-  cout << " Latitude of " << text << ": " << formattedCoords[1]
-       << endl;
+  std::cout << " Latitude of " << text << ": " << formattedCoords[1]
+       << std::endl;
 
 }
 
-void MainWindow::formatCoords(const vector<double> &latlon,
-                              vector<string> &formattedCoords)
+void MainWindow::formatCoords(const std::vector<double> &latlon,
+                              std::vector<std::string> &formattedCoords)
 {
   int latfac=1;  int lonfac=1;
   char EW,NS;
@@ -342,7 +341,7 @@ void MainWindow::formatCoords(const vector<double> &latlon,
     NS='S';
   }
 
-  ostringstream os;
+  std::ostringstream os;
   os << static_cast<int>(latlon[0]*lonfac)
      << "d" 
      << (latlon[0]*lonfac-static_cast<int>(latlon[0]*lonfac))*60 
@@ -405,7 +404,7 @@ void MainWindow::editReport(QString & rN)
       
       QVector<double> llCoords(2);
       theRD.latLon->getCoords(llCoords);
-      vector<double> coords(2,0.0);
+      std::vector<double> coords(2,0.0);
       coords[0]=llCoords[1]; // llCoords[1] is latitude
       coords[1]=llCoords[0]; // llcoords[0] is longitude.  Rearrange for DFLib,
                              // which expects longitude (X) and latitude (Y) in 
@@ -727,9 +726,9 @@ bool MainWindow::checkValidMLFix(DFLib::Proj::Point &thePoint)
     }
   }
   tempPoint.setUserProj(theSettings_.getDefaultCS().getProj4Params());
-  vector<double>latlon=thePoint.getUserCoords();
-  vector<double>merc=thePoint.getXY();
-  vector<double>r0_coords=tempPoint.getUserCoords();
+  std::vector<double>latlon=thePoint.getUserCoords();
+  std::vector<double>merc=thePoint.getXY();
+  std::vector<double>r0_coords=tempPoint.getUserCoords();
 
   if (!(isinf(latlon[0])||isinf(latlon[1])||isnan(latlon[0])||isnan(latlon[1])
         ||
@@ -777,7 +776,7 @@ void MainWindow::closeDisplay()
 
 void MainWindow::displayDFReport(const qDFProjReport *theReport)
 {
-  vector<string> theProj4Params = theSettings_.getDefaultCS().getProj4Params();
+  std::vector<std::string> theProj4Params = theSettings_.getDefaultCS().getProj4Params();
   QString theReportName=theReport->getReportNameQS();
   QString theReportSummary=theReport->getReportSummary(theProj4Params);
 
@@ -817,9 +816,9 @@ void MainWindow::displayDFReport(const qDFProjReport *theReport)
 void MainWindow::displayLSFix(DFLib::Proj::Point & LSFix)
 {
   
-  vector<string> formattedCoords;
-  vector<double> LS_point=LSFix.getUserCoords();
-  //       printCoords(LS_point,string("Least Squares Fix"));
+  std::vector<std::string> formattedCoords;
+  std::vector<double> LS_point=LSFix.getUserCoords();
+  //       printCoords(LS_point,std::string("Least Squares Fix"));
   formatCoords(LS_point,formattedCoords);
   label_LS_Longitude->setText(QString::fromStdString(formattedCoords[0]));
   label_LS_Latitude->setText(QString::fromStdString(formattedCoords[1]));
@@ -833,13 +832,13 @@ void MainWindow::undisplayLSFix()
 
 void MainWindow::displayFCAFix(DFLib::Proj::Point & FCAFix, std::vector<double> FCA_stddev)
 {
-  vector<string> formattedCoords;
-  vector<double> FCA_point=FCAFix.getUserCoords();
-  //     printCoords(FCA_point,string("Fix Cut Average"));
+  std::vector<std::string> formattedCoords;
+  std::vector<double> FCA_point=FCAFix.getUserCoords();
+  //     printCoords(FCA_point,std::string("Fix Cut Average"));
   formatCoords(FCA_point,formattedCoords);
   label_FCA_Longitude->setText(QString::fromStdString(formattedCoords[0]));
   label_FCA_Latitude->setText(QString::fromStdString(formattedCoords[1]));
-  ostringstream os;
+  std::ostringstream os;
   os << FCA_stddev[0];
   label_FCA_Longitude_SD->setText(QString::fromStdString(os.str()));
   os.str("");
@@ -857,9 +856,9 @@ void MainWindow::undisplayFCAFix()
 
 void MainWindow::displayBPEFix(DFLib::Proj::Point & StansfieldFix, double am2, double bm2, double phi)
 {
-  vector<string> formattedCoords;
-  vector<double> Stansfield_point=StansfieldFix.getUserCoords();
-  //       printCoords(ML_point,string("Maximum Likelihood Fix"));
+  std::vector<std::string> formattedCoords;
+  std::vector<double> Stansfield_point=StansfieldFix.getUserCoords();
+  //       printCoords(ML_point,std::string("Maximum Likelihood Fix"));
   formatCoords(Stansfield_point,formattedCoords);
   label_Stansfield_Longitude->setText(QString::fromStdString(formattedCoords[0]));
   label_Stansfield_Latitude->setText(QString::fromStdString(formattedCoords[1]));
@@ -875,10 +874,10 @@ void MainWindow::undisplayBPEFix()
 
 void MainWindow::displayMLFix(DFLib::Proj::Point & MLFix, double am2, double bm2, double phi)
 {
-  vector<string> formattedCoords;
-  vector<double> ML_point=MLFix.getUserCoords();
+  std::vector<std::string> formattedCoords;
+  std::vector<double> ML_point=MLFix.getUserCoords();
   
-  //       printCoords(ML_point,string("Maximum Likelihood Fix"));
+  //       printCoords(ML_point,std::string("Maximum Likelihood Fix"));
   formatCoords(ML_point,formattedCoords);
   label_ML_Longitude->setText(QString::fromStdString(formattedCoords[0]));
   label_ML_Latitude->setText(QString::fromStdString(formattedCoords[1]));

@@ -46,7 +46,7 @@ void aprsDisplay::displayDFReport(const qDFProjReport *theReport)
   {
     DFLib::Proj::Point tempPoint=theReport->getReceiverPoint();
     tempPoint.setUserProj(myCS_.getProj4Params());
-    vector<double> coords(2);
+    std::vector<double> coords(2);
     coords=tempPoint.getUserCoords();
     QString oName=theReport->getReportNameQS();
     QString aprsPosit=theAPRS_->createDFObject(oName,coords,
@@ -72,7 +72,7 @@ void aprsDisplay::displayLSFix(DFLib::Proj::Point & LSFixPoint)
 {
   DFLib::Proj::Point tempPoint = LSFixPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double> LS_point=tempPoint.getUserCoords();
+  std::vector<double> LS_point=tempPoint.getUserCoords();
   aprsPointObject_("LS-Fix",LS_point,"Ln"," Least Squares Solution");
 }
 
@@ -85,7 +85,7 @@ void aprsDisplay::displayFCAFix(DFLib::Proj::Point & FCAFixPoint, std::vector<do
 {
   DFLib::Proj::Point tempPoint = FCAFixPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double> FCA_point=tempPoint.getUserCoords();
+  std::vector<double> FCA_point=tempPoint.getUserCoords();
   aprsPointObject_("FCA-Fix",FCA_point,"An"," Fix Cut Average Solution");
   if (stddevs[0] != 0 && stddevs[1]!=0)
   {
@@ -105,7 +105,7 @@ void aprsDisplay::displayMLFix(DFLib::Proj::Point & MLFixPoint,
 
   DFLib::Proj::Point tempPoint = MLFixPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double> ML_point=tempPoint.getUserCoords();
+  std::vector<double> ML_point=tempPoint.getUserCoords();
   aprsPointObject_("ML-Fix",ML_point,"Mn"," Maximum Likelihood Solution");
   aprsRotatedEllipse_("MLErr50",MLFixPoint,am2,bm2,phi,50);
   aprsRotatedEllipse_("MLErr75",MLFixPoint,am2,bm2,phi,75);
@@ -126,7 +126,7 @@ void aprsDisplay::displayBPEFix(DFLib::Proj::Point & BPEFixPoint,
 {
   DFLib::Proj::Point tempPoint = BPEFixPoint;
   tempPoint.setUserProj(myCS_.getProj4Params());
-  vector<double> BPE_point=tempPoint.getUserCoords();
+  std::vector<double> BPE_point=tempPoint.getUserCoords();
 
   aprsPointObject_("BPE-Fix",BPE_point,"Sn"," Stansfield BPE");
   aprsRotatedEllipse_("SErr50",BPEFixPoint,am2,bm2,phi,50);
@@ -150,7 +150,7 @@ void aprsDisplay::displayAPRSText_(const QString & str)
 }  
 
 void aprsDisplay::aprsPointObject_(const QString &oName, 
-                                 const vector<double>& oPoint,
+                                 const std::vector<double>& oPoint,
                                  const QString &oSym,
                                  const QString & oComment)
 {
@@ -159,8 +159,8 @@ void aprsDisplay::aprsPointObject_(const QString &oName,
 }
 
 void aprsDisplay::aprsDFErrorObject_(const QString &oName,
-                                   const vector<double>&oPoint,
-                                   const vector<double>&oSDs)
+                                   const std::vector<double>&oPoint,
+                                   const std::vector<double>&oSDs)
 {
     QString aprsPosit=theAPRS_->createDFErrorObject(oName,oPoint,oSDs[0],oSDs[1]);
     displayAPRSText_(aprsPosit);
@@ -188,10 +188,10 @@ void aprsDisplay::aprsRotatedEllipse_(const QString &oName, DFLib::Proj::Point &
     double rho=sqrt(-2*log(1-P));
     DFLib::Proj::Point tempPoint(thePoint);
     tempPoint.setUserProj(myCS_.getProj4Params());
-    vector<double> lats;
-    vector<double> lons;
-    vector<double> centerCoords=thePoint.getXY();
-    vector<double> tempCoords(2);
+    std::vector<double> lats;
+    std::vector<double> lons;
+    std::vector<double> centerCoords=thePoint.getXY();
+    std::vector<double> tempCoords(2);
     double a=sqrt(1.0/am2);
     double b=sqrt(1.0/bm2);
     double cosphi=cos(phi);

@@ -46,8 +46,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow, public qDFDisplayI
   enum { MagicNumber = 0xDFDFa550};
 
   qDFProjReportCollection theReportCollection;
-  void printCoords(const vector<double> &ll,const string &text);
-  void formatCoords(const vector<double> &ll,vector<string> &formattedCoords);
+  void printCoords(const std::vector<double> &ll,const std::string &text);
+  void formatCoords(const std::vector<double> &ll,std::vector<std::string> &formattedCoords);
   Settings theSettings_;
   bool okToContinue();
   void readSettings();

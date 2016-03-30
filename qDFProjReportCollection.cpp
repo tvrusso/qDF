@@ -1,5 +1,4 @@
 #include <iostream>
-using namespace std;
 
 #include <QDataStream>
 
@@ -67,7 +66,7 @@ qDFProjReport * qDFProjReportCollection::getReportPointer(const QString &rN)
 }
 
 QString qDFProjReportCollection::getReportSummary(const QString &reportName,
-                                                 const vector<string> & projArgs) const
+                                                 const std::vector<std::string> & projArgs) const
 {
   return (reportMap_[reportName]->getReportSummary(projArgs));
 }
@@ -94,7 +93,7 @@ QDataStream & operator>>(QDataStream &in, qDFProjReportCollection &tC)
   for (unsigned int i=0; i<nrep; i++)
   {
     QString reportName;
-    vector<double> coords(2);
+    std::vector<double> coords(2);
     double bearing;
     double sigma;
     bool validity;

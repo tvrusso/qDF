@@ -8,7 +8,6 @@
 #include <QMessageBox>
 
 #include <iostream>
-using namespace std;
 
 APRS::APRS()
   :server_(""),
@@ -70,7 +69,7 @@ const quint16 APRS::getPort() const
   return port_;
 }
 
-QString APRS::createDFObject(const QString &oName,const vector<double> &coords,
+QString APRS::createDFObject(const QString &oName,const std::vector<double> &coords,
                            double bearing,double sigma, const QString &comment)
 {
   QString BRG;
@@ -89,7 +88,7 @@ QString APRS::createDFObject(const QString &oName,const vector<double> &coords,
   return createObject(oName,coords,"/\\",rep);
 }
 
-QString APRS::createObject(const QString &oName,const vector<double> &coords,
+QString APRS::createObject(const QString &oName,const std::vector<double> &coords,
                      const QString &symbol, const QString &comment)
 {
   QString formattedPosit;
@@ -239,7 +238,7 @@ void APRS::sendPacketToServer(const QString &payload)
 #define minFun(a,b) ( ((a)<(b))?(a):(b))
 #define maxFun(a,b) ( ((a)>(b))?(a):(b))
 
-QString APRS::makeMultiline(const vector<double> &lon, const vector<double> &lat, 
+QString APRS::makeMultiline(const std::vector<double> &lon, const std::vector<double> &lat, 
                       char colorStyle, int lineType, const QString &sequence,
                       double *lonCentr, double *latCentr  )
 {
@@ -252,7 +251,7 @@ QString APRS::makeMultiline(const vector<double> &lon, const vector<double> &lat
     // 43chars - 6 for the sequence number- 5 for the starting pattern leaves
     // 32 characters for lat/lon pairs, or 16 pairs
 
-    int maxPairs = (43-max(sequence.length(),6)-5)/2;
+    int maxPairs = (43-std::max(sequence.length(),6)-5)/2;
     
     if ( numPairs > maxPairs) {
         returnString = "";
@@ -359,7 +358,7 @@ QString APRS::makeMultiline(const vector<double> &lon, const vector<double> &lat
 void APRS::generateEllipse(double lonCentr, double latCentr, 
                      double axisLon, double axisLat,
                      int numPoints,
-                     vector<double> &lons, vector<double> &lats)
+                     std::vector<double> &lons, std::vector<double> &lats)
 {
   int iPair;
   double pi=4*atan(1.0);
@@ -373,20 +372,20 @@ void APRS::generateEllipse(double lonCentr, double latCentr,
 }
 
 QString APRS::createDFErrorObject(const QString &oName,
-                                  const vector<double> &coords,
+                                  const std::vector<double> &coords,
                                   double axisLon,double axisLat)
 {
-  vector<double> lats;
-  vector<double> lons;
+  std::vector<double> lats;
+  std::vector<double> lons;
 
   generateEllipse(coords[0],coords[1],axisLon,axisLat,16,lons,lats);
   return(createMultilineObject(oName,lats,lons,coords,'e',0,"\\l"));
 }
 
 QString APRS::createMultilineObject(const QString &oName,
-                                    const vector<double> &lats, 
-                                    const vector<double> &lons,
-                                    const vector<double> &coords,
+                                    const std::vector<double> &lats, 
+                                    const std::vector<double> &lons,
+                                    const std::vector<double> &coords,
                                     char colorStyle, int lineType,
                                     const QString &oSym)
 {
