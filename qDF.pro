@@ -13,9 +13,8 @@ QT += network
 CONFIG += warn_off
 #CONFIG += debug
 
-qDF.path=/usr/local/bin
-qDF.files=qDF
-INSTALLS += qDF
+target.path=/usr/local/bin
+INSTALLS += target
 
 # Input
 HEADERS += CoordSysBuilder.hpp \
