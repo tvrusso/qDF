@@ -1,17 +1,20 @@
 # qDF: a GUI wrapper to DFLib
 
 qDF allows a user to enter data from radio direction finding activity,
-computes target location estimates using DFLib (using 4 different
+computes target location estimates using
+[DFLib](https://github.com/tvrusso/DFLib) (using 4 different
 estimators), and creates a KML file for plotting the activity in
 Google Earth.  It also optionally feeds data to an APRS client via UDP
 datagrams (only Xastir has been tested with this capability, as that's
-all I use), which can then transmit the data to the APRS RF network or an
-APRS-IS server.
+all I use), which can then transmit the data to the APRS RF network or
+an APRS-IS server.
 
 ## Prerequisites
   1. proj.4 libraries and development headers
   1. Qt4 libraries, headers, and development programs (moc, etc.)
-  1. DFLib (which itself requires proj.4)
+  1. DFLib (which itself requires proj.4, which itself is obsolete ---
+     DFLib has not yet been updated to support versions of proj after
+     6.0, it still uses the old API)
 
 ## Building
 
