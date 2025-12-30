@@ -32,7 +32,7 @@ void rawTextDisplay::initializeDisplay()
     rawTextOut_.setRealNumberNotation(QTextStream::FixedNotation);
     rawTextOut_.setRealNumberPrecision(8);
     fileIsOpen_=true;
-    rawTextOut_ << "Hello, world!" << endl;
+    rawTextOut_ << "Hello, world!" << Qt::endl;
   }
   // if it was already open, we do nothing.
 }
@@ -41,7 +41,7 @@ void rawTextDisplay::closeDisplay()
 {
   if (fileIsOpen_)
   {
-    rawTextOut_ << "File closed cleanly." << endl;
+    rawTextOut_ << "File closed cleanly." << Qt::endl;
     rawTextOut_.flush();
     theFile_.close();
     fileIsOpen_=false;
@@ -60,28 +60,28 @@ void rawTextDisplay::displayDFReport(const qDFProjReport *theReport)
 {
   if (fileIsOpen_)
   {
-    rawTextOut_ << "Display Report: " << endl;
-    rawTextOut_ << "   Name: " << theReport->getReportNameQS() << endl;
+    rawTextOut_ << "Display Report: " << Qt::endl;
+    rawTextOut_ << "   Name: " << theReport->getReportNameQS() << Qt::endl;
     if (theReport->isValid())
     {
-      rawTextOut_ << "    **valid report." << endl;
+      rawTextOut_ << "    **valid report." << Qt::endl;
     }
     DFLib::Proj::Point tempPoint=theReport->getReceiverPoint();
     tempPoint.setUserProj(myCS_.getProj4Params());
     std::vector<double> coords(2);
     coords=tempPoint.getUserCoords();
-    rawTextOut_ << "     Coordinates: " << coords[0]<<","<<coords[1]<<endl;
-    rawTextOut_ << "         Bearing: " << theReport->getBearing() << endl;
-    rawTextOut_ << "        SD (deg): " << theReport->getSigma() << endl;
+    rawTextOut_ << "     Coordinates: " << coords[0]<<","<<coords[1]<<Qt::endl;
+    rawTextOut_ << "         Bearing: " << theReport->getBearing() << Qt::endl;
+    rawTextOut_ << "        SD (deg): " << theReport->getSigma() << Qt::endl;
 
     QVector<double> lats;
     QVector<double> lons;
     computeRhumbline_(tempPoint, theReport->getBearing(),
                       2000, 20, lats,lons);
-    rawTextOut_ << "  -----Bearing Line-----" << endl;
+    rawTextOut_ << "  -----Bearing Line-----" << Qt::endl;
     for (int i=0;i<lats.size();i++)
     {
-      rawTextOut_ << lons[i]<<","<<lats[i]<<",0"<<endl;
+      rawTextOut_ << lons[i]<<","<<lats[i]<<",0"<<Qt::endl;
     }
   }
 }
@@ -93,8 +93,8 @@ void rawTextDisplay::displayLSFix(DFLib::Proj::Point & LSFixPoint)
   std::vector<double> coords=tempPoint.getUserCoords();
   if (fileIsOpen_)
   {
-    rawTextOut_ << "Least Squares Fix:" << endl;
-    rawTextOut_ << "     Coordinates: " << coords[0]<<","<<coords[1]<<endl;
+    rawTextOut_ << "Least Squares Fix:" << Qt::endl;
+    rawTextOut_ << "     Coordinates: " << coords[0]<<","<<coords[1]<<Qt::endl;
   }
 }
 
@@ -106,10 +106,10 @@ void rawTextDisplay::displayMLFix(DFLib::Proj::Point & MLFixPoint,
   std::vector<double> coords=tempPoint.getUserCoords();
   if (fileIsOpen_)
   {
-    rawTextOut_ << "ML Fix:" << endl;
-    rawTextOut_ << "     Coordinates: " << coords[0]<<","<<coords[1]<<endl;
+    rawTextOut_ << "ML Fix:" << Qt::endl;
+    rawTextOut_ << "     Coordinates: " << coords[0]<<","<<coords[1]<<Qt::endl;
     rawTextOut_ << "  ellipse params: " << am2 << " " << bm2 << " " << phi 
-                << endl;
+                << Qt::endl;
   }
 }
 void rawTextDisplay::displayBPEFix(DFLib::Proj::Point & BPEFixPoint,
@@ -120,34 +120,34 @@ void rawTextDisplay::displayBPEFix(DFLib::Proj::Point & BPEFixPoint,
   std::vector<double> coords=tempPoint.getUserCoords();
   if (fileIsOpen_)
   {
-    rawTextOut_ << "BPE Fix:" << endl;
-    rawTextOut_ << "     Coordinates: " << coords[0]<<","<<coords[1]<<endl;
+    rawTextOut_ << "BPE Fix:" << Qt::endl;
+    rawTextOut_ << "     Coordinates: " << coords[0]<<","<<coords[1]<<Qt::endl;
     rawTextOut_ << "  ellipse params: " << am2 << " " << bm2 << " " << phi 
-                << endl;
+                << Qt::endl;
     if (am2 != 0 && bm2!= 0)
     {
       QVector<double> lats;
       QVector<double> lons;
-      rawTextOut_ << "  -----50% ellipse-----" << endl;
+      rawTextOut_ << "  -----50% ellipse-----" << Qt::endl;
       computeEllipse_(tempPoint,am2,bm2,phi,sqrt(-2*log(1-.5)),20,
                       lats,lons);
       for (int i=0;i<lats.size();i++)
       {
-        rawTextOut_ << lons[i]<<","<<lats[i]<<",0"<<endl;
+        rawTextOut_ << lons[i]<<","<<lats[i]<<",0"<<Qt::endl;
       }
-      rawTextOut_ << "  -----75% ellipse-----" << endl;
+      rawTextOut_ << "  -----75% ellipse-----" << Qt::endl;
       computeEllipse_(tempPoint,am2,bm2,phi,sqrt(-2*log(1-.75)),20,
                       lats,lons);
       for (int i=0;i<lats.size();i++)
       {
-        rawTextOut_ << lons[i]<<","<<lats[i]<<",0"<<endl;
+        rawTextOut_ << lons[i]<<","<<lats[i]<<",0"<<Qt::endl;
       }
-      rawTextOut_ << "  -----95% ellipse-----" << endl;
+      rawTextOut_ << "  -----95% ellipse-----" << Qt::endl;
       computeEllipse_(tempPoint,am2,bm2,phi,sqrt(-2*log(1-.95)),20,
                       lats,lons);
       for (int i=0;i<lats.size();i++)
       {
-        rawTextOut_ << lons[i]<<","<<lats[i]<<",0"<<endl;
+        rawTextOut_ << lons[i]<<","<<lats[i]<<",0"<<Qt::endl;
       }
 
     }
@@ -160,15 +160,15 @@ void rawTextDisplay::displayFCAFix(DFLib::Proj::Point & FCAFixPoint, std::vector
   std::vector<double> coords=tempPoint.getUserCoords();
   if (fileIsOpen_)
   {
-    rawTextOut_ << "FCA Fix:" << endl;
-    rawTextOut_ << "     Coordinates: " << coords[0]<<","<<coords[1]<<endl;
-    rawTextOut_ << "             sds: " << stddevs[0]<<","<<stddevs[1]<<endl;
+    rawTextOut_ << "FCA Fix:" << Qt::endl;
+    rawTextOut_ << "     Coordinates: " << coords[0]<<","<<coords[1]<<Qt::endl;
+    rawTextOut_ << "             sds: " << stddevs[0]<<","<<stddevs[1]<<Qt::endl;
 
     if (stddevs[0] != 0 && stddevs[1]!= 0)
     {
       QVector<double> lats;
       QVector<double> lons;
-      rawTextOut_ << "  -----SD ellipse-----" << endl;
+      rawTextOut_ << "  -----SD ellipse-----" << Qt::endl;
 
       for (int i=0;i<20;i++)
       {
@@ -177,7 +177,7 @@ void rawTextDisplay::displayFCAFix(DFLib::Proj::Point & FCAFixPoint, std::vector
       }
       for (int i=0;i<lats.size();i++)
       {
-        rawTextOut_ << lons[i]<<","<<lats[i]<<",0"<<endl;
+        rawTextOut_ << lons[i]<<","<<lats[i]<<",0"<<Qt::endl;
       }
     }
   }
@@ -187,14 +187,14 @@ void rawTextDisplay::undisplayLSFix()
 {
   if (fileIsOpen_)
   {
-    rawTextOut_ << "LS Fix now invalid." << endl;
+    rawTextOut_ << "LS Fix now invalid." << Qt::endl;
   }
 }
 void rawTextDisplay::undisplayBPEFix()
 {
   if (fileIsOpen_)
   {
-    rawTextOut_ << "BPE Fix now invalid." << endl;
+    rawTextOut_ << "BPE Fix now invalid." << Qt::endl;
   }
 }
     
@@ -202,14 +202,14 @@ void rawTextDisplay::undisplayMLFix()
 {
   if (fileIsOpen_)
   {
-    rawTextOut_ << "ML Fix now invalid." << endl;
+    rawTextOut_ << "ML Fix now invalid." << Qt::endl;
   }
 }
 void rawTextDisplay::undisplayFCAFix()
 {
   if (fileIsOpen_)
   {
-    rawTextOut_ << "FCA Fix now invalid." << endl;
+    rawTextOut_ << "FCA Fix now invalid." << Qt::endl;
   }
 }
 

@@ -24,6 +24,8 @@ inline bool isinf(double v) {return !_finite(v);}
 #include "qDFDisplayManager.hpp"
 #include <Util_Misc.hpp>
 
+#define RAD_TO_DEG 57.295779513082321
+
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent),
     dirtyCollection(false),
@@ -190,7 +192,7 @@ void MainWindow::newReportReceived(qDFProjReport *report)
    if (nreports>=2)
    {
      CoordSys myCS=theSettings_.getDefaultCS();
-     
+
      std::vector<double> foo(2,0.0);
      std::vector<double> FCA_stddev(2);
      std::vector<std::string> formattedCoords;
@@ -206,7 +208,7 @@ void MainWindow::newReportReceived(qDFProjReport *report)
 
      FCA_computed=theReportCollection.computeFixCutAverage(FCA,FCA_stddev,
                                          theSettings_.getDefaultFCAMinAngle());
-     
+
      if (nreports>2)
      {
        theReportCollection.computeLeastSquaresFix(LSFix);
@@ -243,11 +245,13 @@ void MainWindow::newReportReceived(qDFProjReport *report)
        double am2,bm2,phi;
        try
        {
+         StansfieldFix=LSFix;
          theReportCollection.computeStansfieldFix(StansfieldFix,am2,bm2,phi);
          StansfieldFix_computed=true;
        }
-       catch (...)
+       catch (DFLib::Util::Exception x)
        {
+         std::cerr << "Ooops got exception " << x.getEmsg() << std::endl;
          StansfieldFix_computed=false;
        }
 

@@ -10,11 +10,9 @@ all I use), which can then transmit the data to the APRS RF network or
 an APRS-IS server.
 
 ## Prerequisites
-  1. proj.4 libraries and development headers
-  1. Qt4 libraries, headers, and development programs (moc, etc.)
-  1. DFLib (which itself requires proj.4, which itself is obsolete ---
-     DFLib has not yet been updated to support versions of proj after
-     6.0, it still uses the old API)
+  1. proj libraries and development headers (version 6 or later)
+  1. Qt6 libraries, headers, and development programs (qmake, moc, etc.)
+  1. [DFLib](https://github.com/tvrusso/DFLib)
 
 ## Building
 
@@ -28,7 +26,7 @@ qmake /path/to/qDF/sources/qDF.pro
 make
 ```
 
-On some systems, qmake might be called "qmake-qt4".
+On some systems, qmake might be called "qmake-qt6" or "qmake6".
 
 ## Running
 

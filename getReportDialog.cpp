@@ -14,7 +14,7 @@ getReportDialog::getReportDialog(const Settings &theSettings,const QList<QString
    theReport_(0)
 {
   setupUi(this);
-  connect(comboBox_EquipmentType,SIGNAL(currentIndexChanged(const QString &)),
+  connect(comboBox_EquipmentType,SIGNAL(currentTextChanged(const QString &)),
           this,SLOT(equipmentChanged(const QString &)));
   connect(lineEdit_ReportName,SIGNAL(textChanged(const QString &)),
           this,SLOT(somethingChanged()));
@@ -47,7 +47,7 @@ getReportDialog::getReportDialog(const Settings &theSettings,const qDFProjReport
   setupUi(this);
   existingNames_.clear();
 
-  connect(comboBox_EquipmentType,SIGNAL(currentIndexChanged(const QString &)),
+  connect(comboBox_EquipmentType,SIGNAL(currentTextChanged(const QString &)),
           this,SLOT(equipmentChanged(const QString &)));
   connect(latLon,SIGNAL(coordsChanged()),
           this,SLOT(somethingChanged()));

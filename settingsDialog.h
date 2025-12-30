@@ -2,6 +2,8 @@
 #define SETTINGSDIALOG_H
 
 #include <QDialog>
+#include <QRegularExpression>
+
 #include "ui_settingsDialog.h"
 #include "Settings.hpp"
 
@@ -13,7 +15,7 @@ public:
   settingsDialog(const Settings &theSettings, QWidget *parent=0);
 
 private:
-  QRegExp portValidator;
+  QRegularExpression portValidator;
 
 public:
   void retrieveSettings(Settings &theSettings);

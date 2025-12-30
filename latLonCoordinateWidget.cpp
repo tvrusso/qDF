@@ -11,20 +11,20 @@ latLonCoordinateWidget::latLonCoordinateWidget(QWidget *parent)
   QWidget::setFocusProxy(latDegLineEdit);
 
   // Initialize the regexps:
-  latDegRegExp=QRegExp("([0-8]{0,1}[0-9]||90)(?:\\.[0-9]*){0,1}");
-  lonDegRegExp=QRegExp("([0]{0,1}[0-9]{1,2}||1[0-7][0-9]||180)(?:\\.[0-9]*){0,1}");
-  minSecDecRegExp=QRegExp("[0-5]{0,1}[0-9](?:\\.[0-9]*){0,1}");
-  intRegExp=QRegExp("[0-5]{0,1}[0-9]");
-  intLonRegExp=QRegExp("([0]{0,1}[0-9]{1,2}||1[0-7][0-9]||180)");
-  intLatRegExp=QRegExp("([0-8]{0,1}[0-9]||90)");
+  latDegRegExp=QRegularExpression("([0-8]{0,1}[0-9]||90)(?:\\.[0-9]*){0,1}");
+  lonDegRegExp=QRegularExpression("([0]{0,1}[0-9]{1,2}||1[0-7][0-9]||180)(?:\\.[0-9]*){0,1}");
+  minSecDecRegExp=QRegularExpression("[0-5]{0,1}[0-9](?:\\.[0-9]*){0,1}");
+  intRegExp=QRegularExpression("[0-5]{0,1}[0-9]");
+  intLonRegExp=QRegularExpression("([0]{0,1}[0-9]{1,2}||1[0-7][0-9]||180)");
+  intLatRegExp=QRegularExpression("([0-8]{0,1}[0-9]||90)");
 
   // Our initial validators (will be modified as text is entered)
-  latDegLineEdit->setValidator(new QRegExpValidator(latDegRegExp, this));
-  lonDegLineEdit->setValidator(new QRegExpValidator(lonDegRegExp, this));
-  latMinLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
-  lonMinLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
-  latSecLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
-  lonSecLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
+  latDegLineEdit->setValidator(new QRegularExpressionValidator(latDegRegExp, this));
+  lonDegLineEdit->setValidator(new QRegularExpressionValidator(lonDegRegExp, this));
+  latMinLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
+  lonMinLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
+  latSecLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
+  lonSecLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
 
   // This is some ugly stuff that really indicates that Lat and Lon need
   // to be refactored so that there's less duplication.
@@ -59,8 +59,8 @@ void latLonCoordinateWidget::latDegChanged(const QString &boxText)
   }
   else
   {
-    latMinLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
-    latSecLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
+    latMinLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
+    latSecLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
     latMinLineEdit->setEnabled(true);
     latSecLineEdit->setEnabled(true);
   }
@@ -79,8 +79,8 @@ void latLonCoordinateWidget::lonDegChanged(const QString &boxText)
   }
   else
   {
-    lonMinLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
-    lonSecLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
+    lonMinLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
+    lonSecLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
     lonMinLineEdit->setEnabled(true);
     lonSecLineEdit->setEnabled(true);
   }
@@ -93,9 +93,9 @@ void latLonCoordinateWidget::latMinChanged(const QString &boxText)
   // validators appropriately
     if (boxText.isEmpty())
     {
-      latDegLineEdit->setValidator(new QRegExpValidator(latDegRegExp, this));
-      latMinLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
-      latSecLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
+      latDegLineEdit->setValidator(new QRegularExpressionValidator(latDegRegExp, this));
+      latMinLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
+      latSecLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
       latSecLineEdit->setEnabled(true);
     }
     else
@@ -103,7 +103,7 @@ void latLonCoordinateWidget::latMinChanged(const QString &boxText)
       // If we have any minutes specified, then degrees must be integer:
       int degrees=latDegLineEdit->text().toInt();
       latDegLineEdit->setText(QString::number(degrees));
-      latDegLineEdit->setValidator(new QRegExpValidator(intLatRegExp, this));
+      latDegLineEdit->setValidator(new QRegularExpressionValidator(intLatRegExp, this));
 
       if (boxText.contains('.'))
       {
@@ -125,9 +125,9 @@ void latLonCoordinateWidget::lonMinChanged(const QString &boxText)
   // validators appropriately
     if (boxText.isEmpty())
     {
-      lonDegLineEdit->setValidator(new QRegExpValidator(lonDegRegExp, this));
-      lonMinLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
-      lonSecLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
+      lonDegLineEdit->setValidator(new QRegularExpressionValidator(lonDegRegExp, this));
+      lonMinLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
+      lonSecLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
       lonSecLineEdit->setEnabled(true);
     }
     else
@@ -135,7 +135,7 @@ void latLonCoordinateWidget::lonMinChanged(const QString &boxText)
       // If we have any minutes specified, then degrees must be integer:
       int degrees=lonDegLineEdit->text().toInt();
       lonDegLineEdit->setText(QString::number(degrees));
-      lonDegLineEdit->setValidator(new QRegExpValidator(intLonRegExp, this));
+      lonDegLineEdit->setValidator(new QRegularExpressionValidator(intLonRegExp, this));
 
       if (boxText.contains('.'))
       {
@@ -157,20 +157,20 @@ void latLonCoordinateWidget::latSecChanged(const QString &boxText)
   // are legit.  Set validators appropriately
     if (boxText.isEmpty())
     {
-      latDegLineEdit->setValidator(new QRegExpValidator(latDegRegExp, this));
-      latMinLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
-      latSecLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
+      latDegLineEdit->setValidator(new QRegularExpressionValidator(latDegRegExp, this));
+      latMinLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
+      latSecLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
     }
     else
     {
       // If we have any seconds specified, then degs and mins must be integer:
       int degrees=latDegLineEdit->text().toInt();
       latDegLineEdit->setText(QString::number(degrees));
-      latDegLineEdit->setValidator(new QRegExpValidator(intLatRegExp, this));
+      latDegLineEdit->setValidator(new QRegularExpressionValidator(intLatRegExp, this));
 
       int mins=latMinLineEdit->text().toInt();
       latMinLineEdit->setText(QString::number(mins));
-      latMinLineEdit->setValidator(new QRegExpValidator(intRegExp, this));
+      latMinLineEdit->setValidator(new QRegularExpressionValidator(intRegExp, this));
     }
   updateLatitude();
 }
@@ -181,20 +181,20 @@ void latLonCoordinateWidget::lonSecChanged(const QString &boxText)
   // are legit.  Set validators appropriately
     if (boxText.isEmpty())
     {
-      lonDegLineEdit->setValidator(new QRegExpValidator(lonDegRegExp, this));
-      lonMinLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
-      lonSecLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
+      lonDegLineEdit->setValidator(new QRegularExpressionValidator(lonDegRegExp, this));
+      lonMinLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
+      lonSecLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
     }
     else
     {
       // If we have any seconds specified, then degs and mins must be integer:
       int degrees=lonDegLineEdit->text().toInt();
       lonDegLineEdit->setText(QString::number(degrees));
-      lonDegLineEdit->setValidator(new QRegExpValidator(intLonRegExp, this));
+      lonDegLineEdit->setValidator(new QRegularExpressionValidator(intLonRegExp, this));
 
       int mins=lonMinLineEdit->text().toInt();
       lonMinLineEdit->setText(QString::number(mins));
-      lonMinLineEdit->setValidator(new QRegExpValidator(intRegExp, this));
+      lonMinLineEdit->setValidator(new QRegularExpressionValidator(intRegExp, this));
     }
   updateLongitude();
 }
@@ -326,12 +326,12 @@ void latLonCoordinateWidget::setCoords(QVector<double> &coordVect)
     lonERadioButton->setChecked(true);
   }
 
-  latDegLineEdit->setValidator(new QRegExpValidator(intRegExp, this));
-  lonDegLineEdit->setValidator(new QRegExpValidator(intRegExp, this));
-  latMinLineEdit->setValidator(new QRegExpValidator(intRegExp, this));
-  lonMinLineEdit->setValidator(new QRegExpValidator(intRegExp, this));
-  latSecLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
-  lonSecLineEdit->setValidator(new QRegExpValidator(minSecDecRegExp, this));
+  latDegLineEdit->setValidator(new QRegularExpressionValidator(intRegExp, this));
+  lonDegLineEdit->setValidator(new QRegularExpressionValidator(intRegExp, this));
+  latMinLineEdit->setValidator(new QRegularExpressionValidator(intRegExp, this));
+  lonMinLineEdit->setValidator(new QRegularExpressionValidator(intRegExp, this));
+  latSecLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
+  lonSecLineEdit->setValidator(new QRegularExpressionValidator(minSecDecRegExp, this));
 
   emit(coordsChanged());
 }

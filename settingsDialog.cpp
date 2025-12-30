@@ -45,8 +45,8 @@ settingsDialog::settingsDialog(const Settings &theSettings, QWidget *parent)
   // set up APRS settings
   APRSServerLineEdit->setText(theSettings.getAPRSServer());
   APRSServerPortLineEdit->setText(QString::number(theSettings.getAPRSPort()));
-  portValidator=QRegExp("[0-9]{1,4}");
-  APRSServerPortLineEdit->setValidator(new QRegExpValidator(portValidator,this));
+  portValidator=QRegularExpression("[0-9]{1,4}");
+  APRSServerPortLineEdit->setValidator(new QRegularExpressionValidator(portValidator,this));
   CallSignLineEdit->setText(theSettings.getAPRSCallsign());
   CallPassLineEdit->setText(theSettings.getAPRSCallpass());
 

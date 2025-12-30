@@ -8,6 +8,7 @@
 #include <QMessageBox>
 
 #include <iostream>
+#include <algorithm>
 
 APRS::APRS()
   :server_(""),
@@ -76,10 +77,10 @@ QString APRS::createDFObject(const QString &oName,const std::vector<double> &coo
   QString NRQ;
   QString rep;
 
-  BRG.sprintf("%03.0lf/",bearing);
+  BRG = QString::asprintf("%03.0lf/",bearing);
 
   int Q=9-int(log(sigma)/log(2.0));
-  NRQ.sprintf("86%1d ",Q);
+  NRQ = QString::asprintf("86%1d ",Q);
   
   rep="000/000/";
   rep.append(BRG);
@@ -124,14 +125,14 @@ QString APRS::createObject(const QString &oName,const std::vector<double> &coord
   deg=(int) lat;
   min=(lat-deg)*60;
   
-  latS.sprintf("%02d%05.2lf",deg,min);
+  latS = QString::asprintf("%02d%05.2lf",deg,min);
   latS.append(NS);
 
 
   deg=(int) lon;
   min=(lon-deg)*60;
   
-  lonS.sprintf("%03d%05.2lf",deg,min);
+  lonS = QString::asprintf("%03d%05.2lf",deg,min);
   lonS.append(EW);
 
   formattedPosit=callsign_;
@@ -251,7 +252,7 @@ QString APRS::makeMultiline(const std::vector<double> &lon, const std::vector<do
     // 43chars - 6 for the sequence number- 5 for the starting pattern leaves
     // 32 characters for lat/lon pairs, or 16 pairs
 
-    int maxPairs = (43-std::max(sequence.length(),6)-5)/2;
+    int maxPairs = (43-std::max(sequence.length(),(qsizetype)6)-5)/2;
     
     if ( numPairs > maxPairs) {
         returnString = "";

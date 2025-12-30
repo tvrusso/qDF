@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QVector>
+#include <QRegularExpression>
 
 #include <ui_latLonCoordinateWidget.h>
 
@@ -20,12 +21,12 @@ class latLonCoordinateWidget : public QWidget, public Ui::latLonCoordinateWidget
   void setDefaultHemispheres(int NS, int EW);
 
  private:
-  QRegExp latDegRegExp;
-  QRegExp lonDegRegExp;
-  QRegExp intRegExp;
-  QRegExp intLatRegExp;
-  QRegExp intLonRegExp;
-  QRegExp minSecDecRegExp;
+  QRegularExpression latDegRegExp;
+  QRegularExpression lonDegRegExp;
+  QRegularExpression intRegExp;
+  QRegularExpression intLatRegExp;
+  QRegularExpression intLonRegExp;
+  QRegularExpression minSecDecRegExp;
   double latitude;
   double longitude;
   
