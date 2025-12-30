@@ -734,9 +734,9 @@ bool MainWindow::checkValidMLFix(DFLib::Proj::Point &thePoint)
   std::vector<double>merc=thePoint.getXY();
   std::vector<double>r0_coords=tempPoint.getUserCoords();
 
-  if (!(isinf(latlon[0])||isinf(latlon[1])||isnan(latlon[0])||isnan(latlon[1])
+  if (!(std::isinf(latlon[0])||std::isinf(latlon[1])||std::isnan(latlon[0])||std::isnan(latlon[1])
         ||
-        isinf(merc[0])||isinf(merc[1])||isnan(merc[0])||isnan(merc[1])))
+        std::isinf(merc[0])||std::isinf(merc[1])||std::isnan(merc[0])||std::isnan(merc[1])))
   {
     // Use the Haversine formula to compute the distance between the fix and
     // the first valid report location we have.
