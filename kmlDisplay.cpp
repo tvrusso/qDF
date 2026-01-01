@@ -4,7 +4,8 @@
 #include <QString>
 #include <vector>
 kmlDisplay::kmlDisplay(QString theFileName)
-  :theFileName_(theFileName)
+  :theFileName_(theFileName),
+   opened_(false)
 {
   CoordSysBuilder myCSB;
   QString myCSName="WGS84 Lat/Lon";

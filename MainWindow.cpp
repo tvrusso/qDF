@@ -507,9 +507,7 @@ void MainWindow::readSettings()
 {
   QSettings qsettings("Tom Russo","qDF");
 
-  QRect rect=qsettings.value("geometry",QRect(0,0,800,600)).toRect();
-  move(rect.topLeft());
-  resize(rect.size());
+  restoreGeometry(qsettings.value("geometry",QRect(0,0,800,600)).toByteArray());
 
   QString csName=qsettings.value("defaultCoordSysName",
                                 theSettings_.getDefaultCSName()).toString();

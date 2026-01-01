@@ -422,10 +422,10 @@ void APRS::checkPendingDatagrams()
     {
       ntries++;
       int bytesRead;
-      QByteArray datagram;
+      QByteArray datagram(256,'\0');
       QHostAddress sender;
       quint16 senderPort;
-      datagram.resize(256);
+
       bool retry=false;
       if ((bytesRead=theSocket->readDatagram(datagram.data(),
                                              datagram.size(),&sender,
