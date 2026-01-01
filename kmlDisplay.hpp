@@ -49,6 +49,7 @@ private:
   bool opened_;
 
   QMap<QString,QString> dfReportStrings_;
+  QMap<QString,QString> dfBearingStrings_;
   QMap<QString,QString> dfFixStrings_;
   QMap<QString,QString> dfEllipseStrings_;
   

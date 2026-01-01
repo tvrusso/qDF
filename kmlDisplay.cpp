@@ -47,8 +47,12 @@ void kmlDisplay::displayDFReport(const qDFProjReport *theReport)
 {
   QString myTempString;
   QTextStream kmlStringStream_(&myTempString);
+  QString myTempBearingString;
+  QTextStream kmlBearingStringStream_(&myTempBearingString);
   kmlStringStream_.setRealNumberNotation(QTextStream::FixedNotation);
   kmlStringStream_.setRealNumberPrecision(8);
+  kmlBearingStringStream_.setRealNumberNotation(QTextStream::FixedNotation);
+  kmlBearingStringStream_.setRealNumberPrecision(8);
 
   if (theReport->isValid())
   {
@@ -64,9 +68,8 @@ void kmlDisplay::displayDFReport(const qDFProjReport *theReport)
             << "</description>"
             << Qt::endl;
     kmlStringStream_ << "  <styleUrl>#DFBearingLines</styleUrl>" << Qt::endl;
-    kmlStringStream_ << "  <MultiGeometry>" <<Qt::endl;
     kmlStringStream_ << "    <Point>" << Qt::endl;
-    
+
     DFLib::Proj::Point tempPoint=theReport->getReceiverPoint();
     tempPoint.setUserProj(myCS_.getProj4Params());
     std::vector<double> coords(2);
@@ -74,9 +77,21 @@ void kmlDisplay::displayDFReport(const qDFProjReport *theReport)
     kmlStringStream_ << "     <coordinates>" << coords[0]<<","<<coords[1]
                      << ",0</coordinates>" << Qt::endl;
     kmlStringStream_ << "    </Point>" << Qt::endl;
-    kmlStringStream_ << "    <LineString>" << Qt::endl;
-    kmlStringStream_ << "      <tessellate>1</tessellate>" << Qt::endl;
-    kmlStringStream_ << "      <coordinates> " << Qt::endl;
+    kmlStringStream_ << "</Placemark> " << Qt::endl;
+
+    kmlBearingStringStream_ << "<Placemark>" << Qt::endl;
+    kmlBearingStringStream_ << "  <name>" << theReport->getReportNameQS()<<"</name>"<< Qt::endl;
+    kmlBearingStringStream_ << "  <description>"  << " DF Report Equipment:" << theEquipType
+            << " Quality:" 
+            << theQuality
+            << " Bearing: " <<theReport->getBearing() 
+            << " SD (deg): " << theReport->getSigma() 
+            << "</description>"
+            << Qt::endl;
+    kmlBearingStringStream_ << "  <styleUrl>#DFBearingLines</styleUrl>" << Qt::endl;
+    kmlBearingStringStream_ << "    <LineString>" << Qt::endl;
+    kmlBearingStringStream_ << "      <tessellate>1</tessellate>" << Qt::endl;
+    kmlBearingStringStream_ << "      <coordinates> " << Qt::endl;
 
     QVector<double> lats;
     QVector<double> lons;
@@ -84,19 +99,20 @@ void kmlDisplay::displayDFReport(const qDFProjReport *theReport)
                       4000, 20, lats,lons);
     for (int i=0;i<lats.size();i++)
     {
-      kmlStringStream_ << "       "<<lons[i]<<","<<lats[i]<<",0"<<Qt::endl;
+      kmlBearingStringStream_ << "       "<<lons[i]<<","<<lats[i]<<",0"<<Qt::endl;
     }
-    kmlStringStream_ << "      </coordinates> " << Qt::endl;
-    kmlStringStream_ << "    </LineString> " << Qt::endl;
-    kmlStringStream_ << "  </MultiGeometry> " << Qt::endl;
-    kmlStringStream_ << "</Placemark> " << Qt::endl;
+    kmlBearingStringStream_ << "      </coordinates> " << Qt::endl;
+    kmlBearingStringStream_ << "    </LineString> " << Qt::endl;
+    kmlBearingStringStream_ << "</Placemark> " << Qt::endl;
 
     dfReportStrings_[theReport->getReportNameQS()] = myTempString;
+    dfBearingStrings_[theReport->getReportNameQS()] = myTempBearingString;
 
   }
   else
   {
     dfReportStrings_[theReport->getReportNameQS()]="";
+    dfBearingStrings_[theReport->getReportNameQS()]="";
   }
 
   commit_();
@@ -105,6 +121,7 @@ void kmlDisplay::displayDFReport(const qDFProjReport *theReport)
 void kmlDisplay::undisplayDFReport(const qDFProjReport *theReport)
 {
   dfReportStrings_[theReport->getReportNameQS()]="";
+  dfBearingStrings_[theReport->getReportNameQS()]="";
   commit_();
 }
 
@@ -514,6 +531,14 @@ void kmlDisplay::commitReports_()
   foreach(QString key, dfReportStrings_.keys())
   {
     kmlFileOut_<< dfReportStrings_[key] <<Qt::endl;
+  }
+  kmlFileOut_<<"    </Folder>"<<Qt::endl;
+  kmlFileOut_<<"    <Folder>"<<Qt::endl;
+  kmlFileOut_<<"      <name>Bearing Lines</name>"<<Qt::endl;
+
+  foreach(QString key, dfBearingStrings_.keys())
+  {
+    kmlFileOut_<< dfBearingStrings_[key] <<Qt::endl;
   }
   kmlFileOut_<<"    </Folder>"<<Qt::endl;
 }
